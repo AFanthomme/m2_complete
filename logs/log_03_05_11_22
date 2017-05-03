@@ -1,0 +1,356 @@
+/opt/exp_soft/llr/python/2.7.10/lib/python2.7/site-packages/sklearn/linear_model/base.py:352: RuntimeWarning: overflow encountered in exp
+  np.expDirectory savplotter.py:78: RuntimeWarning: invalid value encountered in divide
+  normalized_content = contents_table[category, :].astype('float') / np.sum(contents_table[category, :])
+g_noweight_no_discr/ggH predictions successfully stored
+saves/adaboost_logreg_noweight_no_discr/VBFH predictions successfully stored
+saves/adaboost_logreg_noweight_no_discr/WminusH predictions successfully stored
+saves/adaboost_logreg_noweight_no_discr/WplusH predictions successfully stored
+saves/adaboost_logreg_noweight_no_discr/ZH predictions successfully stored
+saves/adaboost_logreg_noweight_no_discr/ttH predictions successfully stored
+ggHpredictions successfully retrieved
+VBFHpredictions successfully retrieved
+WminusHpredictions successfully retrieved
+WplusHpredictions successfully retrieved
+ZHpredictions successfully retrieved
+ttHpredictions successfully retrieved
+
+ 
+#######################################
+#######################################
+
+Studying model logreg_sag_ovr_noweight
+
+
+ 
+#######################################
+#######################################
+
+Studying model adaboost_logreg_purity
+
+Training in progress
+Directory saves/adaboost_logreg_purity_no_discr successfully created.
+Training score : 0.511946586245
+Generalization score : 0.512097871117
+Generating predictions
+saves/adaboost_logreg_purity_no_discr/ggH predictions successfully stored
+saves/adaboost_logreg_purity_no_discr/VBFH predictions successfully stored
+saves/adaboost_logreg_purity_no_discr/WminusH predictions successfully stored
+saves/adaboost_logreg_purity_no_discr/WplusH predictions successfully stored
+saves/adaboost_logreg_purity_no_discr/ZH predictions successfully stored
+saves/adaboost_logreg_purity_no_discr/ttH predictions successfully stored
+ggHpredictions successfully retrieved
+VBFHpredictions successfully retrieved
+WminusHpredictions successfully retrieved
+WplusHpredictions successfully retrieved
+ZHpredictions successfully retrieved
+ttHpredictions successfully retrieved
+
+ 
+#######################################
+#######################################
+
+Studying model mlpc_adam_ovr_1_5_log_noweight
+
+
+ 
+#######################################
+#######################################
+
+Studying model forests_noweight
+
+Training in progress
+Directory saves/forests_noweight_no_discr successfully created.
+Training score : 0.973759482651
+Generalization score : 0.697098531778
+Generating predictions
+saves/forests_noweight_no_discr/ggH predictions successfully stored
+saves/forests_noweight_no_discr/VBFH predictions successfully stored
+saves/forests_noweight_no_discr/WminusH predictions successfully stored
+saves/forests_noweight_no_discr/WplusH predictions successfully stored
+saves/forests_noweight_no_discr/ZH predictions successfully stored
+saves/forests_noweight_no_discr/ttH predictions successfully stored
+ggHpredictions successfully retrieved
+VBFHpredictions successfully retrieved
+WminusHpredictions successfully retrieved
+WplusHpredictions successfully retrieved
+ZHpredictions successfully retrieved
+ttHpredictions successfully retrieved
+
+ 
+#######################################
+#######################################
+
+Studying model adaboost_tree_invfreq
+
+Training in progress
+Directory saves/adaboost_tree_invfreq_no_discr successfully created.
+Training score : 0.343116527795
+Generalization score : 0.342929760063
+Generating predictions
+saves/adaboost_tree_invfreq_no_discr/ggH predictions successfully stored
+saves/adaboost_tree_invfreq_no_discr/VBFH predictions successfully stored
+saves/adaboost_tree_invfreq_no_discr/WminusH predictions successfully stored
+saves/adaboost_tree_invfreq_no_discr/WplusH predictions successfully stored
+saves/adaboost_tree_invfreq_no_discr/ZH predictions successfully stored
+saves/adaboost_tree_invfreq_no_discr/ttH predictions successfully stored
+ggHpredictions successfully retrieved
+VBFHpredictions successfully retrieved
+WminusHpredictions successfully retrieved
+WplusHpredictions successfully retrieved
+ZHpredictions successfully retrieved
+ttHpredictions successfully retrieved
+
+ 
+#######################################
+#######################################
+
+Studying model bag_tree_noweight
+
+Training in progress
+Directory saves/bag_tree_noweight_no_discr successfully created.
+Training score : 0.749043962194
+Generalization score : 0.703262111473
+Generating predictions
+saves/bag_tree_noweight_no_discr/ggH predictions successfully stored
+saves/bag_tree_noweight_no_discr/VBFH predictions successfully stored
+saves/bag_tree_noweight_no_discr/WminusH predictions successfully stored
+saves/bag_tree_noweight_no_discr/WplusH predictions successfully stored
+saves/bag_tree_noweight_no_discr/ZH predictions successfully stored
+saves/bag_tree_noweight_no_discr/ttH predictions successfully stored
+ggHpredictions successfully retrieved
+VBFHpredictions successfully retrieved
+WminusHpredictions successfully retrieved
+WplusHpredictions successfully retrieved
+ZHpredictions successfully retrieved
+ttHpredictions successfully retrieved
+
+ 
+#######################################
+#######################################
+
+Studying model bag_tree_invfreq
+
+Training in progress
+Directory saves/bag_tree_invfreq_no_discr successfully created.
+Training score : 0.699687538863
+Generalization score : 0.66924194965
+Generating predictions
+saves/bag_tree_invfreq_no_discr/ggH predictions successfully stored
+saves/bag_tree_invfreq_no_discr/VBFH predictions successfully stored
+saves/bag_tree_invfreq_no_discr/WminusH predictions successfully stored
+saves/bag_tree_invfreq_no_discr/WplusH predictions successfully stored
+saves/bag_tree_invfreq_no_discr/ZH predictions successfully stored
+saves/bag_tree_invfreq_no_discr/ttH predictions successfully stored
+ggHpredictions successfully retrieved
+VBFHpredictions successfully retrieved
+WminusHpredictions successfully retrieved
+WplusHpredictions successfully retrieved
+ZHpredictions successfully retrieved
+ttHpredictions successfully retrieved
+
+ 
+#######################################
+#######################################
+
+Studying model adaboost_tree_noweight
+
+Training in progress
+Directory saves/adaboost_tree_noweight_no_discr successfully created.
+Training score : 0.703542780749
+Generalization score : 0.703277656441
+Generating predictions
+saves/adaboost_tree_noweight_no_discr/ggH predictions successfully stored
+saves/adaboost_tree_noweight_no_discr/VBFH predictions successfully stored
+saves/adaboost_tree_noweight_no_discr/WminusH predictions successfully stored
+saves/adaboost_tree_noweight_no_discr/WplusH predictions successfully stored
+saves/adaboost_tree_noweight_no_discr/ZH predictions successfully stored
+saves/adaboost_tree_noweight_no_discr/ttH predictions successfully stored
+ggHpredictions successfully retrieved
+VBFHpredictions successfully retrieved
+WminusHpredictions successfully retrieved
+WplusHpredictions successfully retrieved
+ZHpredictions successfully retrieved
+ttHpredictions successfully retrieved
+
+ 
+#######################################
+#######################################
+
+Studying model adaboost_tree_purity
+
+Training in progress
+Directory saves/adaboost_tree_purity_no_discr successfully created.
+Training score : 0.582328068648
+Generalization score : 0.58273420437
+Generating predictions
+saves/adaboost_tree_purity_no_discr/ggH predictions successfully stored
+saves/adaboost_tree_purity_no_discr/VBFH predictions successfully stored
+saves/adaboost_tree_purity_no_discr/WminusH predictions successfully stored
+saves/adaboost_tree_purity_no_discr/WplusH predictions successfully stored
+saves/adaboost_tree_purity_no_discr/ZH predictions successfully stored
+saves/adaboost_tree_purity_no_discr/ttH predictions successfully stored
+ggHpredictions successfully retrieved
+VBFHpredictions successfully retrieved
+WminusHpredictions successfully retrieved
+WplusHpredictions successfully retrieved
+ZHpredictions successfully retrieved
+ttHpredictions successfully retrieved
+
+ 
+#######################################
+#######################################
+
+Studying model logreg_newt_ovr_content
+
+
+ 
+#######################################
+#######################################
+
+Studying model logreg_newt_ovr_invfreq
+
+
+ 
+#######################################
+#######################################
+
+Studying model forests_invfreq
+
+Training in progress
+Directory saves/forests_invfreq_no_discr successfully created.
+Training score : 0.840497139659
+Generalization score : 0.626703145524
+Generating predictions
+saves/forests_invfreq_no_discr/ggH predictions successfully stored
+saves/forests_invfreq_no_discr/VBFH predictions successfully stored
+saves/forests_invfreq_no_discr/WminusH predictions successfully stored
+saves/forests_invfreq_no_discr/WplusH predictions successfully stored
+saves/forests_invfreq_no_discr/ZH predictions successfully stored
+saves/forests_invfreq_no_discr/ttH predictions successfully stored
+ggHpredictions successfully retrieved
+VBFHpredictions successfully retrieved
+WminusHpredictions successfully retrieved
+WplusHpredictions successfully retrieved
+ZHpredictions successfully retrieved
+ttHpredictions successfully retrieved
+
+ 
+#######################################
+#######################################
+
+Studying model mlpc_adam_ovr_2_5_5_noweight
+
+
+ 
+#######################################
+#######################################
+
+Studying model mlpc_adam_ovr_1_5_noweight
+
+
+ 
+#######################################
+#######################################
+
+Studying model logreg_newt_ovr_purity
+
+
+ 
+#######################################
+#######################################
+
+Studying model bag_logreg_invfreq
+
+Training in progress
+Directory saves/bag_logreg_invfreq_no_discr successfully created.
+Training score : 0.319130083323
+Generalization score : 0.318236578864
+Generating predictions
+saves/bag_logreg_invfreq_no_discr/ggH predictions successfully stored
+saves/bag_logreg_invfreq_no_discr/VBFH predictions successfully stored
+saves/bag_logreg_invfreq_no_discr/WminusH predictions successfully stored
+saves/bag_logreg_invfreq_no_discr/WplusH predictions successfully stored
+saves/bag_logreg_invfreq_no_discr/ZH predictions successfully stored
+saves/bag_logreg_invfreq_no_discr/ttH predictions successfully stored
+ggHpredictions successfully retrieved
+VBFHpredictions successfully retrieved
+WminusHpredictions successfully retrieved
+WplusHpredictions successfully retrieved
+ZHpredictions successfully retrieved
+ttHpredictions successfully retrieved
+
+ 
+#######################################
+#######################################
+
+Studying model bag_logreg_noweight
+
+Training in progress
+Directory saves/bag_logreg_noweight_no_discr successfully created.
+Training score : 0.643001492352
+Generalization score : 0.642722234745
+Generating predictions
+saves/bag_logreg_noweight_no_discr/ggH predictions successfully stored
+saves/bag_logreg_noweight_no_discr/VBFH predictions successfully stored
+saves/bag_logreg_noweight_no_discr/WminusH predictions successfully stored
+saves/bag_logreg_noweight_no_discr/WplusH predictions successfully stored
+saves/bag_logreg_noweight_no_discr/ZH predictions successfully stored
+saves/bag_logreg_noweight_no_discr/ttH predictions successfully stored
+ggHpredictions successfully retrieved
+VBFHpredictions successfully retrieved
+WminusHpredictions successfully retrieved
+WplusHpredictions successfully retrieved
+ZHpredictions successfully retrieved
+ttHpredictions successfully retrieved
+
+ 
+#######################################
+#######################################
+
+Studying model mlpc_adam_ovr_1_10_noweight
+
+
+ 
+#######################################
+#######################################
+
+Studying model adaboost_logreg_invfreq
+
+Training in progress
+Directory saves/adaboost_logreg_invfreq_no_discr successfully created.
+Training score : 0.282070016167
+Generalization score : 0.281853581949
+Generating predictions
+saves/adaboost_logreg_invfreq_no_discr/ggH predictions successfully stored
+saves/adaboost_logreg_invfreq_no_discr/VBFH predictions successfully stored
+saves/adaboost_logreg_invfreq_no_discr/WminusH predictions successfully stored
+saves/adaboost_logreg_invfreq_no_discr/WplusH predictions successfully stored
+saves/adaboost_logreg_invfreq_no_discr/ZH predictions successfully stored
+saves/adaboost_logreg_invfreq_no_discr/ttH predictions successfully stored
+ggHpredictions successfully retrieved
+VBFHpredictions successfully retrieved
+WminusHpredictions successfully retrieved
+WplusHpredictions successfully retrieved
+ZHpredictions successfully retrieved
+ttHpredictions successfully retrieved
+
+ 
+#######################################
+#######################################
+
+Studying model mlpc_adam_ovr_1_3_noweight
+
+
+ 
+#######################################
+#######################################
+
+Studying model logreg_liblin_ovr_noweight
+
+
+ 
+#######################################
+#######################################
+
+Studying model logreg_newt_ovr_noweight
+
