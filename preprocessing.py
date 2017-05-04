@@ -52,10 +52,10 @@ def prepare_datasets():
     for add_calculated_features in [False, True]:
         gen_modes_int = gen_modes_merged
         if add_calculated_features:
-            directory = 'common/'
+            directory = 'saves/common/'
             suffix = ''
         else:
-            directory = 'common_no_discr/'
+            directory = 'saves/common_no_discr/'
             suffix = '_no_discr'
 
         with open(directory + 'scaler.txt', 'rb') as f:
