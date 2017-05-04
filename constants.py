@@ -98,6 +98,9 @@ models_dict = {'logreg_newt_ovr_invfreq': LogisticRegression(solver='newton-cg',
                                                                                  multi_class='ovr', n_jobs=6)),
                 'adaboost_logreg_purity': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
                                                                                 multi_class='ovr', n_jobs=6)),
+                'adaboost_200_logreg_purity': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
+                                                    multi_class='ovr', n_jobs=8), n_estimators=200),
+
                }
 
 
