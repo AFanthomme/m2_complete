@@ -1,3 +1,92 @@
+import pickle
+import numpy as np
+from sklearn import preprocessing as pr
+from constants import gen_modes_merged, event_numbers, cross_sections
+
+def prepare_scaler():
+    gen_modes_int = gen_modes_merged
+    for add_calculated_features in [False, True]:
+
+        if add_calculated_features:
+            directory = 'saves/common/'
+            suffix = ''
+        else:
+            directory = 'saves/common_no_discr/'
+            suffix = '_no_discr'
+
+    file_list = [directory + mode for mode in gen_modes_int]
+    training_set = np.loadtxt(file_list[0] + '_training.txt')
+    test_set = np.loadtxt(file_list[0] + '_test.txt')
+
+    for idx, filename in enumerate(file_list[1:]):
+        temp_train = np.loadtxt(filename + '_training.txt')
+        temp_test = np.loadtxt(filename + '_test.txt')
+        training_set = np.concatenate((training_set, temp_train), axis=0)
+        test_set = np.concatenate((test_set, temp_test), axis=0)
+
+    with open(directory + 'scaler.txt', 'wb') as f:
+        pickle.dump(scaler, f)
+
+def prepare_datasets():
+    gen_modes_int = gen_modes_merged
+    for add_calculated_features in [False, True]:
+
+        if add_calculated_features:
+            directory = 'saves/common/'
+            suffix = ''
+        else:
+            directory = 'saves/common_no_discr/'
+            suffix = '_no_discr'
+
+        with open(directory + 'scaler.txt', 'rb') as f:
+            scaler = pickle.load(f)
+
+        file_list = [directory + mode for mode in gen_modes_int]
+        training_set = scaler.transform(np.loadtxt(file_list[0] + '_training.txt'))
+        test_set = scaler.transform(np.loadtxt(file_list[0] + '_test.txt'))
+        training_labels = np.zeros(np.ma.size(training_set, 0))
+        test_labels = np.zeros(np.ma.size(test_set, 0))
+        weights_train = np.loadtxt(file_list[0] + '_weights_training.txt') * \
+                  cross_sections[gen_modes_int[0]] / event_numbers[gen_modes_int[0]]
+        weights_test = np.loadtxt(file_list[0] + '_weights_test.txt') * \
+                        cross_sections[gen_modes_int[0]] / event_numbers[gen_modes_int[0]]
+
+        for idx, filename in enumerate(file_list[1:]):
+            temp_train = scaler.transform(np.loadtxt(filename + '_training.txt'))
+            temp_test = scaler.transform(np.loadtxt(filename + '_test.txt'))
+            temp_weights_train = np.loadtxt(filename + '_weights_training.txt') * \
+                           cross_sections[gen_modes_int[idx]] / event_numbers[gen_modes_int[idx]]
+            temp_weights_test = np.loadtxt(filename + '_weights_test.txt') * \
+                                 cross_sections[gen_modes_int[idx]] / event_numbers[gen_modes_int[idx]]
+            training_set = np.concatenate((training_set, temp_train), axis=0)
+            test_set = np.concatenate((test_set, temp_test), axis=0)
+            training_labels = np.concatenate((training_labels, (idx + 1) * np.ones(np.ma.size(temp_train, 0))), axis=0)
+            test_labels = np.concatenate((test_labels, (idx + 1) * np.ones(np.ma.size(temp_test, 0))), axis=0)
+            weights_train = np.concatenate((weights_train, temp_weights_train), axis=0)
+            weights_test = np.concatenate((weights_test, temp_weights_test), axis=0)
+            np.savetxt(filename + '_training_scaled.txt', temp_train)
+            np.savetxt(filename + '_test_scaled.txt', temp_test)
+
+        np.savetxt('plop/dataset_test' + suffix, test_set)
+        np.savetxt('plop/labels_test' + suffix, test_labels)
+        np.savetxt('plop/labels_train' + suffix, training_labels)
+        np.savetxt('plop/weights_train' + suffix, weights_train)
+        np.savetxt('plop/dataset_train' + suffix, training_set)
+        np.savetxt('plop/weights_test' + suffix, weights_test)
+
+# def main():
+#     with open('saves/common/scaler.txt', 'rb') as f:
+#         sc = pickle.load(f)
+#     tmp = sc.transform(np.loadtxt('saves/common/ggH_test.txt'))
+#     np.savetxt('ggH_test_scaled.txt', tmp)
+#
+#     with open('saves/common_no_discr/scaler.txt', 'rb') as f:
+#         sc = pickle.load(f)
+#     tmp2 = sc.transform(np.loadtxt('saves/common/ggH_test.txt'))
+#     np.savetxt('ggH_test_scaled_no_discr.txt', tmp2)
+#
+# main()
+
 def identify_final_state(Z1_flav, Z2_flav, merge_mixed_states=True):
     if Z1_flav == Z2_flav:
         if Z1_flav == -121:
@@ -10,13 +99,6 @@ def identify_final_state(Z1_flav, Z2_flav, merge_mixed_states=True):
         else:
             return 'fs2mu2e'
 
-kin_variables_list = ['nExtraLep', 'nExtraZ', 'nCleanedJetsPt30', 'nCleanedJetsPt30BTagged_bTagSF',
-                      'JetQGLikelihood', 'p_JJQCD_SIG_ghg2_1_JHUGen_JECNominal',
-                      'p_JQCD_SIG_ghg2_1_JHUGen_JECNominal',
-                      'p_JJVBF_SIG_ghv1_1_JHUGen_JECNominal', 'p_JVBF_SIG_ghv1_1_JHUGen_JECNominal',
-                      'pAux_JVBF_SIG_ghv1_1_JHUGen_JECNominal',
-                      'p_HadWH_SIG_ghw1_1_JHUGen_JECNominal', 'p_HadZH_SIG_ghz1_1_JHUGen_JECNominal',
-                      'JetPhi', 'ZZMass', 'PFMET']
 
 # def histogram_compare(file_vbf="/data_CMS/cms/ochando/CJLSTReducedTree/170109/ggH125/ZZ4lAnalysis.root",
 #                file_ggh='/data_CMS/cms/ochando/CJLSTReducedTree/170109/VBFH125/ZZ4lAnalysis.root',
