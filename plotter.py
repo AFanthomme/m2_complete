@@ -96,8 +96,6 @@ def content_plot(model, tags=None, permutation=None, save=True, verbose=global_v
 
 if __name__ == "__main__":
     suff = ''
-    pr.prepare_datasets()
-    exit()
     if not add_calculated_features:
         suff = '_no_discr'
     for model_name in models_dict.keys():
