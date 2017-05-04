@@ -11,10 +11,6 @@ from constants import luminosity, cross_sections, gen_modes, gen_modes_merged, e
 from copy import copy
 
 
-
-
-
-
 def content_plot(model, tags=None, permutation=None, save=True, verbose=global_verbosity):
     """
     Use an instance of a sklearn model (custom ones possible as long as they're contained in a class with correctly 
@@ -35,7 +31,7 @@ def content_plot(model, tags=None, permutation=None, save=True, verbose=global_v
         suffix = '_no_discr/'
 
     directory = model + suffix
-
+    pr.prepare_datasets()
     if not os.path.isfile('saves/' + directory + 'ggH_predictions.txt'):
         if verbose:
             print('Generating predictions')

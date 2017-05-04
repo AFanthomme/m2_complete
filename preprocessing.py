@@ -3,7 +3,7 @@ import pickle
 import ROOT as r
 import os
 from root_numpy import root2array, tree2array
-from constants import base_features, base_path, gen_modes, event_numbers, cross_sections, global_verbosity, \
+from constants import base_features, base_path, gen_modes, gen_modes_merged, event_numbers, cross_sections, global_verbosity, \
     add_calculated_features
 from warnings import warn
 import numpy.lib.recfunctions as rcf
@@ -46,6 +46,53 @@ def expand(array_of_tuples_1d):
         for j in range(nb_columns):
             tmp[i, j] = array_of_tuples_1d[i][j]
     return tmp
+
+
+def prepare_datasets():
+    for add_calculated_features in [False, True]:
+        gen_modes_int = gen_modes_merged
+        if add_calculated_features:
+            directory = 'common/'
+            suffix = ''
+        else:
+            directory = 'common_no_discr/'
+            suffix = '_no_discr'
+
+        with open(directory + 'scaler.txt', 'rb') as f:
+            scaler = pickle.load(f)
+
+        file_list = [directory + mode for mode in gen_modes_int]
+        training_set = scaler.transform(np.loadtxt(file_list[0] + '_training.txt'))
+        test_set = scaler.transform(np.loadtxt(file_list[0] + '_test.txt'))
+        training_labels = np.zeros(np.ma.size(training_set, 0))
+        test_labels = np.zeros(np.ma.size(test_set, 0))
+        weights_train = np.loadtxt(file_list[0] + '_weights_training.txt') * \
+                  cross_sections[gen_modes_int[0]] / event_numbers[gen_modes_int[0]]
+        weights_test = np.loadtxt(file_list[0] + '_weights_test.txt') * \
+                        cross_sections[gen_modes_int[0]] / event_numbers[gen_modes_int[0]]
+
+        for idx, filename in enumerate(file_list[1:]):
+            temp_train = scaler.transform(np.loadtxt(filename + '_training.txt'))
+            temp_test = scaler.transform(np.loadtxt(filename + '_test.txt'))
+            temp_weights_train = np.loadtxt(filename + '_weights_training.txt') * \
+                           cross_sections[gen_modes_int[idx]] / event_numbers[gen_modes_int[idx]]
+            temp_weights_test = np.loadtxt(filename + '_weights_test.txt') * \
+                                 cross_sections[gen_modes_int[idx]] / event_numbers[gen_modes_int[idx]]
+            training_set = np.concatenate((training_set, temp_train), axis=0)
+            test_set = np.concatenate((test_set, temp_test), axis=0)
+            training_labels = np.concatenate((training_labels, (idx + 1) * np.ones(np.ma.size(temp_train, 0))), axis=0)
+            test_labels = np.concatenate((test_labels, (idx + 1) * np.ones(np.ma.size(temp_test, 0))), axis=0)
+            weights_train = np.concatenate((weights_train, temp_weights_train), axis=0)
+            weights_test = np.concatenate((weights_test, temp_weights_test), axis=0)
+            np.savetxt(filename + '_training_scaled.txt', temp_train)
+            np.savetxt(filename + '_test_scaled.txt', temp_test)
+
+        np.savetxt('dataset_test' + suffix, test_set)
+        np.savetxt('labels_test' + suffix, test_labels)
+        np.savetxt('labels_train' + suffix, training_labels)
+        np.savetxt('weights_train' + suffix, weights_train)
+        np.savetxt('dataset_train' + suffix, training_set)
+        np.savetxt('weights_test' + suffix, weights_test)
 
 
 def merge_data(directory):
