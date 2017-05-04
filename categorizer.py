@@ -1,13 +1,8 @@
 import numpy as np
-from sklearn import preprocessing as pr
 import pickle
 import os
 from constants import models_dict, gen_modes, gen_modes_merged, cross_sections, event_numbers, global_verbosity, \
     add_calculated_features
-
-
-def frozen(*arg):
-    raise AttributeError("This method has been removed")
 
 
 def model_training(model_name, use_merged_modes=True, verbose=global_verbosity):
@@ -24,9 +19,9 @@ def model_training(model_name, use_merged_modes=True, verbose=global_verbosity):
         directory = 'saves/common_no_discr/'
         suffix = '_no_discr'
 
-    training_set = np.savetxt('dataset_train' + suffix)
-    training_labels = np.savetxt('labels_train' + suffix)
-    weights = np.savetxt('weights_train' + suffix)
+    training_set = np.loadtxt('dataset_train' + suffix)
+    training_labels = np.loadtxt('labels_train' + suffix)
+    weights = np.loadtxt('weights_train' + suffix)
 
     if model_name.split('_')[-1] == 'invfreq':
         analyser.fit(training_set, training_labels, 1./weights)

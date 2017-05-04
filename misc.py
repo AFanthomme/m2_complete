@@ -3,29 +3,28 @@ import numpy as np
 from sklearn import preprocessing as pr
 from constants import gen_modes_merged, event_numbers, cross_sections
 
-def prepare_scaler():
-    gen_modes_int = gen_modes_merged
-    for add_calculated_features in [False, True]:
 
-        if add_calculated_features:
-            directory = 'saves/common/'
-            suffix = ''
-        else:
-            directory = 'saves/common_no_discr/'
-            suffix = '_no_discr'
+def expand(array_of_tuples_1d):
+    nb_columns = len(array_of_tuples_1d[0])
+    nb_rows = np.ma.size(array_of_tuples_1d, 0)
+    tmp = np.zeros((nb_rows, nb_columns))
+    for i in range(nb_rows):
+        for j in range(nb_columns):
+            tmp[i, j] = array_of_tuples_1d[i][j]
+    return tmp
 
-    file_list = [directory + mode for mode in gen_modes_int]
-    training_set = np.loadtxt(file_list[0] + '_training.txt')
-    test_set = np.loadtxt(file_list[0] + '_test.txt')
 
-    for idx, filename in enumerate(file_list[1:]):
-        temp_train = np.loadtxt(filename + '_training.txt')
-        temp_test = np.loadtxt(filename + '_test.txt')
-        training_set = np.concatenate((training_set, temp_train), axis=0)
-        test_set = np.concatenate((test_set, temp_test), axis=0)
+def check_number_events():
+    tmp = {'ggH': 0, 'VBFH': 0, 'WminusH': 0, 'WplusH': 0, 'ZH': 0, 'ttH': 0}
+    for idx, tag in enumerate(gen_modes):
+        rfile = r.TFile(base_path + tag + '125/ZZ4lAnalysis.root')
+        tmp[tag] = rfile.Get('ZZTree/Counters').GetBinContent(40)
+    if not tmp == event_numbers:
+        print("Event numbers don't match, please modify constants.py")
+        print(tmp)
+    else:
+        print("Event numbers match, nothing to change")
 
-    with open(directory + 'scaler.txt', 'wb') as f:
-        pickle.dump(scaler, f)
 
 def prepare_datasets():
     gen_modes_int = gen_modes_merged

@@ -2,6 +2,7 @@ import numpy as np
 import pickle
 import ROOT as r
 import os
+from sklearn import preprocessing as pr
 from root_numpy import root2array, tree2array
 from constants import base_features, base_path, gen_modes, gen_modes_merged, event_numbers, cross_sections, global_verbosity, \
     add_calculated_features
@@ -17,35 +18,61 @@ calculated_features = {
                             'p_JQCD_SIG_ghg2_1_JHUGen_JECNominal', 'ZZMass'])}
 
 
-def check_number_events():
-    tmp = {'ggH': 0, 'VBFH': 0, 'WminusH': 0, 'WplusH': 0, 'ZH': 0, 'ttH': 0}
-    for idx, tag in enumerate(gen_modes):
-        rfile = r.TFile(base_path + tag + '125/ZZ4lAnalysis.root')
-        tmp[tag] = rfile.Get('ZZTree/Counters').GetBinContent(40)
-    if not tmp == event_numbers:
-        print("Event numbers don't match, please modify constants.py")
-        print(tmp)
-    else:
-        print("Event numbers match, nothing to change")
+def frozen(*arg):
+    raise AttributeError("This method has been removed")
 
 
-def append_field(structured_array, descr):
-    if structured_array.dtype.fields is None:
-        raise ValueError("`A' must be a structured numpy array")
-    b = np.empty(structured_array.shape, dtype=structured_array.dtype.descr + descr)
-    for name in structured_array.dtype.names:
-        b[name] = structured_array[name]
-    return b
+def prepare_scalers():
+    gen_modes_int = gen_modes_merged
+    for directory in ['saves/common/', 'saves/common_no_discr/']:
+
+        file_list = [directory + mode for mode in gen_modes_int]
+        training_set = np.loadtxt(file_list[0] + '_training.txt')
+        test_set = np.loadtxt(file_list[0] + '_test.txt')
+
+        for idx, filename in enumerate(file_list[1:]):
+            temp_train = np.loadtxt(filename + '_training.txt')
+            temp_test = np.loadtxt(filename + '_test.txt')
+            training_set = np.concatenate((training_set, temp_train), axis=0)
+            test_set = np.concatenate((test_set, temp_test), axis=0)
+
+        scaler = pr.StandardScaler()
+        scaler.fit(training_set)
+        scaler.fit = frozen
+        scaler.fit_transform = frozen
+        scaler.set_params = frozen
+
+        with open(directory + 'scaler.txt', 'wb') as f:
+            pickle.dump(scaler, f)
 
 
-def expand(array_of_tuples_1d):
-    nb_columns = len(array_of_tuples_1d[0])
-    nb_rows = np.ma.size(array_of_tuples_1d, 0)
-    tmp = np.zeros((nb_rows, nb_columns))
-    for i in range(nb_rows):
-        for j in range(nb_columns):
-            tmp[i, j] = array_of_tuples_1d[i][j]
-    return tmp
+def make_scaled_datasets():
+    fit_categories = gen_modes_merged
+    for directory in ['saves/common/', 'saves/common_no_discr/']:
+
+        with open(directory + 'scaler.txt', 'rb') as f:
+            scaler = pickle.load(f)
+
+        file_list = [directory + cat for cat in fit_categories]
+        training_set = scaler.transform(np.loadtxt(file_list[0] + '_training.txt'))
+        test_set = scaler.transform(np.loadtxt(file_list[0] + '_test.txt'))
+        np.savetxt(file_list[0] + '_test_scaled.txt')
+        training_labels = np.zeros(np.ma.size(training_set, 0))
+        test_labels = np.zeros(np.ma.size(test_set, 0))
+
+        for idx, filename in enumerate(file_list[1:]):
+            temp_train = scaler.transform(np.loadtxt(filename + '_training.txt'))
+            temp_test = scaler.transform(np.loadtxt(filename + '_test.txt'))
+            training_set = np.concatenate((training_set, temp_train), axis=0)
+            test_set = np.concatenate((test_set, temp_test), axis=0)
+            np.savetxt(filename + '_test_scaled.txt', temp_test)
+            training_labels = np.concatenate((training_labels, (idx + 1) * np.ones(np.ma.size(temp_train, 0))), axis=0)
+            test_labels = np.concatenate((test_labels, (idx + 1) * np.ones(np.ma.size(temp_test, 0))), axis=0)
+
+        np.savetxt(directory + 'full_training_set.txt', training_set)
+        np.savetxt(directory + 'full_training_labels.txt', training_labels)
+        np.savetxt(directory + 'full_test_set.txt', test_set)
+        np.savetxt(directory + 'full_test_labels.txt', test_labels)
 
 
 
@@ -108,22 +135,22 @@ def prepare_data(directory='common/', additional_variables=None):
         
         mask = True
         if all_calculated_features:
-		new_features = [np.zeros(nb_events) for _ in range(len(all_calculated_features))]
-		keys = []
-		feature_idx = 0
-		mask = np.ones(nb_events).astype(bool)
-		for key, couple in all_calculated_features.iteritems():
-		    keys.append(key)
-		    plop = new_features[feature_idx]
-		    feature_expression, vars_list = couple
-		    for event_idx in range(nb_events):
-			tmp = feature_expression(*data_set[vars_list][event_idx])
-			if np.isnan(tmp) or np.isinf(tmp) or np.isneginf(tmp):
-			    mask[event_idx] = False
-			plop[event_idx] = tmp
-		    new_features[feature_idx] = plop    
-		    feature_idx += 1
-		data_set = rcf.rec_append_fields(data_set, keys, new_features)
+            new_features = [np.zeros(nb_events) for _ in range(len(all_calculated_features))]
+            keys = []
+            feature_idx = 0
+            mask = np.ones(nb_events).astype(bool)
+            for key, couple in all_calculated_features.iteritems():
+                keys.append(key)
+                plop = new_features[feature_idx]
+                feature_expression, vars_list = couple
+                for event_idx in range(nb_events):
+                    tmp = feature_expression(*data_set[vars_list][event_idx])
+                    if np.isnan(tmp) or np.isinf(tmp) or np.isneginf(tmp):
+                        mask[event_idx] = False
+                    plop[event_idx] = tmp
+                new_features[feature_idx] = plop
+                feature_idx += 1
+            data_set = rcf.rec_append_fields(data_set, keys, new_features)
         
         if not np.all(mask):
             warn('At least one of the calculated features was Inf or NaN')
