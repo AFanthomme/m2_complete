@@ -77,8 +77,8 @@ models_dict = {'logreg_newt_ovr_invfreq': LogisticRegression(solver='newton-cg',
                'mlpc_adam_ovr_1_5_log_noweight': MLPClassifier(hidden_layer_sizes=(10,), activation='logistic',
                                                                verbose=global_verbosity),
                # These are too slow
-                'svclin_newt_ovr_invfreq': BaggingClassifier(SVC(tol=.1, kernel='linear', decision_function_shape='ovr',
-                                                                verbose=False), max_samples=0.01),
+               # 'svclin_newt_ovr_invfreq': BaggingClassifier(SVC(tol=.1, kernel='linear', decision_function_shape='ovr',
+                #                                                verbose=False), max_samples=0.01),
                 #'gauss_none_ovr_noweight': GaussianProcessClassifier(n_jobs=6),
 
                 'bag_logreg_invfreq': BaggingClassifier(LogisticRegression(solver='newton-cg', multi_class='ovr')

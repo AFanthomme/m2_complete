@@ -39,7 +39,7 @@ def content_plot(model, tags=None, permutation=None, save=True, verbose=global_v
     if not os.path.isfile('saves/' + directory + 'ggH_predictions.txt'):
         if verbose:
             print('Generating predictions')
-        with open('saves/' + model_name + suffix + 'categorizer.txt', 'rb') as f:
+        with open('saves/' + model + suffix + 'categorizer.txt', 'rb') as f:
             categorizer = pickle.load(f)
         for mode in gen_modes:
             ctg.generate_predictions('saves/common' + suffix + mode + '_test.txt', mode, categorizer, out_dir=directory)
@@ -69,7 +69,7 @@ def content_plot(model, tags=None, permutation=None, save=True, verbose=global_v
         contents_table[:, idx] *= cross_sections[gen_mode] * luminosity / event_numbers[gen_mode]
 
     fig = p.figure()
-    p.title('Composition of the different categories for ' + model_name + ' classification', y=-0.12)
+    p.title('Composition of the different categories for ' + model + ' classification', y=-0.12)
     ax = fig.add_subplot(111)
     color_array = ['b', 'g', 'r', 'brown', 'darkorange', 'm']
 
@@ -127,7 +127,8 @@ if __name__ == "__main__":
         except IOError:
             print('Training in progress')
             ctg.model_training(model_name)
-        content_plot(model_name, tags=gen_modes_merged)
+
+    content_plot('adaboost_200_logreg_purity', tags=gen_modes_merged)
 
 
 
