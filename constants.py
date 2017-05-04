@@ -16,7 +16,7 @@ global_verbosity = True  # if true, prints all confirmation messages, otherwise 
 ignore_warnings = False  # if true, all warnings will be ignored (use with caution)
 prompt_user = False  # If false, cannot retrain an existing model, if true needs user to answer prompts to retrain
 add_calculated_features = False 
-redirect_output = True
+redirect_output = False 
 
 if redirect_output:
     if not os.path.isdir('logs'):
@@ -79,7 +79,7 @@ models_dict = {'logreg_newt_ovr_invfreq': LogisticRegression(solver='newton-cg',
                # These are too slow
                 'svclin_newt_ovr_invfreq': BaggingClassifier(SVC(tol=.1, kernel='linear', decision_function_shape='ovr',
                                                                 verbose=False), max_samples=0.01),
-                'gauss_none_ovr_noweight': GaussianProcessClassifier(n_jobs=6, verbose=True),
+                #'gauss_none_ovr_noweight': GaussianProcessClassifier(n_jobs=6),
 
                 'bag_logreg_invfreq': BaggingClassifier(LogisticRegression(solver='newton-cg', multi_class='ovr')
                                         , max_samples=0.1, n_jobs=6),
