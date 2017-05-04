@@ -31,7 +31,7 @@ def content_plot(model, tags=None, permutation=None, save=True, verbose=global_v
         suffix = '_no_discr/'
 
     directory = model + suffix
-    pr.prepare_datasets()
+    prepare_datasets()
     if not os.path.isfile('saves/' + directory + 'ggH_predictions.txt'):
         if verbose:
             print('Generating predictions')
