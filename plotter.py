@@ -6,7 +6,7 @@ import categorizer as ctg
 import os
 
 from shutil import rmtree
-from constants import luminosity, cross_sections, gen_modes, gen_modes_merged, event_numbers,\
+from constants import luminosity, cross_sections, production_modes, gen_modes_merged, event_numbers,\
     models_dict, global_verbosity, prompt_user, add_calculated_features
 from copy import copy
 
@@ -31,13 +31,12 @@ def content_plot(model, tags=None, permutation=None, save=True, verbose=global_v
         suffix = '_no_discr/'
 
     directory = model + suffix
-    prepare_datasets()
     if not os.path.isfile('saves/' + directory + 'ggH_predictions.txt'):
         if verbose:
             print('Generating predictions')
         with open('saves/' + model + suffix + 'categorizer.txt', 'rb') as f:
             categorizer = pickle.load(f)
-        for mode in gen_modes:
+        for mode in production_modes:
             ctg.generate_predictions('saves/common' + suffix + mode + '_test.txt', mode, categorizer, out_dir=directory)
 
     nb_categories = max(len(np.unique(np.loadtxt('saves/' + directory + 'ggH_predictions.txt'))), 4)
@@ -47,13 +46,13 @@ def content_plot(model, tags=None, permutation=None, save=True, verbose=global_v
     else:
         tags_list = copy(tags)
 
-    contents_table = np.zeros((nb_categories, len(gen_modes)))
+    contents_table = np.zeros((nb_categories, len(production_modes)))
     ordering = range(nb_categories)
 
     if permutation:
         ordering = permutation
 
-    for mod_idx, tag in enumerate(gen_modes):
+    for mod_idx, tag in enumerate(production_modes):
         weights_list = np.loadtxt('saves/common' + suffix + tag + '_weights_test.txt')
         predictions_list = np.loadtxt('saves/' + directory + tag + '_predictions.txt')
         if verbose:
@@ -61,7 +60,7 @@ def content_plot(model, tags=None, permutation=None, save=True, verbose=global_v
         for event_idx, prediction in enumerate(predictions_list):
             contents_table[int(prediction), mod_idx] += weights_list[event_idx]
 
-    for idx, gen_mode in enumerate(gen_modes):
+    for idx, gen_mode in enumerate(production_modes):
         contents_table[:, idx] *= cross_sections[gen_mode] * luminosity / event_numbers[gen_mode]
 
     fig = p.figure()
@@ -73,11 +72,11 @@ def content_plot(model, tags=None, permutation=None, save=True, verbose=global_v
         position = ordering[category]
         normalized_content = contents_table[category, :].astype('float') / np.sum(contents_table[category, :])
         tmp = 0.
-        for gen_mode in range(len(gen_modes)):
+        for gen_mode in range(len(production_modes)):
             if position == 1:
                 ax.axhspan(position * 0.19 + 0.025, (position + 1) * 0.19 - 0.025, tmp,
                            tmp + normalized_content[gen_mode],
-                           color=color_array[gen_mode], label=gen_modes[gen_mode])
+                           color=color_array[gen_mode], label=production_modes[gen_mode])
             else:
                 ax.axhspan(position * 0.19 + 0.025, (position + 1) * 0.19 - 0.025, tmp,
                            tmp + normalized_content[gen_mode],

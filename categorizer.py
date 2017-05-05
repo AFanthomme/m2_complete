@@ -1,12 +1,12 @@
 import numpy as np
 import pickle
 import os
-from constants import models_dict, gen_modes, gen_modes_merged, cross_sections, event_numbers, global_verbosity, \
+from constants import models_dict, production_modes, gen_modes_merged, cross_sections, event_numbers, global_verbosity, \
     add_calculated_features
 
 
 def model_training(model_name, use_merged_modes=True, verbose=global_verbosity):
-    gen_modes_int = gen_modes
+    gen_modes_int = production_modes
     analyser = models_dict[model_name]
 
     if use_merged_modes:

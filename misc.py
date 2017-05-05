@@ -3,6 +3,9 @@ import numpy as np
 from sklearn import preprocessing as pr
 from constants import gen_modes_merged, event_numbers, cross_sections
 
+def frozen(*arg):
+    raise AttributeError("This method has been removed")
+
 
 def expand(array_of_tuples_1d):
     nb_columns = len(array_of_tuples_1d[0])
@@ -14,16 +17,16 @@ def expand(array_of_tuples_1d):
     return tmp
 
 
-def check_number_events():
-    tmp = {'ggH': 0, 'VBFH': 0, 'WminusH': 0, 'WplusH': 0, 'ZH': 0, 'ttH': 0}
-    for idx, tag in enumerate(gen_modes):
-        rfile = r.TFile(base_path + tag + '125/ZZ4lAnalysis.root')
-        tmp[tag] = rfile.Get('ZZTree/Counters').GetBinContent(40)
-    if not tmp == event_numbers:
-        print("Event numbers don't match, please modify constants.py")
-        print(tmp)
-    else:
-        print("Event numbers match, nothing to change")
+# def check_number_events():
+#     tmp = {'ggH': 0, 'VBFH': 0, 'WminusH': 0, 'WplusH': 0, 'ZH': 0, 'ttH': 0}
+#     for idx, tag in enumerate(gen_modes):
+#         rfile = r.TFile(base_path + tag + '125/ZZ4lAnalysis.root')
+#         tmp[tag] = rfile.Get('ZZTree/Counters').GetBinContent(40)
+#     if not tmp == event_numbers:
+#         print("Event numbers don't match, please modify constants.py")
+#         print(tmp)
+#     else:
+#         print("Event numbers match, nothing to change")
 
 
 def prepare_datasets():

@@ -6,17 +6,17 @@ import os
 import sys
 import time
 from sklearn.linear_model import LogisticRegression
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.svm import SVC
-from sklearn.neural_network import MLPClassifier
-from sklearn.ensemble import BaggingClassifier, RandomForestClassifier, AdaBoostClassifier
-# test
+from sklearn.ensemble import AdaBoostClassifier
+# from sklearn.ensemble import BaggingClassifier, RandomForestClassifier,
+# from sklearn.gaussian_process import GaussianProcessClassifier
+# from sklearn.svm import SVC
+# from sklearn.neural_network import MLPClassifier
 
 global_verbosity = True  # if true, prints all confirmation messages, otherwise just the model and its scores.
 ignore_warnings = False  # if true, all warnings will be ignored (use with caution)
 prompt_user = False  # If false, cannot retrain an existing model, if true needs user to answer prompts to retrain
 add_calculated_features = False 
-redirect_output = False 
+redirect_output = True
 
 if redirect_output:
     if not os.path.isdir('logs'):
@@ -31,12 +31,15 @@ if ignore_warnings:
 luminosity = 2 * 35.9   # (fb-1), factor 2 because only half of the initial data set used for evaluation
 
 cross_sections = {'ggH': 13.41, 'VBFH': 1.044, 'WminusH': 0.147, 'WplusH': 0.232, 'ZH': 0.668, 'ttH': 0.393,
-                  'VH': 0.232}
+                  'VH': 0.232, 'VH_lept': 0.232, 'VH_hadr': 0.232, 'VH_met': 0.232}
 
 event_numbers = {'ZH': 376657.21875, 'WplusH': 252870.65625, 'WminusH': 168069.609375, 'ttH': 327699.28125,
-                 'ggH': 999738.125, 'VBFH': 1885726.125, 'VH': 252870.65625}
+                 'ggH': 999738.125, 'VBFH': 1885726.125, 'VH': 252870.65625, 'VH_lept': 252870.65625,
+                 'VH_hadr': 252870.65625, 'VH_met': 252870.65625}
 
-gen_modes = ['ggH', 'VBFH', 'WminusH', 'WplusH', 'ZH', 'ttH']
+production_modes = ['ggH', 'VBFH', 'WminusH', 'WplusH', 'ZH', 'ttH']
+
+event_categories = ['ggH', 'VBFH', 'VH_lept', 'VH_hadr', 'VH_met', 'ttH']
 
 gen_modes_merged = ['ggH', 'VBFH', 'ttH', 'VH']
 
