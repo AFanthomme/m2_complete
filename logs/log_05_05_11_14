@@ -1,0 +1,30 @@
+preprocessing.py:63: UserWarning: At least one of the calculated features was Inf or NaN
+  warn('At least one of the calculated features was Inf or NaN')
+Traceback (most recent call last):
+  File "preprocessing.py", line 220, in <module>
+    full_process()
+  File "preprocessing.py", line 215, in full_process
+    merge_vector_modes()
+  File "preprocessing.py", line 129, in merge_vector_modes
+    temp_weights_train *= event_numbers['WplusH'] / event_numbers[filename.split('/')[-1]]
+KeyError: 'WminusH_lept'
+ stored in saves/saves/common/
+WplusH_hadr weights, training and test sets successfully stored in saves/saves/common/
+WplusH_met weights, training and test sets successfully stored in saves/saves/common/
+ZH_lept weights, training and test sets successfully stored in saves/saves/common/
+ZH_hadr weights, training and test sets successfully stored in saves/saves/common/
+ZH_met weights, training and test sets successfully stored in saves/saves/common/
+ttH weights, training and test sets successfully stored in saves/saves/common/
+Directory saves/common_no_discr/ created
+ggH weights, training and test sets successfully stored in saves/saves/common_no_discr/
+VBFH weights, training and test sets successfully stored in saves/saves/common_no_discr/
+WminusH_lept weights, training and test sets successfully stored in saves/saves/common_no_discr/
+WminusH_hadr weights, training and test sets successfully stored in saves/saves/common_no_discr/
+WminusH_met weights, training and test sets successfully stored in saves/saves/common_no_discr/
+WplusH_lept weights, training and test sets successfully stored in saves/saves/common_no_discr/
+WplusH_hadr weights, training and test sets successfully stored in saves/saves/common_no_discr/
+WplusH_met weights, training and test sets successfully stored in saves/saves/common_no_discr/
+ZH_lept weights, training and test sets successfully stored in saves/saves/common_no_discr/
+ZH_hadr weights, training and test sets successfully stored in saves/saves/common_no_discr/
+ZH_met weights, training and test sets successfully stored in saves/saves/common_no_discr/
+ttH weights, training and test sets successfully stored in saves/saves/common_no_discr/

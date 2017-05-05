@@ -16,7 +16,7 @@ global_verbosity = True  # if true, prints all confirmation messages, otherwise 
 ignore_warnings = False  # if true, all warnings will be ignored (use with caution)
 prompt_user = False  # If false, cannot retrain an existing model, if true needs user to answer prompts to retrain
 add_calculated_features = False 
-redirect_output = True
+redirect_output = False 
 
 if redirect_output:
     if not os.path.isdir('logs'):

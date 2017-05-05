@@ -7,7 +7,7 @@ import os
 from sklearn import preprocessing as pr
 from root_numpy import root2array, tree2array
 from constants import base_features, base_path, production_modes, gen_modes_merged, event_numbers, cross_sections, \
-    add_calculated_features
+    add_calculated_features, event_categories
 from warnings import warn
 from misc import frozen
 
@@ -23,9 +23,9 @@ calculated_features = {
 
 def read_root_files(directories=('saves/common/', 'saves/common_no_discr/'), additional_variables=None):
     for directory in directories:
-        if not os.path.isdir('saves/' + directory):
-            os.makedirs('saves/' + directory)
-            print('Directory saves/' + directory + ' created')
+        if not os.path.isdir(directory):
+            os.makedirs(directory)
+            print('Directory ' + directory + ' created')
 
         for mode in production_modes:
             rfile = r.TFile(base_path + mode + '125/ZZ4lAnalysis.root')
@@ -64,10 +64,10 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/'), add
                     data_set = data_set[mask]
                     weights = weights[mask]
 
-                np.savetxt('saves/' + directory + mode + '_training.txt', data_set[:nb_events // 2])
-                np.savetxt('saves/' + directory + mode + '_test.txt', data_set[nb_events // 2:])
-                np.savetxt('saves/' + directory + mode + '_weights_training.txt', weights[:nb_events // 2])
-                np.savetxt('saves/' + directory + mode + '_weights_test.txt', weights[nb_events // 2:])
+                np.savetxt(directory + mode + '_training.txt', data_set[:nb_events // 2])
+                np.savetxt(directory + mode + '_test.txt', data_set[nb_events // 2:])
+                np.savetxt(directory + mode + '_weights_training.txt', weights[:nb_events // 2])
+                np.savetxt(directory + mode + '_weights_test.txt', weights[nb_events // 2:])
                 print(mode + ' weights, training and test sets successfully stored in saves/' + directory)
             else:
                 decay_criteria = {'_lept': '', '_hadr': '', '_met':  ''}
@@ -103,10 +103,10 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/'), add
                         data_set = data_set[mask]
                         weights = weights[mask]
 
-                    np.savetxt('saves/' + directory + mode + decay + '_training.txt', data_set[:nb_events // 2])
-                    np.savetxt('saves/' + directory + mode + decay + '_test.txt', data_set[nb_events // 2:])
-                    np.savetxt('saves/' + directory + mode + decay + '_weights_training.txt', weights[:nb_events // 2])
-                    np.savetxt('saves/' + directory + mode + decay + '_weights_test.txt', weights[nb_events // 2:])
+                    np.savetxt(directory + mode + decay + '_training.txt', data_set[:nb_events // 2])
+                    np.savetxt(directory + mode + decay + '_test.txt', data_set[nb_events // 2:])
+                    np.savetxt(directory + mode + decay + '_weights_training.txt', weights[:nb_events // 2])
+                    np.savetxt(directory + mode + decay + '_weights_test.txt', weights[nb_events // 2:])
                     print(mode + decay + ' weights, training and test sets successfully stored in saves/' + directory)
 
 
@@ -126,11 +126,11 @@ def merge_vector_modes(directories=('saves/common/', 'saves/common_no_discr/')):
                 temp_test = np.loadtxt(filename + '_test.txt')
                 temp_weights_train = np.loadtxt(filename + '_weights_training.txt')
                 temp_weights_test = np.loadtxt(filename + '_weights_test.txt')
-                temp_weights_train *= event_numbers['WplusH'] / event_numbers[filename.split('/')[-1]]
-                temp_weights_test *= event_numbers['WplusH'] / event_numbers[filename.split('/')[-1]]
+                temp_weights_train *= event_numbers['WplusH'] / event_numbers[filename.split('/')[-1].split('_')[0]]
+                temp_weights_test *= event_numbers['WplusH'] / event_numbers[filename.split('/')[-1].split('_')[0]]
 
-                temp_weights_train *= cross_sections[filename.split('/')[-1]] / cross_sections['WplusH']
-                temp_weights_test *= cross_sections[filename.split('/')[-1]] / cross_sections['WplusH']
+                temp_weights_train *= cross_sections[filename.split('/')[-1].split('_')[0]] / cross_sections['WplusH']
+                temp_weights_test *= cross_sections[filename.split('/')[-1].split('_')[0]] / cross_sections['WplusH']
 
                 training_set = np.concatenate((training_set, temp_train), axis=0)
                 test_set = np.concatenate((test_set, temp_test), axis=0)
@@ -145,7 +145,7 @@ def merge_vector_modes(directories=('saves/common/', 'saves/common_no_discr/')):
 
 
 def prepare_scalers(directories=('saves/common/', 'saves/common_no_discr/')):
-    gen_modes_int = gen_modes_merged
+    gen_modes_int = event_categories #gen_modes_merged
     for directory in directories:
 
         file_list = [directory + mode for mode in gen_modes_int]
@@ -169,7 +169,7 @@ def prepare_scalers(directories=('saves/common/', 'saves/common_no_discr/')):
 
 
 def make_scaled_datasets():
-    fit_categories = gen_modes_merged
+    fit_categories = event_categories #gen_modes_merged
     for directory in ['saves/common/', 'saves/common_no_discr/']:
 
         with open(directory + 'scaler.txt', 'rb') as f:
@@ -178,7 +178,7 @@ def make_scaled_datasets():
         file_list = [directory + cat for cat in fit_categories]
         training_set = scaler.transform(np.loadtxt(file_list[0] + '_training.txt'))
         test_set = scaler.transform(np.loadtxt(file_list[0] + '_test.txt'))
-        np.savetxt(file_list[0] + '_test_scaled.txt')
+        np.savetxt(file_list[0] + '_test_scaled.txt', test_set)
         training_labels = np.zeros(np.ma.size(training_set, 0))
         test_labels = np.zeros(np.ma.size(test_set, 0))
         training_weights = np.loadtxt(file_list[0] + '_weights_training.txt') * \
@@ -190,13 +190,13 @@ def make_scaled_datasets():
             temp_train = scaler.transform(np.loadtxt(filename + '_training.txt'))
             temp_test = scaler.transform(np.loadtxt(filename + '_test.txt'))
             tmp_training_weights = np.loadtxt(filename + '_weights_training.txt') * \
-                               cross_sections[filename] / event_numbers[filename]
+                               cross_sections[filename.split('/')[-1]] / event_numbers[filename.split('/')[-1]]
             tmp_test_weights = np.loadtxt(filename + '_weights_test.txt') * \
-                           cross_sections[filename] / event_numbers[filename]
+                           cross_sections[filename.split('/')[-1]] / event_numbers[filename.split('/')[-1]]
             training_set = np.concatenate((training_set, temp_train), axis=0)
             test_set = np.concatenate((test_set, temp_test), axis=0)
             np.savetxt(filename + '_test_scaled.txt', temp_test)
-            np.savetxt(filename + '_test_weights.txt', tmp_test_weights)
+            np.savetxt(filename + '_test_weights_scaled.txt', tmp_test_weights)
             training_labels = np.concatenate((training_labels, (idx + 1) * np.ones(np.ma.size(temp_train, 0))), axis=0)
             test_labels = np.concatenate((test_labels, (idx + 1) * np.ones(np.ma.size(temp_test, 0))), axis=0)
             training_weights = np.concatenate((training_weights, tmp_training_weights), axis=0)
@@ -211,9 +211,9 @@ def make_scaled_datasets():
 
 
 def full_process():
-    read_root_files()
-    merge_vector_modes()
-    prepare_scalers()
+    #read_root_files()
+    #merge_vector_modes()
+    #prepare_scalers()
     make_scaled_datasets()
 
 if __name__ == '__main__':
