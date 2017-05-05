@@ -195,8 +195,6 @@ def make_scaled_datasets():
                            cross_sections[filename.split('/')[-1]] / event_numbers[filename.split('/')[-1]]
             training_set = np.concatenate((training_set, temp_train), axis=0)
             test_set = np.concatenate((test_set, temp_test), axis=0)
-            np.savetxt(filename + '_test_scaled.txt', temp_test)
-            np.savetxt(filename + '_test_weights_scaled.txt', tmp_test_weights)
             training_labels = np.concatenate((training_labels, (idx + 1) * np.ones(np.ma.size(temp_train, 0))), axis=0)
             test_labels = np.concatenate((test_labels, (idx + 1) * np.ones(np.ma.size(temp_test, 0))), axis=0)
             training_weights = np.concatenate((training_weights, tmp_training_weights), axis=0)
@@ -219,16 +217,16 @@ def clean_intermediate_files():
 
 
 def full_process():
-    logging.info('\n Reading root files \n')
+    logging.info('Reading root files')
     read_root_files()
-    logging.info('\n Merging vector modes \n')
+    logging.info('Merging vector modes')
     merge_vector_modes()
-    logging.info('\n Preparing scalers \n')
+    logging.info('Preparing scalers')
     prepare_scalers()
-    logging.info('\n Merging and scaling datasets \n')
+    logging.info('Merging and scaling datasets')
     make_scaled_datasets()
-    # logging.info('\n Removing all intermediate files \n')
-    # clean_intermediate_files()
+    logging.info('Removing all intermediate files')
+    clean_intermediate_files()
 
 if __name__ == '__main__':
     full_process()

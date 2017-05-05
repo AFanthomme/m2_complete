@@ -39,11 +39,11 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     weights = np.loadtxt('saves/common' + suffix + 'full_test_weights.txt')
     predictions = np.loadtxt(directory + 'predictions.txt')
 
-    nb_categories = max(len(np.unique(np.loadtxt('saves/' + directory + 'ggH_predictions.txt'))), 5)
+    nb_categories = 5  # max(len(np.unique(np.loadtxt('saves/' + directory + 'ggH_predictions.txt'))), 5)
     contents_table = np.zeros((nb_categories, len(event_categories)))
 
     for true_tag, predicted_tag, rescaled_weight in izip(true_categories, predictions, weights):
-        contents_table[predicted_tag, true_tag] += weights
+        contents_table[predicted_tag, true_tag] += rescaled_weight
 
 
     ordering = range(nb_categories)
@@ -59,11 +59,11 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
         position = ordering[category]
         normalized_content = contents_table[category, :].astype('float') / np.sum(contents_table[category, :])
         tmp = 0.
-        for gen_mode in range(len(production_modes)):
+        for gen_mode in range(nb_categories):
             if position == 1:
                 ax.axhspan(position * 0.19 + 0.025, (position + 1) * 0.19 - 0.025, tmp,
                            tmp + normalized_content[gen_mode],
-                           color=color_array[gen_mode], label=production_modes[gen_mode])
+                           color=color_array[gen_mode], label=event_categories[gen_mode])
             else:
                 ax.axhspan(position * 0.19 + 0.025, (position + 1) * 0.19 - 0.025, tmp,
                            tmp + normalized_content[gen_mode],
@@ -81,25 +81,30 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
 
 
 if __name__ == "__main__":
-    for use_calculated_features in [True, False]:
-        suff = '/'
-        if not use_calculated_features:
-            suff = '_no_discr/'
-        for model_name in models_dict.keys():
-            logging.info('Studying model ' + model_name + '\n')
+    suff = ''
+    if not use_calculated_features:
+        suff = '_no_discr'
 
-            if not os.path.isdir('figs/tmp'):
-                os.makedirs('figs/tmp')
-            if not os.path.isfile('saves/common' + suff + 'full_training_set.txt'):
-                pr.full_process()
 
-            try:
-                open('saves/' + model_name + suff + '/categorizer.txt', 'rb')
-            except IOError:
-                logging.info('Training model ' + model_name)
-                ctg.model_training(model_name)
+    #pr.full_process()
+    for model_name in models_dict.keys():
+        logging.info('Studying model ' + model_name)
+	
+        if not os.path.isdir('figs/tmp'):
+            os.makedirs('figs/tmp')
+            
+        try:
+            open('saves/' + model_name + suff + '/categorizer.txt', 'rb')
+        except IOError:
+            logging.info('Training model ' + model_name)
+            ctg.model_training(model_name)
+        try:
+            open('saves/' + model_name + suff + '/predictions.txt', 'rb')
+        except IOError:
+            logging.info('Generating predictions for ' + model_name + suff)
+            ctg.generate_predictions(model_name)
 
-            content_plot(model_name)
+        content_plot(model_name)
 
 
 

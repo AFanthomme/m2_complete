@@ -1,0 +1,59 @@
+INFO  Logger initialized
+INFO  Reading root files
+INFO  Directory saves/common/ created
+INFO  ggH weights, training and test sets successfully stored in saves/saves/common/
+INFO  VBFH weights, training and test sets successfully stored in saves/saves/common/
+INFO  WminusH_lept weights, training and test sets successfully stored in saves/saves/common/
+INFO  WminusH_hadr weights, training and test sets successfully stored in saves/saves/common/
+INFO  WplusH_lept weights, training and test sets successfully stored in saves/saves/common/
+INFO  WplusH_hadr weights, training and test sets successfully stored in saves/saves/common/
+INFO  ZH_lept weights, training and test sets successfully stored in saves/saves/common/
+INFO  ZH_hadr weights, training and test sets successfully stored in saves/saves/common/
+INFO  ttH weights, training and test sets successfully stored in saves/saves/common/
+INFO  Directory saves/common_no_discr/ created
+INFO  ggH weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO  VBFH weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO  WminusH_lept weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO  WminusH_hadr weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO  WplusH_lept weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO  WplusH_hadr weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO  ZH_lept weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO  ZH_hadr weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO  ttH weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO  Merging vector modes
+INFO  Merged data successfully generated
+INFO  Preparing scalers
+INFO  Merging and scaling datasets
+INFO  Removing all intermediate files
+INFO  Studying model logreg_newt_ovr_invfreq
+INFO  Training model logreg_newt_ovr_invfreq
+INFO  Training score : 0.423636858264
+INFO  Generalization score : 0.423763592131
+INFO  Generating predictions for logreg_newt_ovr_invfreq_no_discr
+INFO  Studying model adaboost_logreg_purity
+INFO  Generating predictions for adaboost_logreg_purity_no_discr
+INFO  Studying model adaboost_logreg_invfreq
+INFO  Training model adaboost_logreg_invfreq
+INFO  Logger initialized
+INFO  Studying model logreg_newt_ovr_invfreq
+INFO  Studying model adaboost_logreg_purity
+INFO  Studying model adaboost_logreg_invfreq
+INFO  Training model adaboost_logreg_invfreq
+INFO  Training score : 0.39562395554
+INFO  Generalization score : 0.395992507326
+INFO  Generating predictions for adaboost_logreg_invfreq_no_discr
+INFO  Studying model logreg_newt_ovr_purity
+INFO  Training model logreg_newt_ovr_purity
+INFO  Training score : 0.589965411371
+INFO  Generalization score : 0.589892661998
+INFO  Generating predictions for logreg_newt_ovr_purity_no_discr
+INFO  Studying model logreg_newt_ovr_content
+INFO  Training model logreg_newt_ovr_content
+INFO  Training score : 0.641218763359
+INFO  Generalization score : 0.643522800581
+INFO  Generating predictions for logreg_newt_ovr_content_no_discr
+INFO  Studying model logreg_newt_ovr_noweight
+INFO  Training model logreg_newt_ovr_noweight
+INFO  Training score : 0.674151801329
+INFO  Generalization score : 0.67442619638
+INFO  Generating predictions for logreg_newt_ovr_noweight_no_discr

@@ -12,15 +12,12 @@ from sklearn.ensemble import AdaBoostClassifier
 # from sklearn.neural_network import MLPClassifier
 
 global_verbosity = True  # if true, prints all confirmation messages, otherwise just the model and its scores.
-ignore_warnings = False  # if true, all warnings will be ignored (use with caution)
+ignore_warnings = True  # if true, all warnings will be ignored (use with caution)
 use_calculated_features = False
 
 
-if not os.path.isfile('logs'):
-    logging.basicConfig(filename='logs', level=logging.INFO)
-    logging.info('Logger initialized')
-
-
+logging.basicConfig(filename='logs', format='%(levelname)s  %(message)s', level=logging.INFO)
+logging.info('Logger initialized')
 
 
 if ignore_warnings:
