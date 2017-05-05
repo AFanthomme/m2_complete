@@ -7,7 +7,7 @@ import os
 from sklearn import preprocessing as pr
 from root_numpy import root2array, tree2array
 from constants import base_features, base_path, production_modes, gen_modes_merged, event_numbers, cross_sections, \
-    add_calculated_features, event_categories
+    use_calculated_features, event_categories
 from warnings import warn
 from misc import frozen
 
@@ -21,7 +21,7 @@ calculated_features = {
                             'p_JQCD_SIG_ghg2_1_JHUGen_JECNominal', 'ZZMass'])}
 
 
-def read_root_files(directories=('saves/common/', 'saves/common_no_discr/'), additional_variables=None):
+def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
     for directory in directories:
         if not os.path.isdir(directory):
             os.makedirs(directory)
@@ -70,8 +70,8 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/'), add
                 np.savetxt(directory + mode + '_weights_test.txt', weights[nb_events // 2:])
                 print(mode + ' weights, training and test sets successfully stored in saves/' + directory)
             else:
-                decay_criteria = {'_lept': '', '_hadr': '', '_met':  ''}
-                for decay in ['_lept', '_hadr', '_met']:
+                decay_criteria = {'_lept': ' && genExtInfo > 10', '_hadr': ' && genExtInfo < 10'}
+                for decay in ['_lept', '_hadr']:
                     data_set = tree2array(tree, branches=core_variables, selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130' + decay_criteria[decay])
                     weights = tree2array(tree, branches='overallEventWeight', selection=
@@ -113,7 +113,7 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/'), add
 
 def merge_vector_modes(directories=('saves/common/', 'saves/common_no_discr/')):
     for directory in directories:
-        for decay in ['_lept', '_hadr', '_met']:
+        for decay in ['_lept', '_hadr']:
             file_list = [directory + mediator + decay for mediator in ['WplusH', 'WminusH', 'ZH']]
 
             training_set = np.loadtxt(file_list[0] + '_training.txt')
@@ -209,12 +209,26 @@ def make_scaled_datasets():
         np.savetxt(directory + 'full_test_labels.txt', test_labels)
         np.savetxt(directory + 'full_test_weights.txt', test_weights)
 
+def clean_intermediate_files():
+    for directory in ['saves/common/', 'saves/common_no_discr/']:
+        files_list = os.listdir(directory)
+        for file_name in files_list:
+            if file_name.split('_')[0] != 'full':
+                os.remove(directory + file_name)
+
+
 
 def full_process():
-    #read_root_files()
-    #merge_vector_modes()
-    #prepare_scalers()
+    print('\n Reading root files \n')
+    read_root_files()
+    print('\n Merging vector modes \n')
+    merge_vector_modes()
+    print('\n Preparing scalers \n')
+    prepare_scalers()
+    print('\n Merging and scaling datasets \n')
     make_scaled_datasets()
+    # print('\n Removing all intermediate files \n')
+    # clean_intermediate_files()
 
 if __name__ == '__main__':
     full_process()

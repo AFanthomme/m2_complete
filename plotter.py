@@ -1,22 +1,19 @@
 import matplotlib.pyplot as p
 import numpy as np
-import pickle
 import preprocessing as pr
 import categorizer as ctg
 import os
-
-from shutil import rmtree
-from constants import luminosity, cross_sections, production_modes, gen_modes_merged, event_numbers,\
-    models_dict, global_verbosity, prompt_user, add_calculated_features
+from itertools import izip
+from constants import production_modes, models_dict, global_verbosity, use_calculated_features, event_categories
 from copy import copy
 
 
-def content_plot(model, tags=None, permutation=None, save=True, verbose=global_verbosity):
+def content_plot(model_name, permutation=None, save=True, verbose=global_verbosity):
     """
     Use an instance of a sklearn model (custom ones possible as long as they're contained in a class with correctly 
     named attributes)
     
-    :param model: model to study
+    :param model_name: model to study
     :param tolerance: minimal confidence in the result to get tagged
     :param tags: tags for the categories (categorizer predicts 1 => tag[1], etc..)
     :param permutation: to plot the categories in an order different than 0 at bottom, then 1, etc...
@@ -24,47 +21,36 @@ def content_plot(model, tags=None, permutation=None, save=True, verbose=global_v
     :param verbose: print the evolution messages
     :return: None but the plot
     """
+    tags_list = copy(event_categories)
 
-    if add_calculated_features:
+    if use_calculated_features:
         suffix = '/'
     else:
         suffix = '_no_discr/'
 
-    directory = model + suffix
-    if not os.path.isfile('saves/' + directory + 'ggH_predictions.txt'):
+    directory = 'saves/' + model_name + suffix
+    if not os.path.isfile(directory + 'predictions.txt'):
         if verbose:
             print('Generating predictions')
-        with open('saves/' + model + suffix + 'categorizer.txt', 'rb') as f:
-            categorizer = pickle.load(f)
-        for mode in production_modes:
-            ctg.generate_predictions('saves/common' + suffix + mode + '_test.txt', mode, categorizer, out_dir=directory)
+        ctg.generate_predictions(model_name)
 
-    nb_categories = max(len(np.unique(np.loadtxt('saves/' + directory + 'ggH_predictions.txt'))), 4)
+    true_categories = np.loadtxt('saves/common' + suffix + 'full_test_labels.txt')
+    weights = np.loadtxt('saves/common' + suffix + 'full_test_weights.txt')
+    predictions = np.loadtxt(directory + 'predictions.txt')
 
-    if not tags:
-        tags_list = ['Category ' + str(i) for i in range(nb_categories)]
-    else:
-        tags_list = copy(tags)
+    nb_categories = max(len(np.unique(np.loadtxt('saves/' + directory + 'ggH_predictions.txt'))), 5)
+    contents_table = np.zeros((nb_categories, len(event_categories)))
 
-    contents_table = np.zeros((nb_categories, len(production_modes)))
+    for true_tag, predicted_tag, rescaled_weight in izip(true_categories, predictions, weights):
+        contents_table[predicted_tag, true_tag] += weights
+
+
     ordering = range(nb_categories)
-
     if permutation:
         ordering = permutation
 
-    for mod_idx, tag in enumerate(production_modes):
-        weights_list = np.loadtxt('saves/common' + suffix + tag + '_weights_test.txt')
-        predictions_list = np.loadtxt('saves/' + directory + tag + '_predictions.txt')
-        if verbose:
-            print(tag + 'predictions successfully retrieved')
-        for event_idx, prediction in enumerate(predictions_list):
-            contents_table[int(prediction), mod_idx] += weights_list[event_idx]
-
-    for idx, gen_mode in enumerate(production_modes):
-        contents_table[:, idx] *= cross_sections[gen_mode] * luminosity / event_numbers[gen_mode]
-
     fig = p.figure()
-    p.title('Composition of the different categories for ' + model + ' classification', y=-0.12)
+    p.title('Content plot for ' + model_name, y=-0.12)
     ax = fig.add_subplot(111)
     color_array = ['b', 'g', 'r', 'brown', 'darkorange', 'm']
 
@@ -88,42 +74,33 @@ def content_plot(model, tags=None, permutation=None, save=True, verbose=global_v
     p.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=6, fontsize=11, mode="expand", borderaxespad=0.)
 
     if save:
-        p.savefig('figs/tmp/' + model + suffix[:-1] + '.png')
+        p.savefig('figs/tmp/' + model_name + suffix[:-1] + '.png')
     else:
         p.show()
 
 
 if __name__ == "__main__":
-    suff = ''
-    if not add_calculated_features:
-        suff = '_no_discr'
-    for model_name in models_dict.keys():
-        print('\n \n#######################################')
-        print('#######################################\n')
-        print('Studying model ' + model_name + '\n')
-        if not os.path.isdir('figs/tmp'):
-            os.makedirs('figs/tmp')
+    for use_calculated_features in [True, False]:
+        suff = '/'
+        if not use_calculated_features:
+            suff = '_no_discr/'
+        for model_name in models_dict.keys():
+            print('\n \n#######################################')
+            print('#######################################\n')
+            print('Studying model ' + model_name + '\n')
 
-        try:
-            open('saves/common' + suff + '/ttH_training.txt')
-        except IOError:
-            print('Common numpy saves not found, generating them')
-            pr.prepare_data()
+            if not os.path.isdir('figs/tmp'):
+                os.makedirs('figs/tmp')
+            if not os.isfile('saves/common' + suff + 'full_training_set.txt'):
+                pr.full_process()
 
-        try:
-            open('saves/' + model_name + suff + '/categorizer.txt', 'rb')
-            if prompt_user:
-                if raw_input('Do you want to remove the files associated to classifier ' + model_name +
-                                 ' and retrain it (y/n)? ') == 'y':
-                    rmtree('saves/' + model_name + suff)
-            else:
-                continue 
-            open('saves/' + model_name + suff + '/categorizer.txt', 'rb')
-        except IOError:
-            print('Training in progress')
-            ctg.model_training(model_name)
+            try:
+                open('saves/' + model_name + suff + '/categorizer.txt', 'rb')
+            except IOError:
+                print('Training model ' + model_name)
+                ctg.model_training(model_name)
 
-    content_plot('adaboost_200_logreg_purity', tags=gen_modes_merged)
+            content_plot(model_name)
 
 
 
