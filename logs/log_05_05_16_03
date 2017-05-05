@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "plotter.py", line 95, in <module>
+    pr.full_process()
+  File "/grid_mnt/vol__vol_U__u/llr/cms/fanthomme/analysis/preprocessing.py", line 223, in full_process
+    read_root_files()
+  File "/grid_mnt/vol__vol_U__u/llr/cms/fanthomme/analysis/preprocessing.py", line 68, in read_root_files
+    np.savetxt(directory + mode + '_test.txt', data_set[nb_events // 2:])
+  File "/cvmfs/cms.cern.ch/slc6_amd64_gcc530/external/py2-numpy/1.11.1-ikhhed2/lib/python2.7/site-packages/numpy-1.11.1-py2.7-linux-x86_64.egg/numpy/lib/npyio.py", line 1168, in savetxt
+    fh.close()
+KeyboardInterrupt

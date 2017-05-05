@@ -91,7 +91,7 @@ if __name__ == "__main__":
 
             if not os.path.isdir('figs/tmp'):
                 os.makedirs('figs/tmp')
-            if not os.isfile('saves/common' + suff + 'full_training_set.txt'):
+            if not os.path.isfile('saves/common' + suff + 'full_training_set.txt'):
                 pr.full_process()
 
             try:

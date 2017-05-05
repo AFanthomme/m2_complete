@@ -17,11 +17,11 @@ ignore_warnings = False  # if true, all warnings will be ignored (use with cauti
 use_calculated_features = False
 redirect_output = True
 
-if redirect_output:
-    if not os.path.isdir('logs'):
-        os.makedirs('logs')
-    sys.stdout = open('logs/log_' + time.strftime("%d_%m_%H_%M"), 'w')
-    sys.stderr = open('logs/log_' + time.strftime("%d_%m_%H_%M"), 'w')
+#if redirect_output:
+if not os.path.isdir('logs'):
+    os.makedirs('logs')
+sys.stdout = open('logs/log_' + time.strftime("%d_%m_%H_%M"), 'w')
+sys.stderr = open('logs/log_' + time.strftime("%d_%m_%H_%M"), 'w')
 
 
 if ignore_warnings:
