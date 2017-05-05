@@ -1,5 +1,6 @@
 import numpy as np
 import pickle
+import logging
 import os
 from misc import frozen
 from constants import models_dict, global_verbosity, use_calculated_features
@@ -45,8 +46,8 @@ def model_training(model_name, verbose=global_verbosity):
 
     test_set = np.loadtxt(directory + 'full_test_set')
     test_labels = np.loadtxt(directory + 'full_training_labels')
-    print('Training score : ' + str(analyser.score(training_set, training_labels)))
-    print('Generalization score : ' + str(analyser.score(test_set, test_labels)))
+    logging.info('Training score : ' + str(analyser.score(training_set, training_labels)))
+    logging.info('Generalization score : ' + str(analyser.score(test_set, test_labels)))
 
 
 def generate_predictions(model_name, tolerance=0., verbose=global_verbosity):

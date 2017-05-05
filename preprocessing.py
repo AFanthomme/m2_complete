@@ -3,7 +3,7 @@ import numpy.lib.recfunctions as rcf
 import ROOT as r
 import pickle
 import os
-
+import logging
 from sklearn import preprocessing as pr
 from root_numpy import root2array, tree2array
 from constants import base_features, base_path, production_modes, gen_modes_merged, event_numbers, cross_sections, \
@@ -25,7 +25,7 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
     for directory in directories:
         if not os.path.isdir(directory):
             os.makedirs(directory)
-            print('Directory ' + directory + ' created')
+            logging.info('Directory ' + directory + ' created')
 
         for mode in production_modes:
             rfile = r.TFile(base_path + mode + '125/ZZ4lAnalysis.root')
@@ -68,7 +68,7 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
                 np.savetxt(directory + mode + '_test.txt', data_set[nb_events // 2:])
                 np.savetxt(directory + mode + '_weights_training.txt', weights[:nb_events // 2])
                 np.savetxt(directory + mode + '_weights_test.txt', weights[nb_events // 2:])
-                print(mode + ' weights, training and test sets successfully stored in saves/' + directory)
+                logging.info(mode + ' weights, training and test sets successfully stored in saves/' + directory)
             else:
                 decay_criteria = {'_lept': ' && genExtInfo > 10', '_hadr': ' && genExtInfo < 10'}
                 for decay in ['_lept', '_hadr']:
@@ -99,7 +99,7 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
                         data_set = rcf.rec_append_fields(data_set, keys, new_features)
 
                     if not np.all(mask):
-                        warn('At least one of the calculated features was Inf or NaN')
+                        logging.warning('At least one of the calculated features was Inf or NaN')
                         data_set = data_set[mask]
                         weights = weights[mask]
 
@@ -107,7 +107,7 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
                     np.savetxt(directory + mode + decay + '_test.txt', data_set[nb_events // 2:])
                     np.savetxt(directory + mode + decay + '_weights_training.txt', weights[:nb_events // 2])
                     np.savetxt(directory + mode + decay + '_weights_test.txt', weights[nb_events // 2:])
-                    print(mode + decay + ' weights, training and test sets successfully stored in saves/' + directory)
+                    logging.info(mode + decay + ' weights, training and test sets successfully stored in saves/' + directory)
 
 
 
@@ -141,7 +141,7 @@ def merge_vector_modes(directories=('saves/common/', 'saves/common_no_discr/')):
             np.savetxt(directory + 'VH' + decay + '_test.txt', test_set)
             np.savetxt(directory + 'VH' + decay + '_weights_training.txt', weights_train)
             np.savetxt(directory + 'VH' + decay + '_weights_test.txt', weights_test)
-        print('Merged data successfully generated')
+    logging.info('Merged data successfully generated')
 
 
 def prepare_scalers(directories=('saves/common/', 'saves/common_no_discr/')):
@@ -219,15 +219,15 @@ def clean_intermediate_files():
 
 
 def full_process():
-    print('\n Reading root files \n')
+    logging.info('\n Reading root files \n')
     read_root_files()
-    print('\n Merging vector modes \n')
+    logging.info('\n Merging vector modes \n')
     merge_vector_modes()
-    print('\n Preparing scalers \n')
+    logging.info('\n Preparing scalers \n')
     prepare_scalers()
-    print('\n Merging and scaling datasets \n')
+    logging.info('\n Merging and scaling datasets \n')
     make_scaled_datasets()
-    # print('\n Removing all intermediate files \n')
+    # logging.info('\n Removing all intermediate files \n')
     # clean_intermediate_files()
 
 if __name__ == '__main__':

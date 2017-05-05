@@ -2,6 +2,7 @@ import matplotlib.pyplot as p
 import numpy as np
 import preprocessing as pr
 import categorizer as ctg
+import logging
 import os
 from itertools import izip
 from constants import production_modes, models_dict, global_verbosity, use_calculated_features, event_categories
@@ -85,9 +86,7 @@ if __name__ == "__main__":
         if not use_calculated_features:
             suff = '_no_discr/'
         for model_name in models_dict.keys():
-            print('\n \n#######################################')
-            print('#######################################\n')
-            print('Studying model ' + model_name + '\n')
+            logging.info('Studying model ' + model_name + '\n')
 
             if not os.path.isdir('figs/tmp'):
                 os.makedirs('figs/tmp')
@@ -97,7 +96,7 @@ if __name__ == "__main__":
             try:
                 open('saves/' + model_name + suff + '/categorizer.txt', 'rb')
             except IOError:
-                print('Training model ' + model_name)
+                logging.info('Training model ' + model_name)
                 ctg.model_training(model_name)
 
             content_plot(model_name)

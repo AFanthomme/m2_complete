@@ -2,9 +2,8 @@
 Define all constants needed for what we want to do, and the sklearn models to use
 """
 import warnings
+import logging
 import os
-import sys
-import time
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import AdaBoostClassifier
 # from sklearn.ensemble import BaggingClassifier, RandomForestClassifier,
@@ -15,13 +14,13 @@ from sklearn.ensemble import AdaBoostClassifier
 global_verbosity = True  # if true, prints all confirmation messages, otherwise just the model and its scores.
 ignore_warnings = False  # if true, all warnings will be ignored (use with caution)
 use_calculated_features = False
-redirect_output = True
 
-#if redirect_output:
-if not os.path.isdir('logs'):
-    os.makedirs('logs')
-sys.stdout = open('logs/log_' + time.strftime("%d_%m_%H_%M"), 'w')
-sys.stderr = open('logs/log_' + time.strftime("%d_%m_%H_%M"), 'w')
+
+if not os.path.isfile('logs'):
+    logging.basicConfig(filename='logs', level=logging.INFO)
+    logging.info('Logger initialized')
+
+
 
 
 if ignore_warnings:
