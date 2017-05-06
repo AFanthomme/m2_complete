@@ -85,14 +85,15 @@ if __name__ == "__main__":
     if not use_calculated_features:
         suff = '_no_discr'
 
-
-    #pr.full_process()
+    if not os.path.isfile('saves/common_no_discr/full_test_set.txt'):
+        pr.full_process()
+    
+    if not os.path.isdir('figs/tmp'):
+        os.makedirs('figs/tmp')
+    
     for model_name in models_dict.keys():
         logging.info('Studying model ' + model_name)
-	
-        if not os.path.isdir('figs/tmp'):
-            os.makedirs('figs/tmp')
-            
+           
         try:
             open('saves/' + model_name + suff + '/categorizer.txt', 'rb')
         except IOError:
@@ -103,9 +104,9 @@ if __name__ == "__main__":
         except IOError:
             logging.info('Generating predictions for ' + model_name + suff)
             ctg.generate_predictions(model_name)
-
+   
         content_plot(model_name)
-
+    logging.info('All models studied')
 
 
 

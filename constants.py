@@ -11,12 +11,11 @@ from sklearn.ensemble import AdaBoostClassifier
 # from sklearn.svm import SVC
 # from sklearn.neural_network import MLPClassifier
 
-global_verbosity = True  # if true, prints all confirmation messages, otherwise just the model and its scores.
+global_verbosity = False  # if true, prints all confirmation messages, otherwise just the model and its scores.
 ignore_warnings = True  # if true, all warnings will be ignored (use with caution)
-use_calculated_features = False
+use_calculated_features = True
 
-
-logging.basicConfig(filename='logs', format='%(levelname)s  %(message)s', level=logging.INFO)
+logging.basicConfig(filename='logs', format='%(levelname)s %(asctime)s %(message)s', level=logging.INFO, datefmt='%H:%M:%S')
 logging.info('Logger initialized')
 
 
@@ -72,5 +71,13 @@ models_dict = {
                 multi_class='ovr', n_jobs=8)),
         'adaboost_logreg_purity': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
                 multi_class='ovr', n_jobs=8)),
+        'adaboost_logreg_content': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
+                multi_class='ovr', n_jobs=8)),
+        'adaboost_logreg_200_purity': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
+                multi_class='ovr', n_jobs=8), n_estimators=200 ),
+        'adaboost_logreg_200_content': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
+                multi_class='ovr', n_jobs=8), n_estimators=200 ),
+        'adaboost_logreg_200_invfreq': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
+                multi_class='ovr', n_jobs=8), n_estimators=200 ),
         }
 

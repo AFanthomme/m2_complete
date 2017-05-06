@@ -10,7 +10,6 @@ INFO  WplusH_hadr weights, training and test sets successfully stored in saves/s
 INFO  ZH_lept weights, training and test sets successfully stored in saves/saves/common/
 INFO  ZH_hadr weights, training and test sets successfully stored in saves/saves/common/
 INFO  ttH weights, training and test sets successfully stored in saves/saves/common/
-INFO  Directory saves/common_no_discr/ created
 INFO  ggH weights, training and test sets successfully stored in saves/saves/common_no_discr/
 INFO  VBFH weights, training and test sets successfully stored in saves/saves/common_no_discr/
 INFO  WminusH_lept weights, training and test sets successfully stored in saves/saves/common_no_discr/
@@ -31,12 +30,18 @@ INFO  Training score : 0.423636858264
 INFO  Generalization score : 0.423763592131
 INFO  Generating predictions for logreg_newt_ovr_invfreq_no_discr
 INFO  Studying model adaboost_logreg_purity
-INFO  Generating predictions for adaboost_logreg_purity_no_discr
-INFO  Studying model adaboost_logreg_invfreq
-INFO  Training model adaboost_logreg_invfreq
+INFO  Training model adaboost_logreg_purity
 INFO  Logger initialized
 INFO  Studying model logreg_newt_ovr_invfreq
 INFO  Studying model adaboost_logreg_purity
+INFO  Training model adaboost_logreg_purity
+INFO  Training score : 0.5677587346
+INFO  Generalization score : 0.566295401021
+INFO  Generating predictions for adaboost_logreg_purity_no_discr
+INFO  Studying model adaboost_logreg_invfreq
+INFO  Training model adaboost_logreg_invfreq
+INFO  Training score : 0.5677587346
+INFO  Generalization score : 0.566295401021
 INFO  Studying model adaboost_logreg_invfreq
 INFO  Training model adaboost_logreg_invfreq
 INFO  Training score : 0.39562395554
@@ -49,11 +54,119 @@ INFO  Generalization score : 0.589892661998
 INFO  Generating predictions for logreg_newt_ovr_purity_no_discr
 INFO  Studying model logreg_newt_ovr_content
 INFO  Training model logreg_newt_ovr_content
+INFO  Training score : 0.39562395554
+INFO  Generalization score : 0.395992507326
 INFO  Training score : 0.641218763359
 INFO  Generalization score : 0.643522800581
 INFO  Generating predictions for logreg_newt_ovr_content_no_discr
+INFO  Studying model logreg_newt_ovr_purity
+INFO  Studying model logreg_newt_ovr_content
+INFO  Studying model logreg_newt_ovr_noweight
+INFO  Training model logreg_newt_ovr_noweight
 INFO  Studying model logreg_newt_ovr_noweight
 INFO  Training model logreg_newt_ovr_noweight
 INFO  Training score : 0.674151801329
 INFO  Generalization score : 0.67442619638
 INFO  Generating predictions for logreg_newt_ovr_noweight_no_discr
+INFO  Training score : 0.674151801329
+INFO  Generalization score : 0.67442619638
+INFO  Generating predictions for logreg_newt_ovr_noweight_no_discr
+INFO 16:20:43 Logger initialized
+INFO 16:20:48 Studying model adaboost_logreg_200_purity
+INFO 16:20:48 Training model adaboost_logreg_200_purity
+INFO 16:27:10 Training score : 0.570144961331
+INFO 16:27:29 Generalization score : 0.569396622079
+INFO 16:27:29 Generating predictions for adaboost_logreg_200_purity_no_discr
+INFO 16:28:09 Studying model adaboost_logreg_purity
+INFO 16:28:14 Studying model logreg_newt_ovr_invfreq
+INFO 16:28:19 Studying model adaboost_logreg_content
+INFO 16:28:19 Training model adaboost_logreg_content
+INFO 16:30:14 Training score : 0.649038125219
+INFO 16:30:19 Generalization score : 0.649375480922
+INFO 16:30:19 Generating predictions for adaboost_logreg_content_no_discr
+INFO 16:30:36 Studying model adaboost_logreg_200_nvfreq
+INFO 16:30:36 Training model adaboost_logreg_200_nvfreq
+INFO 16:31:21 Logger initialized
+INFO 16:31:26 Studying model adaboost_logreg_200_invfreq
+INFO 16:31:26 Training model adaboost_logreg_200_invfreq
+INFO 16:38:04 Training score : 0.668392211729
+INFO 16:38:24 Generalization score : 0.668526881135
+INFO 16:38:24 Generating predictions for adaboost_logreg_200_nvfreq_no_discr
+INFO 16:38:55 Studying model adaboost_logreg_invfreq
+INFO 16:39:00 Studying model adaboost_logreg_200_content
+INFO 16:39:00 Training model adaboost_logreg_200_content
+INFO 16:39:49 Training score : 0.399277136528
+INFO 16:40:09 Generalization score : 0.399474580092
+INFO 16:40:09 Generating predictions for adaboost_logreg_200_invfreq_no_discr
+INFO 16:40:51 Studying model adaboost_logreg_200_purity
+INFO 16:40:57 Studying model adaboost_logreg_purity
+INFO 16:41:02 Studying model logreg_newt_ovr_invfreq
+INFO 16:41:07 Studying model adaboost_logreg_content
+INFO 16:41:12 Studying model adaboost_logreg_invfreq
+INFO 16:41:18 Studying model adaboost_logreg_200_content
+INFO 16:41:18 Training model adaboost_logreg_200_content
+INFO 16:46:26 Training score : 0.648050989079
+INFO 16:46:46 Generalization score : 0.648333968086
+INFO 16:46:46 Generating predictions for adaboost_logreg_200_content_no_discr
+INFO 16:47:17 Studying model logreg_newt_ovr_purity
+INFO 16:47:23 Studying model logreg_newt_ovr_content
+INFO 16:47:28 Studying model logreg_newt_ovr_noweight
+INFO 16:47:33 All models studied
+INFO 16:48:38 Training score : 0.648050989079
+INFO 16:48:57 Generalization score : 0.648333968086
+INFO 16:49:01 Studying model logreg_newt_ovr_purity
+INFO 16:49:06 Studying model logreg_newt_ovr_content
+INFO 16:49:11 Studying model logreg_newt_ovr_noweight
+INFO 16:49:16 All models studied
+INFO 16:53:42 Logger initialized
+INFO 16:53:47 Studying model adaboost_logreg_200_invfreq
+INFO 16:53:47 Training model adaboost_logreg_200_invfreq
+INFO 17:00:30 Training score : 0.399277136528
+INFO 17:00:49 Generalization score : 0.399474580092
+INFO 17:00:49 Generating predictions for adaboost_logreg_200_invfreq
+INFO 17:01:28 Studying model adaboost_logreg_200_purity
+INFO 17:01:28 Training model adaboost_logreg_200_purity
+INFO 17:07:49 Training score : 0.570144961331
+INFO 17:08:07 Generalization score : 0.569396622079
+INFO 17:08:07 Generating predictions for adaboost_logreg_200_purity
+INFO 17:08:34 Studying model adaboost_logreg_purity
+INFO 17:08:34 Training model adaboost_logreg_purity
+INFO 17:10:11 Training score : 0.5677587346
+INFO 17:10:15 Generalization score : 0.566295401021
+INFO 17:10:15 Generating predictions for adaboost_logreg_purity
+INFO 17:10:30 Studying model logreg_newt_ovr_invfreq
+INFO 17:10:30 Training model logreg_newt_ovr_invfreq
+INFO 17:11:21 Training score : 0.423636858264
+INFO 17:11:21 Generalization score : 0.423763592131
+INFO 17:11:21 Generating predictions for logreg_newt_ovr_invfreq
+INFO 17:11:30 Studying model adaboost_logreg_content
+INFO 17:11:30 Training model adaboost_logreg_content
+INFO 17:13:19 Training score : 0.649038125219
+INFO 17:13:23 Generalization score : 0.649375480922
+INFO 17:13:23 Generating predictions for adaboost_logreg_content
+INFO 17:13:37 Studying model adaboost_logreg_invfreq
+INFO 17:13:37 Training model adaboost_logreg_invfreq
+INFO 17:15:35 Training score : 0.39562395554
+INFO 17:15:40 Generalization score : 0.395992507326
+INFO 17:15:40 Generating predictions for adaboost_logreg_invfreq
+INFO 17:15:54 Studying model adaboost_logreg_200_content
+INFO 17:15:54 Training model adaboost_logreg_200_content
+INFO 17:22:18 Training score : 0.648050989079
+INFO 17:22:35 Generalization score : 0.648333968086
+INFO 17:22:35 Generating predictions for adaboost_logreg_200_content
+INFO 17:23:02 Studying model logreg_newt_ovr_purity
+INFO 17:23:02 Training model logreg_newt_ovr_purity
+INFO 17:23:20 Training score : 0.589965411371
+INFO 17:23:20 Generalization score : 0.589892661998
+INFO 17:23:20 Generating predictions for logreg_newt_ovr_purity
+INFO 17:23:30 Studying model logreg_newt_ovr_content
+INFO 17:23:30 Training model logreg_newt_ovr_content
+INFO 17:23:48 Training score : 0.641218763359
+INFO 17:23:48 Generalization score : 0.643522800581
+INFO 17:23:48 Generating predictions for logreg_newt_ovr_content
+INFO 17:23:57 Studying model logreg_newt_ovr_noweight
+INFO 17:23:57 Training model logreg_newt_ovr_noweight
+INFO 17:24:15 Training score : 0.674151801329
+INFO 17:24:15 Generalization score : 0.67442619638
+INFO 17:24:15 Generating predictions for logreg_newt_ovr_noweight
+INFO 17:24:25 All models studied
