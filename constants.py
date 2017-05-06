@@ -6,6 +6,7 @@ import logging
 import os
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import AdaBoostClassifier
+from sklearn.tree import DecisionTreeClassifier
 # from sklearn.ensemble import BaggingClassifier, RandomForestClassifier,
 # from sklearn.gaussian_process import GaussianProcessClassifier
 # from sklearn.svm import SVC
@@ -13,7 +14,7 @@ from sklearn.ensemble import AdaBoostClassifier
 
 global_verbosity = False  # if true, prints all confirmation messages, otherwise just the model and its scores.
 ignore_warnings = True  # if true, all warnings will be ignored (use with caution)
-use_calculated_features = True
+use_calculated_features = False
 
 logging.basicConfig(filename='logs', format='%(levelname)s %(asctime)s %(message)s', level=logging.INFO, datefmt='%H:%M:%S')
 logging.info('Logger initialized')
@@ -63,21 +64,27 @@ kin_variables_list_full = \
 
 
 models_dict = {
-        'logreg_newt_ovr_invfreq': LogisticRegression(solver='newton-cg', multi_class='ovr', n_jobs=8),
-        'logreg_newt_ovr_noweight': LogisticRegression(solver='newton-cg', multi_class='ovr', n_jobs=8),
-        'logreg_newt_ovr_purity': LogisticRegression(solver='newton-cg', multi_class='ovr', n_jobs=8),
-        'logreg_newt_ovr_content': LogisticRegression(solver='newton-cg', multi_class='ovr', n_jobs=8),
-        'adaboost_logreg_invfreq': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
-                multi_class='ovr', n_jobs=8)),
-        'adaboost_logreg_purity': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
-                multi_class='ovr', n_jobs=8)),
-        'adaboost_logreg_content': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
-                multi_class='ovr', n_jobs=8)),
+        # 'logreg_newt_ovr_invfreq': LogisticRegression(solver='newton-cg', multi_class='ovr', n_jobs=8),
+        # 'logreg_newt_ovr_noweight': LogisticRegression(solver='newton-cg', multi_class='ovr', n_jobs=8),
+        # 'logreg_newt_ovr_purity': LogisticRegression(solver='newton-cg', multi_class='ovr', n_jobs=8),
+        # 'logreg_newt_ovr_content': LogisticRegression(solver='newton-cg', multi_class='ovr', n_jobs=8),
+        # 'adaboost_logreg_invfreq': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
+        #         multi_class='ovr', n_jobs=8)),
+        # 'adaboost_logreg_purity': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
+        #         multi_class='ovr', n_jobs=8)),
+        # 'adaboost_logreg_content': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
+        #         multi_class='ovr', n_jobs=8)),
         'adaboost_logreg_200_purity': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
-                multi_class='ovr', n_jobs=8), n_estimators=200 ),
-        'adaboost_logreg_200_content': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
-                multi_class='ovr', n_jobs=8), n_estimators=200 ),
+                multi_class='ovr', n_jobs=8), n_estimators=200),
+        'adaboost_logreg_200_noweight': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
+                multi_class='ovr', n_jobs=8), n_estimators=200),
         'adaboost_logreg_200_invfreq': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
-                multi_class='ovr', n_jobs=8), n_estimators=200 ),
+                multi_class='ovr', n_jobs=8), n_estimators=200),
+
+        'adaboost_stumps_300_purity': AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                            n_estimators=300),
+
+        'adaboost_stumps_300_noweight': AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                            n_estimators=300),
         }
 
