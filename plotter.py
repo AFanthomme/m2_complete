@@ -5,7 +5,7 @@ import categorizer as ctg
 import logging
 import os
 from itertools import izip
-from constants import production_modes, models_dict, global_verbosity, use_calculated_features, event_categories
+from constants import models_dict, global_verbosity, use_calculated_features, event_categories, luminosity
 from copy import copy
 
 
@@ -45,7 +45,7 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     for true_tag, predicted_tag, rescaled_weight in izip(true_categories, predictions, weights):
         contents_table[predicted_tag, true_tag] += rescaled_weight
 
-
+    contents_table *= luminosity
     ordering = range(nb_categories)
     if permutation:
         ordering = permutation

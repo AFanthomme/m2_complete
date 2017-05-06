@@ -110,7 +110,6 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
                     logging.info(mode + decay + ' weights, training and test sets successfully stored in saves/' + directory)
 
 
-
 def merge_vector_modes(directories=('saves/common/', 'saves/common_no_discr/')):
     for directory in directories:
         for decay in ['_lept', '_hadr']:
@@ -207,13 +206,13 @@ def make_scaled_datasets():
         np.savetxt(directory + 'full_test_labels.txt', test_labels)
         np.savetxt(directory + 'full_test_weights.txt', test_weights)
 
+
 def clean_intermediate_files():
     for directory in ['saves/common/', 'saves/common_no_discr/']:
         files_list = os.listdir(directory)
         for file_name in files_list:
             if file_name.split('_')[0] != 'full':
                 os.remove(directory + file_name)
-
 
 
 def full_process():
