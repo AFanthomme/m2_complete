@@ -116,3 +116,103 @@ INFO 12:38:15 Generating predictions for adaboost_logreg_200_purity
 INFO 12:43:17 Training score : 0.570144961331
 INFO 12:43:34 Generalization score : 0.569396622079
 INFO 12:43:39 All models studied
+INFO 12:50:42 Logger initialized
+INFO 12:50:47 Reading root files
+INFO 12:50:47 Directory saves/common/ created
+INFO 12:52:51 ggH weights, training and test sets successfully stored in saves/saves/common/
+INFO 12:53:37 VBFH weights, training and test sets successfully stored in saves/saves/common/
+INFO 12:53:38 WminusH_lept weights, training and test sets successfully stored in saves/saves/common/
+INFO 12:53:41 WminusH_hadr weights, training and test sets successfully stored in saves/saves/common/
+INFO 12:53:44 WplusH_lept weights, training and test sets successfully stored in saves/saves/common/
+INFO 12:53:50 WplusH_hadr weights, training and test sets successfully stored in saves/saves/common/
+INFO 12:53:52 ZH_lept weights, training and test sets successfully stored in saves/saves/common/
+INFO 12:53:55 ZH_hadr weights, training and test sets successfully stored in saves/saves/common/
+INFO 12:54:02 ttH weights, training and test sets successfully stored in saves/saves/common/
+INFO 12:54:02 Directory saves/common_no_discr/ created
+INFO 12:56:06 ggH weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO 12:56:50 VBFH weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO 12:56:51 WminusH_lept weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO 12:56:54 WminusH_hadr weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO 12:56:56 WplusH_lept weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO 12:57:02 WplusH_hadr weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO 12:57:04 ZH_lept weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO 12:57:07 ZH_hadr weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO 12:57:14 ttH weights, training and test sets successfully stored in saves/saves/common_no_discr/
+INFO 12:57:14 Merging vector modes
+INFO 12:57:22 Merged data successfully generated
+INFO 12:57:22 Preparing scalers
+INFO 12:57:38 Merging and scaling datasets
+INFO 12:58:17 Removing all intermediate files
+INFO 12:58:17 Studying model adaboost_logreg_200_invfreq
+INFO 12:58:17 Training model adaboost_logreg_200_invfreq
+INFO 13:04:44 Training score : 0.399277136528
+INFO 13:05:01 Generalization score : 0.399474580092
+INFO 13:05:01 Generating predictions for adaboost_logreg_200_invfreq_no_discr
+INFO 13:05:40 Studying model adaboost_stumps_300_noweight
+INFO 13:05:40 Training model adaboost_stumps_300_noweight
+INFO 13:07:08 Training score : 0.703361703781
+INFO 13:07:21 Generalization score : 0.703541920892
+INFO 13:07:21 Generating predictions for adaboost_stumps_300_noweight_no_discr
+INFO 13:07:44 Studying model adaboost_stumps_800_purity
+INFO 13:07:44 Training model adaboost_stumps_800_purity
+INFO 13:11:21 Training score : 0.620193540865
+INFO 13:11:57 Generalization score : 0.61945141809
+INFO 13:11:57 Generating predictions for adaboost_stumps_800_purity_no_discr
+INFO 13:12:42 Studying model adaboost_stumps_500_purity
+INFO 13:12:42 Training model adaboost_stumps_500_purity
+INFO 13:15:03 Training score : 0.621911313202
+INFO 13:15:26 Generalization score : 0.621884205536
+INFO 13:15:26 Generating predictions for adaboost_stumps_500_purity_no_discr
+INFO 13:15:57 Studying model adaboost_logreg_200_noweight
+INFO 13:15:57 Training model adaboost_logreg_200_noweight
+INFO 13:21:49 Training score : 0.668392211729
+INFO 13:22:06 Generalization score : 0.668526881135
+INFO 13:22:06 Generating predictions for adaboost_logreg_200_noweight_no_discr
+INFO 13:22:33 Studying model adaboost_stumps_300_purity
+INFO 13:22:33 Training model adaboost_stumps_300_purity
+INFO 13:24:01 Training score : 0.619750495511
+INFO 13:24:15 Generalization score : 0.619676820121
+INFO 13:24:15 Generating predictions for adaboost_stumps_300_purity_no_discr
+INFO 13:24:38 Studying model adaboost_logreg_200_purity
+INFO 13:24:38 Training model adaboost_logreg_200_purity
+INFO 13:30:38 Training score : 0.570144961331
+INFO 13:30:55 Generalization score : 0.569396622079
+INFO 13:30:55 Generating predictions for adaboost_logreg_200_purity_no_discr
+INFO 13:31:22 All models studied
+INFO 13:47:30 Logger initialized
+INFO 13:47:35 Studying model adaboost_logreg_200_invfreq
+INFO 13:47:35 Training model adaboost_logreg_200_invfreq
+INFO 13:54:25 Training score : 0.399277136528
+INFO 13:54:43 Generalization score : 0.399474580092
+INFO 13:54:43 Generating predictions for adaboost_logreg_200_invfreq
+INFO 13:55:23 Studying model adaboost_stumps_300_noweight
+INFO 13:55:23 Training model adaboost_stumps_300_noweight
+INFO 13:56:54 Training score : 0.703361703781
+INFO 13:57:07 Generalization score : 0.703541920892
+INFO 13:57:07 Generating predictions for adaboost_stumps_300_noweight
+INFO 13:57:30 Studying model adaboost_stumps_800_purity
+INFO 13:57:30 Training model adaboost_stumps_800_purity
+INFO 14:01:10 Training score : 0.620193540865
+INFO 14:01:45 Generalization score : 0.61945141809
+INFO 14:01:45 Generating predictions for adaboost_stumps_800_purity
+INFO 14:02:30 Studying model adaboost_stumps_500_purity
+INFO 14:02:30 Training model adaboost_stumps_500_purity
+INFO 14:04:51 Training score : 0.621911313202
+INFO 14:05:13 Generalization score : 0.621884205536
+INFO 14:05:13 Generating predictions for adaboost_stumps_500_purity
+INFO 14:05:45 Studying model adaboost_logreg_200_noweight
+INFO 14:05:45 Training model adaboost_logreg_200_noweight
+INFO 14:11:50 Training score : 0.668392211729
+INFO 14:12:07 Generalization score : 0.668526881135
+INFO 14:12:07 Generating predictions for adaboost_logreg_200_noweight
+INFO 14:12:35 Studying model adaboost_stumps_300_purity
+INFO 14:12:35 Training model adaboost_stumps_300_purity
+INFO 14:14:03 Training score : 0.619750495511
+INFO 14:14:17 Generalization score : 0.619676820121
+INFO 14:14:17 Generating predictions for adaboost_stumps_300_purity
+INFO 14:14:40 Studying model adaboost_logreg_200_purity
+INFO 14:14:40 Training model adaboost_logreg_200_purity
+INFO 14:20:48 Training score : 0.570144961331
+INFO 14:21:05 Generalization score : 0.569396622079
+INFO 14:21:05 Generating predictions for adaboost_logreg_200_purity
+INFO 14:21:31 All models studied
