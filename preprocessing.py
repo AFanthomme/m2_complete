@@ -37,8 +37,8 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130')
                 weights = tree2array(tree, branches='overallEventWeight', selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130')
-
-                all_calculated_features = calculated_features
+                if directory == 'saves/common/':
+                    all_calculated_features = calculated_features
                 nb_events = np.ma.size(data_set, 0)
 
                 mask = np.ones(nb_events).astype(bool)
