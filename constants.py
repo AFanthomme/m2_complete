@@ -83,7 +83,11 @@ models_dict = {
 
         'adaboost_stumps_300_purity': AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
                             n_estimators=300),
+        'adaboost_stumps_500_purity': AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                            n_estimators=500),
 
+        'adaboost_stumps_800_purity': AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                            n_estimators=800),
         'adaboost_stumps_300_noweight': AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
                             n_estimators=300),
         }
