@@ -27,6 +27,11 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
             os.makedirs(directory)
             logging.info('Directory ' + directory + ' created')
 
+        all_calculated_features = None
+
+        if directory == 'saves/common/':
+            all_calculated_features = calculated_features
+
         for mode in production_modes:
             rfile = r.TFile(base_path + mode + '125/ZZ4lAnalysis.root')
             tree = rfile.Get('ZZTree/candTree')
@@ -37,8 +42,6 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130')
                 weights = tree2array(tree, branches='overallEventWeight', selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130')
-                if directory == 'saves/common/':
-                    all_calculated_features = calculated_features
                 nb_events = np.ma.size(data_set, 0)
 
                 mask = np.ones(nb_events).astype(bool)
@@ -163,7 +166,7 @@ def prepare_scalers(directories=('saves/common/', 'saves/common_no_discr/')):
         scaler.fit_transform = frozen
         scaler.set_params = frozen
 
-        with open(directory + 'scaler.txt', 'wb') as f:
+        with open(directory + 'scaler.pkl', 'wb') as f:
             pickle.dump(scaler, f)
 
 
@@ -171,7 +174,7 @@ def make_scaled_datasets():
     fit_categories = event_categories #gen_modes_merged
     for directory in ['saves/common/', 'saves/common_no_discr/']:
 
-        with open(directory + 'scaler.txt', 'rb') as f:
+        with open(directory + 'scaler.pkl', 'rb') as f:
             scaler = pickle.load(f)
 
         file_list = [directory + cat for cat in fit_categories]

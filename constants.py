@@ -14,7 +14,7 @@ from sklearn.tree import DecisionTreeClassifier
 
 global_verbosity = False  # if true, prints all confirmation messages, otherwise just the model and its scores.
 ignore_warnings = True  # if true, all warnings will be ignored (use with caution)
-use_calculated_features = True 
+use_calculated_features = False
 
 logging.basicConfig(filename='logs', format='%(levelname)s %(asctime)s %(message)s', level=logging.INFO, datefmt='%H:%M:%S')
 logging.info('Logger initialized')

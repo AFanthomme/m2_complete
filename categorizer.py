@@ -41,7 +41,7 @@ def model_training(model_name, verbose=global_verbosity):
     if verbose:
         print('Directory saves/' + model_name + suffix + ' successfully created.')
 
-    with open('saves/' + model_name + suffix + '/categorizer.txt', mode='wb') as file:
+    with open('saves/' + model_name + suffix + '/categorizer.pkl', mode='wb') as file:
         pickle.dump(analyser, file)
 
     test_set = np.loadtxt(directory + 'full_test_set.txt')
@@ -60,7 +60,7 @@ def generate_predictions(model_name, tolerance=0., verbose=global_verbosity):
 
     scaled_dataset = np.loadtxt(directory + 'full_test_set.txt')
 
-    with open('saves/' + model_name + suffix + '/categorizer.txt', mode='rb') as file:
+    with open('saves/' + model_name + suffix + '/categorizer.pkl', mode='rb') as file:
         classifier = pickle.load(file)
 
     results = classifier.predict(scaled_dataset)
