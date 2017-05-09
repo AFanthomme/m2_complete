@@ -20,7 +20,7 @@ if __name__ == "__main__":
         suffix = ''
     elif features_set_selector == 1:
         directory = 'saves/common_only_discr/'
-        suffix = '_no_discr'
+        suffix = '_only_discr'
     elif features_set_selector == 2:
         directory = 'saves/common/'
         suffix = '_no_discr'

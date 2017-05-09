@@ -14,7 +14,7 @@ from sklearn.tree import DecisionTreeClassifier
 
 global_verbosity = False  # if true, prints all confirmation messages, otherwise just the model and its scores.
 ignore_warnings = True  # if true, all warnings will be ignored (use with caution)
-features_set_selector = 0  # 0:linear, 1: non_linear, 2: both
+features_set_selector = 1  # 0:linear, 1: non_linear, 2: both
 
 luminosity = 2 * 35.9   # (fb-1), factor 2 because only half of the initial data set used for evaluation
 
