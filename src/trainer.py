@@ -17,8 +17,8 @@ def asymmetric_training(model_name, weights=None, penalty_matrix=None, verbose=g
         suffix = '_no_discr'
 
 
-def model_training(model_name, weights=None, penalty_matrix=None, verbose=global_verbosity):
-    analyser = models_dict[model_name]
+def model_training(model_name, verbose=global_verbosity):
+    analyser, weights = models_dict[model_name]
 
     if use_calculated_features:
         directory = 'saves/common/'

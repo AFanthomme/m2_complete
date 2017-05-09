@@ -26,7 +26,6 @@ if __name__ == "__main__":
 
     for model_name in models_dict.keys():
         logging.info('Studying model ' + model_name)
-
         try:
             open('saves/' + model_name + suff + '/categorizer.pkl', 'rb')
         except IOError:

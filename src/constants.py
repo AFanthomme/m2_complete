@@ -67,10 +67,19 @@ models_dict = {
         #         multi_class='ovr', n_jobs=8)),
         # 'adaboost_logreg_content': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
         #         multi_class='ovr', n_jobs=8)),
-        'adaboost_logreg_200_purity': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
-                multi_class='ovr', n_jobs=8), n_estimators=200),
+        'adaboost_logreg_200_purity': (AdaBoostClassifier(LogisticRegression(solver='newton-cg',
+                multi_class='ovr', n_jobs=8), n_estimators=200), None),
 
-        'adaboost_stumps_300_purity': AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                            n_estimators=300),
+        'adaboost_stumps_300_purity': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                            n_estimators=300), None),
+        'adaboost_stumps_300_15_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                            n_estimators=300), [1.5, 1., 1., 1., 1.]),
+        'adaboost_stumps_300_20_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                            n_estimators=300), [2, 1., 1., 1., 1.]),
+        'adaboost_stumps_300_25_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                                                             n_estimators=300), [2.5, 1., 1., 1., 1.]),
+        'adaboost_stumps_300_30_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                                                             n_estimators=300), [3., 1., 1., 1., 1.]),
+
         }
 
