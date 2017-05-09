@@ -9,31 +9,21 @@ from src.misc import frozen
 
 
 def asymmetric_training(model_name, weights=None, penalty_matrix=None, verbose=global_verbosity):
-    if features_set_selector == 0:
-        directory = 'saves/common_no_discr/'
-        suffix = ''
-    elif features_set_selector == 1:
-        directory = 'saves/common_only_discr/'
-        suffix = '_no_discr'
-    elif features_set_selector == 2:
-        directory = 'saves/common/'
-        suffix = '_no_discr'
-    else:
-        raise('Please choose a valid features set')
+    pass
 
 
 def model_training(model_name, verbose=global_verbosity):
     analyser, model_weights = models_dict[model_name]
 
     if features_set_selector == 0:
-        directory = 'saves/common_no_discr/'
-        suffix = ''
+        directory = 'saves/common_nodiscr/'
+        suffix = '_nodiscr'
     elif features_set_selector == 1:
-        directory = 'saves/common_only_discr/'
-        suffix = '_no_discr'
+        directory = 'saves/common_onlydiscr/'
+        suffix = '_onlydiscr'
     elif features_set_selector == 2:
-        directory = 'saves/common/'
-        suffix = '_no_discr'
+        directory = 'saves/common_full/'
+        suffix = '_full'
     else:
         raise IOError
 
@@ -76,14 +66,14 @@ def model_training(model_name, verbose=global_verbosity):
 
 def generate_predictions(model_name, tolerance=0., verbose=global_verbosity):
     if features_set_selector == 0:
-        directory = 'saves/common_no_discr/'
-        suffix = ''
+        directory = 'saves/common_nodiscr/'
+        suffix = '_nodiscr'
     elif features_set_selector == 1:
-        directory = 'saves/common_only_discr/'
-        suffix = '_no_discr'
+        directory = 'saves/common_onlydiscr/'
+        suffix = '_onlydiscr'
     elif features_set_selector == 2:
-        directory = 'saves/common/'
-        suffix = '_no_discr'
+        directory = 'saves/common_full/'
+        suffix = '_full'
     else:
         raise IOError
 

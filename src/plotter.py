@@ -25,11 +25,11 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     tags_list = copy(event_categories)
 
     if features_set_selector == 0:
-        suffix = '/'
+        suffix = '_nodiscr/'
     elif features_set_selector == 1:
-        suffix = '_only_discr/'
+        suffix = '_onlydiscr/'
     elif features_set_selector == 2:
-        suffix = '_no_discr/'
+        suffix = '_full/'
     else:
         raise IOError
 

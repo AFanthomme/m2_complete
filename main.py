@@ -16,19 +16,21 @@ if ignore_warnings:
 if __name__ == "__main__":
 
     if features_set_selector == 0:
-        directory = 'saves/common_no_discr/'
-        suffix = ''
+        directory = 'saves/common_nodiscr/'
+        suffix = '_nodiscr'
     elif features_set_selector == 1:
-        directory = 'saves/common_only_discr/'
-        suffix = '_only_discr'
+        directory = 'saves/common_onlydiscr/'
+        suffix = '_onlydiscr'
     elif features_set_selector == 2:
-        directory = 'saves/common/'
-        suffix = '_no_discr'
+        directory = 'saves/common_full/'
+        suffix = '_full'
     else:
         raise IOError
 
-    if not tests.common_saves_found():
+    if not (tests.common_saves_found() and tests.lengths_consistent()):
         pr.full_process()
+    if not (tests.common_saves_found() and tests.lengths_consistent()):
+        raise UserWarning
 
     if not os.path.isdir('figs/tmp'):
         os.makedirs('figs/tmp')

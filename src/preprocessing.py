@@ -31,7 +31,7 @@ def remove_fields(a, *fields_to_remove):
     return a[[name for name in a.dtype.names if name not in fields_to_remove]]
 
 
-def read_root_files(directories=('saves/common/', 'saves/common_no_discr/', 'saves/common_only_discr/')):
+def read_root_files(directories=('saves/common_full/', 'saves/common_nodiscr/', 'saves/common_onlydiscr/')):
     for directory in directories:
         if os.path.isdir(directory):
             rmtree(directory)
@@ -40,7 +40,7 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/', 'sav
 
         features_to_compute = None
 
-        if directory in ['saves/common/', 'saves/common_only_discr/']:
+        if directory in ['saves/common_full/', 'saves/common_onlydiscr/']:
             features_to_compute = calculated_features
 
         for mode in production_modes:
@@ -78,8 +78,8 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/', 'sav
                     data_set = data_set[mask]
                     weights = weights[mask]
 
-                if directory == 'saves/common_only_discr/':
-                    data_set = remove_fields(data_set, likelihood_names)
+                if directory == 'saves/common_onlydiscr/':
+                    data_set = remove_fields(data_set, *likelihood_names)
 
                 np.savetxt(directory + mode + '_training.txt', data_set[:nb_events // 2])
                 np.savetxt(directory + mode + '_test.txt', data_set[nb_events // 2:])
@@ -187,7 +187,7 @@ def prepare_scalers(directories=('saves/common/', 'saves/common_no_discr/', 'sav
 
 def make_scaled_datasets():
     fit_categories = event_categories
-    for directory in ['saves/common/', 'saves/common_no_discr/', 'saves/common_only_discr/']:
+    for directory in ['saves/common_full/', 'saves/common_nodiscr/', 'saves/common_onlydiscr/']:
 
         with open(directory + 'scaler.pkl', 'rb') as f:
             scaler = pickle.load(f)
@@ -226,10 +226,10 @@ def make_scaled_datasets():
 
 
 def clean_intermediate_files():
-    for directory in ['saves/common/', 'saves/common_no_discr/', 'saves/common_only_discr/']:
+    for directory in ['saves/common_full/', 'saves/common_nodiscr/', 'saves/common_onlydiscr/']:
         files_list = os.listdir(directory)
         for file_name in files_list:
-            if file_name.split('_')[0] != 'full':
+            if file_name.split('_')[0] not in ['full', 'scaler.pkl']:
                 os.remove(directory + file_name)
 
 
