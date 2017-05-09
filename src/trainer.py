@@ -1,12 +1,14 @@
-import numpy as np
-import pickle
 import logging
 import os
-from misc import frozen
+import pickle
+
+import numpy as np
 from constants import models_dict, global_verbosity, use_calculated_features
 
+from src.misc import frozen
 
-def model_training(model_name, verbose=global_verbosity):
+
+def model_training(model_name, weights=None, penalty_matrix=None, verbose=global_verbosity):
     analyser = models_dict[model_name]
 
     if use_calculated_features:
@@ -19,7 +21,9 @@ def model_training(model_name, verbose=global_verbosity):
     training_set = np.loadtxt(directory + 'full_training_set.txt')
     training_labels = np.loadtxt(directory + 'full_training_labels.txt')
 
-    if model_name.split('_')[-1] == 'invfreq':
+    if weights:
+        analyser.fit(training_set, training_labels, weights)
+    elif model_name.split('_')[-1] == 'invfreq':
         weights = np.loadtxt(directory + 'full_training_weights.txt')
         analyser.fit(training_set, training_labels, 1./weights)
     elif model_name.split('_')[-1] == 'purity':
@@ -27,7 +31,7 @@ def model_training(model_name, verbose=global_verbosity):
         weights = np.array([custom_weights[int(cat)] for cat in training_labels])
         analyser.fit(training_set, training_labels, weights)
     elif model_name.split('_')[-1] == 'content':
-        custom_weights = np.array([1., 3.,0.5,  2., 0.5])
+        custom_weights = np.array([1., 3., 0.5,  2., 0.5])
         weights = np.array([custom_weights[int(cat)] for cat in training_labels])
         analyser.fit(training_set, training_labels, weights)
     else:

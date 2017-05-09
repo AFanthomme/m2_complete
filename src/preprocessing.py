@@ -1,15 +1,17 @@
+import logging
+import os
+import pickle
+from warnings import warn
+import ROOT as r
 import numpy as np
 import numpy.lib.recfunctions as rcf
-import ROOT as r
-import pickle
-import os
-import logging
+from src.constants import base_features, base_path, production_modes, event_numbers, cross_sections, \
+    event_categories
+from root_numpy import tree2array
+from shutils import rmtree
 from sklearn import preprocessing as pr
-from root_numpy import root2array, tree2array
-from constants import base_features, base_path, production_modes, gen_modes_merged, event_numbers, cross_sections, \
-    use_calculated_features, event_categories
-from warnings import warn
-from misc import frozen
+
+from src.misc import frozen
 
 r.gROOT.LoadMacro("libs/cConstants_no_ext.cc")
 r.gROOT.LoadMacro("libs/Discriminants_no_ext.cc")
@@ -23,14 +25,15 @@ calculated_features = {
 
 def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
     for directory in directories:
-        if not os.path.isdir(directory):
-            os.makedirs(directory)
-            logging.info('Directory ' + directory + ' created')
+        if os.path.isdir(directory):
+            rmtree(directory)
+        os.makedirs(directory)
+        logging.info('Directory ' + directory + ' created')
 
-        all_calculated_features = None
+        features_to_compute = None
 
         if directory == 'saves/common/':
-            all_calculated_features = calculated_features
+            features_to_compute = calculated_features
 
         for mode in production_modes:
             rfile = r.TFile(base_path + mode + '125/ZZ4lAnalysis.root')
@@ -45,11 +48,11 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
                 nb_events = np.ma.size(data_set, 0)
 
                 mask = np.ones(nb_events).astype(bool)
-                if all_calculated_features:
-                    new_features = [np.zeros(nb_events) for _ in range(len(all_calculated_features))]
+                if features_to_compute:
+                    new_features = [np.zeros(nb_events) for _ in range(len(features_to_compute))]
                     keys = []
                     feature_idx = 0
-                    for key, couple in all_calculated_features.iteritems():
+                    for key, couple in features_to_compute.iteritems():
                         keys.append(key)
                         plop = new_features[feature_idx]
                         feature_expression, vars_list = couple
@@ -80,15 +83,13 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
                     weights = tree2array(tree, branches='overallEventWeight', selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130' + decay_criteria[decay])
 
-                    all_calculated_features = calculated_features
                     nb_events = np.ma.size(data_set, 0)
-
                     mask = np.ones(nb_events).astype(bool)
-                    if all_calculated_features:
-                        new_features = [np.zeros(nb_events) for _ in range(len(all_calculated_features))]
+                    if features_to_compute:
+                        new_features = [np.zeros(nb_events) for _ in range(len(features_to_compute))]
                         keys = []
                         feature_idx = 0
-                        for key, couple in all_calculated_features.iteritems():
+                        for key, couple in features_to_compute.iteritems():
                             keys.append(key)
                             plop = new_features[feature_idx]
                             feature_expression, vars_list = couple

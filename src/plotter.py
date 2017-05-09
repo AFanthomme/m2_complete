@@ -1,12 +1,12 @@
+import os
+from copy import copy
+from itertools import izip
+
 import matplotlib.pyplot as p
 import numpy as np
-import preprocessing as pr
-import categorizer as ctg
-import logging
-import os
-from itertools import izip
-from constants import models_dict, global_verbosity, use_calculated_features, event_categories, luminosity
-from copy import copy
+import trainer as ctg
+
+from src.constants import global_verbosity, use_calculated_features, event_categories, luminosity
 
 
 def content_plot(model_name, permutation=None, save=True, verbose=global_verbosity):
@@ -46,7 +46,8 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
         contents_table[predicted_tag, true_tag] += rescaled_weight
 
     contents_table *= luminosity
-    ordering = range(nb_categories)
+    ordering = [nb_categories - i for i in range(nb_categories)]
+
     if permutation:
         ordering = permutation
 
@@ -80,33 +81,6 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
         p.show()
 
 
-if __name__ == "__main__":
-    suff = ''
-    if not use_calculated_features:
-        suff = '_no_discr'
-
-    if not os.path.isfile('saves/common_no_discr/full_test_set.txt'):
-        pr.full_process()
-    
-    if not os.path.isdir('figs/tmp'):
-        os.makedirs('figs/tmp')
-    
-    for model_name in models_dict.keys():
-        logging.info('Studying model ' + model_name)
-           
-        try:
-            open('saves/' + model_name + suff + '/categorizer.txt', 'rb')
-        except IOError:
-            logging.info('Training model ' + model_name)
-            ctg.model_training(model_name)
-        try:
-            open('saves/' + model_name + suff + '/predictions.txt', 'rb')
-        except IOError:
-            logging.info('Generating predictions for ' + model_name + suff)
-            ctg.generate_predictions(model_name)
-   
-        content_plot(model_name)
-    logging.info('All models studied')
 
 
 

@@ -16,13 +16,6 @@ global_verbosity = False  # if true, prints all confirmation messages, otherwise
 ignore_warnings = True  # if true, all warnings will be ignored (use with caution)
 use_calculated_features = False
 
-logging.basicConfig(filename='logs', format='%(levelname)s %(asctime)s %(message)s', level=logging.INFO, datefmt='%H:%M:%S')
-logging.info('Logger initialized')
-
-
-if ignore_warnings:
-    warnings.filterwarnings('ignore')
-
 luminosity = 2 * 35.9   # (fb-1), factor 2 because only half of the initial data set used for evaluation
 
 cross_sections = {'ggH': 13.41, 'VBFH': 1.044, 'WminusH': 0.147, 'WplusH': 0.232, 'ZH': 0.668, 'ttH': 0.393,
