@@ -8,6 +8,15 @@ from constants import models_dict, global_verbosity, use_calculated_features
 from src.misc import frozen
 
 
+def asymmetric_training(model_name, weights=None, penalty_matrix=None, verbose=global_verbosity):
+    if use_calculated_features:
+        directory = 'saves/common/'
+        suffix = ''
+    else:
+        directory = 'saves/common_no_discr/'
+        suffix = '_no_discr'
+
+
 def model_training(model_name, weights=None, penalty_matrix=None, verbose=global_verbosity):
     analyser = models_dict[model_name]
 

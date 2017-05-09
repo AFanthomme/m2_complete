@@ -71,7 +71,7 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
                            color=color_array[gen_mode])
             tmp += normalized_content[gen_mode]
         ax.text(0.01, (position + 0.5) * 0.19 - 0.025, tags_list[category] + ', ' +
-                str(np.round(np.sum(contents_table[category, :]), 3)) + ' events', fontsize=15)
+                str(np.round(np.sum(contents_table[category, :]), 3)) + ' events', fontsize=16, color='w')
     ax.get_yaxis().set_visible(False)
     p.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=6, fontsize=11, mode="expand", borderaxespad=0.)
 
