@@ -4,9 +4,9 @@ from itertools import izip
 
 import matplotlib.pyplot as p
 import numpy as np
-import trainer as ctg
+import src.trainer as ctg
 
-from src.constants import global_verbosity, use_calculated_features, event_categories, luminosity
+from src.constants import global_verbosity, features_set_selector, event_categories, luminosity
 
 
 def content_plot(model_name, permutation=None, save=True, verbose=global_verbosity):
@@ -24,10 +24,14 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     """
     tags_list = copy(event_categories)
 
-    if use_calculated_features:
-        suffix = '/'
+    if features_set_selector == 0:
+        suffix = ''
+    elif features_set_selector == 1:
+        suffix = '_no_discr'
+    elif features_set_selector == 2:
+        suffix = '_no_discr'
     else:
-        suffix = '_no_discr/'
+        raise IOError
 
     directory = 'saves/' + model_name + suffix
     if not os.path.isfile(directory + 'predictions.txt'):
@@ -54,7 +58,7 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     fig = p.figure()
     p.title('Content plot for ' + model_name, y=-0.12)
     ax = fig.add_subplot(111)
-    color_array = ['b', 'g', 'r', 'brown', 'darkorange', 'm']
+    color_array = ['b', 'g', 'r', 'brown', 'm']
 
     for category in range(nb_categories):
         position = ordering[category]

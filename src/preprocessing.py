@@ -10,20 +10,28 @@ from src.constants import base_features, base_path, production_modes, event_numb
 from root_numpy import tree2array
 from shutil import rmtree
 from sklearn import preprocessing as pr
-
+from src.constants import likelihood_names
 from src.misc import frozen
 
+
+# This is done here to avoid having root anywhere it doesn't need to be
 r.gROOT.LoadMacro("libs/cConstants_no_ext.cc")
 r.gROOT.LoadMacro("libs/Discriminants_no_ext.cc")
-
-
 calculated_features = {
 'DVBF2j_ME': (r.DVBF2j_ME, ['p_JJVBF_SIG_ghv1_1_JHUGen_JECNominal', 'p_JJQCD_SIG_ghg2_1_JHUGen_JECNominal', 'ZZMass']),
 'DVBF1j_ME' : (r.DVBF1j_ME, ['p_JVBF_SIG_ghv1_1_JHUGen_JECNominal', 'pAux_JVBF_SIG_ghv1_1_JHUGen_JECNominal',
-                            'p_JQCD_SIG_ghg2_1_JHUGen_JECNominal', 'ZZMass'])}
+                            'p_JQCD_SIG_ghg2_1_JHUGen_JECNominal', 'ZZMass']),
+'DWHh_ME': (r.DWHh_ME, ['p_HadWH_SIG_ghw1_1_JHUGen_JECNominal', 'p_JJQCD_SIG_ghg2_1_JHUGen_JECNominal', 'ZZMass']),
+'DZHh_ME': (r.DZHh_ME, ['p_HadZH_SIG_ghz1_1_JHUGen_JECNominal', 'p_JJQCD_SIG_ghg2_1_JHUGen_JECNominal', 'ZZMass']),
+
+}
 
 
-def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
+def remove_fields(a, *fields_to_remove):
+    return a[[name for name in a.dtype.names if name not in fields_to_remove]]
+
+
+def read_root_files(directories=('saves/common/', 'saves/common_no_discr/', 'saves/common_only_discr/')):
     for directory in directories:
         if os.path.isdir(directory):
             rmtree(directory)
@@ -32,7 +40,7 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
 
         features_to_compute = None
 
-        if directory == 'saves/common/':
+        if directory in ['saves/common/', 'saves/common_only_discr/']:
             features_to_compute = calculated_features
 
         for mode in production_modes:
@@ -69,6 +77,9 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
                     warn('At least one of the calculated features was Inf or NaN')
                     data_set = data_set[mask]
                     weights = weights[mask]
+
+                if directory == 'saves/common_only_discr/':
+                    data_set = remove_fields(data_set, likelihood_names)
 
                 np.savetxt(directory + mode + '_training.txt', data_set[:nb_events // 2])
                 np.savetxt(directory + mode + '_test.txt', data_set[nb_events // 2:])
@@ -107,6 +118,9 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
                         data_set = data_set[mask]
                         weights = weights[mask]
 
+                    if directory == 'saves/common_only_discr/':
+                        data_set = remove_fields(data_set, likelihood_names)
+
                     np.savetxt(directory + mode + decay + '_training.txt', data_set[:nb_events // 2])
                     np.savetxt(directory + mode + decay + '_test.txt', data_set[nb_events // 2:])
                     np.savetxt(directory + mode + decay + '_weights_training.txt', weights[:nb_events // 2])
@@ -114,7 +128,7 @@ def read_root_files(directories=('saves/common/', 'saves/common_no_discr/')):
                     logging.info(mode + decay + ' weights, training and test sets successfully stored in saves/' + directory)
 
 
-def merge_vector_modes(directories=('saves/common/', 'saves/common_no_discr/')):
+def merge_vector_modes(directories=('saves/common/', 'saves/common_no_discr/', 'saves/common_only_discr/')):
     for directory in directories:
         for decay in ['_lept', '_hadr']:
             file_list = [directory + mediator + decay for mediator in ['WplusH', 'WminusH', 'ZH']]
@@ -147,8 +161,8 @@ def merge_vector_modes(directories=('saves/common/', 'saves/common_no_discr/')):
     logging.info('Merged data successfully generated')
 
 
-def prepare_scalers(directories=('saves/common/', 'saves/common_no_discr/')):
-    gen_modes_int = event_categories #gen_modes_merged
+def prepare_scalers(directories=('saves/common/', 'saves/common_no_discr/', 'saves/common_only_discr/')):
+    gen_modes_int = event_categories
     for directory in directories:
 
         file_list = [directory + mode for mode in gen_modes_int]
@@ -172,8 +186,8 @@ def prepare_scalers(directories=('saves/common/', 'saves/common_no_discr/')):
 
 
 def make_scaled_datasets():
-    fit_categories = event_categories #gen_modes_merged
-    for directory in ['saves/common/', 'saves/common_no_discr/']:
+    fit_categories = event_categories
+    for directory in ['saves/common/', 'saves/common_no_discr/', 'saves/common_only_discr/']:
 
         with open(directory + 'scaler.pkl', 'rb') as f:
             scaler = pickle.load(f)
@@ -212,7 +226,7 @@ def make_scaled_datasets():
 
 
 def clean_intermediate_files():
-    for directory in ['saves/common/', 'saves/common_no_discr/']:
+    for directory in ['saves/common/', 'saves/common_no_discr/', 'saves/common_only_discr/']:
         files_list = os.listdir(directory)
         for file_name in files_list:
             if file_name.split('_')[0] != 'full':

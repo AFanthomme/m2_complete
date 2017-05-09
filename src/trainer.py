@@ -3,29 +3,39 @@ import os
 import pickle
 
 import numpy as np
-from constants import models_dict, global_verbosity, use_calculated_features
+from src.constants import models_dict, global_verbosity, features_set_selector
 
 from src.misc import frozen
 
 
 def asymmetric_training(model_name, weights=None, penalty_matrix=None, verbose=global_verbosity):
-    if use_calculated_features:
-        directory = 'saves/common/'
-        suffix = ''
-    else:
+    if features_set_selector == 0:
         directory = 'saves/common_no_discr/'
+        suffix = ''
+    elif features_set_selector == 1:
+        directory = 'saves/common_only_discr/'
         suffix = '_no_discr'
+    elif features_set_selector == 2:
+        directory = 'saves/common/'
+        suffix = '_no_discr'
+    else:
+        raise('Please choose a valid features set')
 
 
 def model_training(model_name, verbose=global_verbosity):
     analyser, model_weights = models_dict[model_name]
 
-    if use_calculated_features:
-        directory = 'saves/common/'
-        suffix = ''
-    else:
+    if features_set_selector == 0:
         directory = 'saves/common_no_discr/'
+        suffix = ''
+    elif features_set_selector == 1:
+        directory = 'saves/common_only_discr/'
         suffix = '_no_discr'
+    elif features_set_selector == 2:
+        directory = 'saves/common/'
+        suffix = '_no_discr'
+    else:
+        raise IOError
 
     training_set = np.loadtxt(directory + 'full_training_set.txt')
     training_labels = np.loadtxt(directory + 'full_training_labels.txt')
@@ -65,12 +75,17 @@ def model_training(model_name, verbose=global_verbosity):
 
 
 def generate_predictions(model_name, tolerance=0., verbose=global_verbosity):
-    if use_calculated_features:
-        directory = 'saves/common/'
-        suffix = ''
-    else:
+    if features_set_selector == 0:
         directory = 'saves/common_no_discr/'
+        suffix = ''
+    elif features_set_selector == 1:
+        directory = 'saves/common_only_discr/'
         suffix = '_no_discr'
+    elif features_set_selector == 2:
+        directory = 'saves/common/'
+        suffix = '_no_discr'
+    else:
+        raise IOError
 
     scaled_dataset = np.loadtxt(directory + 'full_test_set.txt')
 

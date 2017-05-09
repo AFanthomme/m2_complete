@@ -14,7 +14,7 @@ from sklearn.tree import DecisionTreeClassifier
 
 global_verbosity = False  # if true, prints all confirmation messages, otherwise just the model and its scores.
 ignore_warnings = True  # if true, all warnings will be ignored (use with caution)
-use_calculated_features = True
+features_set_selector = 0  # 0:linear, 1: non_linear, 2: both
 
 luminosity = 2 * 35.9   # (fb-1), factor 2 because only half of the initial data set used for evaluation
 
@@ -42,6 +42,11 @@ base_features = [
                 'pAux_JVBF_SIG_ghv1_1_JHUGen_JECNominal', 'p_HadWH_SIG_ghw1_1_JHUGen_JECNominal',
                 'p_HadZH_SIG_ghz1_1_JHUGen_JECNominal', 'ZZMass', 'PFMET'
                 ]
+
+likelihood_names = ['p_JJQCD_SIG_ghg2_1_JHUGen_JECNominal', 'p_JQCD_SIG_ghg2_1_JHUGen_JECNominal',
+                'p_JJVBF_SIG_ghv1_1_JHUGen_JECNominal', 'p_JVBF_SIG_ghv1_1_JHUGen_JECNominal',
+                'pAux_JVBF_SIG_ghv1_1_JHUGen_JECNominal', 'p_HadWH_SIG_ghw1_1_JHUGen_JECNominal',
+                'p_HadZH_SIG_ghz1_1_JHUGen_JECNominal']
 
 
 kin_variables_list_full = \
