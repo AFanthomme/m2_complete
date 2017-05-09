@@ -19,8 +19,20 @@ def lengths_consistent():
     name = 'full_test_set.txt'
 
     for directory in expectations.keys():
-        if not np.ma.size(np.loadtxt(directory + name), 0) == expectations[directory]:
+        if not np.ma.size(np.loadtxt(directory + name), 1) == expectations[directory]:
             logging.info(directory + name + ' has inconsistent number of features.')
+            return False
+    return True
+
+def plop():
+    expectations = {'saves/common_full/': 17, 'saves/common_nodiscr/':13, 'saves/common_onlydiscr/':10}
+    name = 'WplusH_hadr_test.txt'
+
+    for directory in expectations.keys():
+        print(directory, np.ma.size(np.loadtxt(directory + name), 1))
+        if not np.ma.size(np.loadtxt(directory + name), 1) == expectations[directory]:
+            logging.info(directory + name + ' has inconsistent number of features.')
+
             return False
     return True
 

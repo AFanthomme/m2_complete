@@ -118,8 +118,8 @@ def read_root_files(directories=('saves/common_full/', 'saves/common_nodiscr/', 
                         data_set = data_set[mask]
                         weights = weights[mask]
 
-                    if directory == 'saves/common_only_discr/':
-                        data_set = remove_fields(data_set, likelihood_names)
+                    if directory == 'saves/common_onlydiscr/':
+                        data_set = remove_fields(data_set, *likelihood_names)
 
                     np.savetxt(directory + mode + decay + '_training.txt', data_set[:nb_events // 2])
                     np.savetxt(directory + mode + decay + '_test.txt', data_set[nb_events // 2:])
@@ -128,7 +128,7 @@ def read_root_files(directories=('saves/common_full/', 'saves/common_nodiscr/', 
                     logging.info(mode + decay + ' weights, training and test sets successfully stored in saves/' + directory)
 
 
-def merge_vector_modes(directories=('saves/common/', 'saves/common_no_discr/', 'saves/common_only_discr/')):
+def merge_vector_modes(directories=('saves/common_full/', 'saves/common_nodiscr/', 'saves/common_onlydiscr/')):
     for directory in directories:
         for decay in ['_lept', '_hadr']:
             file_list = [directory + mediator + decay for mediator in ['WplusH', 'WminusH', 'ZH']]
@@ -161,7 +161,7 @@ def merge_vector_modes(directories=('saves/common/', 'saves/common_no_discr/', '
     logging.info('Merged data successfully generated')
 
 
-def prepare_scalers(directories=('saves/common/', 'saves/common_no_discr/', 'saves/common_only_discr/')):
+def prepare_scalers(directories=('saves/common_full/', 'saves/common_nodiscr/', 'saves/common_onlydiscr/')):
     gen_modes_int = event_categories
     for directory in directories:
 
@@ -170,7 +170,9 @@ def prepare_scalers(directories=('saves/common/', 'saves/common_no_discr/', 'sav
         test_set = np.loadtxt(file_list[0] + '_test.txt')
 
         for idx, filename in enumerate(file_list[1:]):
+
             temp_train = np.loadtxt(filename + '_training.txt')
+            print(directory + filename, np.ma.size(temp_train, 1))
             temp_test = np.loadtxt(filename + '_test.txt')
             training_set = np.concatenate((training_set, temp_train), axis=0)
             test_set = np.concatenate((test_set, temp_test), axis=0)
