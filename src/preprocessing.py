@@ -8,7 +8,7 @@ import numpy.lib.recfunctions as rcf
 from src.constants import base_features, base_path, production_modes, event_numbers, cross_sections, \
     event_categories
 from root_numpy import tree2array
-from shutils import rmtree
+from shutil import rmtree
 from sklearn import preprocessing as pr
 
 from src.misc import frozen

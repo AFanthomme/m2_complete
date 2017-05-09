@@ -14,7 +14,7 @@ from sklearn.tree import DecisionTreeClassifier
 
 global_verbosity = False  # if true, prints all confirmation messages, otherwise just the model and its scores.
 ignore_warnings = True  # if true, all warnings will be ignored (use with caution)
-use_calculated_features = False
+use_calculated_features = True
 
 luminosity = 2 * 35.9   # (fb-1), factor 2 because only half of the initial data set used for evaluation
 
@@ -69,19 +69,8 @@ models_dict = {
         #         multi_class='ovr', n_jobs=8)),
         'adaboost_logreg_200_purity': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
                 multi_class='ovr', n_jobs=8), n_estimators=200),
-        'adaboost_logreg_200_noweight': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
-                multi_class='ovr', n_jobs=8), n_estimators=200),
-        'adaboost_logreg_200_invfreq': AdaBoostClassifier(LogisticRegression(solver='newton-cg',
-                multi_class='ovr', n_jobs=8), n_estimators=200),
 
         'adaboost_stumps_300_purity': AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                            n_estimators=300),
-        'adaboost_stumps_500_purity': AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                            n_estimators=500),
-
-        'adaboost_stumps_800_purity': AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                            n_estimators=800),
-        'adaboost_stumps_300_noweight': AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
                             n_estimators=300),
         }
 

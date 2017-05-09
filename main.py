@@ -28,7 +28,7 @@ if __name__ == "__main__":
         logging.info('Studying model ' + model_name)
 
         try:
-            open('saves/' + model_name + suff + '/categorizer.txt', 'rb')
+            open('saves/' + model_name + suff + '/categorizer.pkl', 'rb')
         except IOError:
             logging.info('Training model ' + model_name)
             ctg.model_training(model_name)
