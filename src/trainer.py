@@ -18,7 +18,7 @@ def asymmetric_training(model_name, weights=None, penalty_matrix=None, verbose=g
 
 
 def model_training(model_name, verbose=global_verbosity):
-    analyser, weights = models_dict[model_name]
+    analyser, model_weights = models_dict[model_name]
 
     if use_calculated_features:
         directory = 'saves/common/'
@@ -30,7 +30,8 @@ def model_training(model_name, verbose=global_verbosity):
     training_set = np.loadtxt(directory + 'full_training_set.txt')
     training_labels = np.loadtxt(directory + 'full_training_labels.txt')
 
-    if weights:
+    if model_weights:
+        weights = np.array([model_weights[int(cat)] for cat in training_labels])
         analyser.fit(training_set, training_labels, weights)
     elif model_name.split('_')[-1] == 'invfreq':
         weights = np.loadtxt(directory + 'full_training_weights.txt')
