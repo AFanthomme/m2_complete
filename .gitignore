@@ -1,7 +1,8 @@
 *pkl  # Dangerous to unpickle anything that could have been exposed to attacks
 *.idea
 /saves/*
-!/saves/common
-!/saves/common_no_discr
+!/saves/common_full
+!/saves/common_nodiscr
+!/saves/common_onlydiscr
 
 logs
