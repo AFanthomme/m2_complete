@@ -4,6 +4,7 @@ Define all constants needed for what we want to do, and the sklearn models to us
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.tree import DecisionTreeClassifier
+from src.custom_classifiers import SelfThresholdingAdaClassifier
 
 global_verbosity = 0
 ignore_warnings = True
@@ -44,6 +45,9 @@ likelihood_names = ['p_JJQCD_SIG_ghg2_1_JHUGen_JECNominal', 'p_JQCD_SIG_ghg2_1_J
                 'p_HadZH_SIG_ghz1_1_JHUGen_JECNominal']
 
 
+decision_stump = DecisionTreeClassifier(max_depth=1)
+my_classifier = SelfThresholdingAdaClassifier(base_estimator=decision_stump, n_estimators=300)
+
 models_dict = {
         # 'logreg_newt_ovr_invfreq': LogisticRegression(solver='newton-cg', multi_class='ovr', n_jobs=8),
         # 'logreg_newt_ovr_noweight': LogisticRegression(solver='newton-cg', multi_class='ovr', n_jobs=8),
@@ -66,7 +70,7 @@ models_dict = {
         #                     n_estimators=300), [2, 1., 1., 1., 1.]),
         # 'adaboost_stumps_300_25_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
         #                                                      n_estimators=300), [2.5, 1., 1., 1., 1.]),
-        'adaboost_stumps_300_30_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                                                             n_estimators=300), [3., 1., 1., 1., 1.]),
+        'adathresh_stumps_300_noweight': (SelfThresholdingAdaClassifier(base_estimator=decision_stump, n_estimators=300)
+                                          , None)
         }
 

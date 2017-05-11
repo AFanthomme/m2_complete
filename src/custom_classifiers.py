@@ -6,6 +6,7 @@ from sklearn.calibration import CalibratedClassifierCV
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.model_selection import train_test_split
 
+
 def base_change(n, b):
     if n == 0:
         return [0]
@@ -14,6 +15,7 @@ def base_change(n, b):
         digits.append(int(n % b))
         n /= b
     return digits
+
 
 def n_dim_iterator(dimension, support=(0, 1), n_points=10):
     """
@@ -43,6 +45,9 @@ class SelfThresholdingAdaClassifier:
         self.thresholds = None
         self.history = {}
         self.scores = None
+        self.y_thr = None
+        self.X_thr = None
+
 
     @staticmethod
     def filter_scores(scores_array, thresholds):
@@ -79,15 +84,25 @@ class SelfThresholdingAdaClassifier:
         return np.sum(np.multiply(confusion_matrix, weights))
 
     def fit(self, X, y):
-        X_train, X_cal, y_train, y_cal = train_test_split(X, y, test_size=0.5)
+        """
+        Split the training dataset in three : base training, calibration, thresh optimization
+        The thresh optimization ones are used to get the scores / ground truth for optimize_threshold.
+        :param X: 
+        :param y: 
+        :return: 
+        """
+        X_train, X_cal, y_train, y_cal = train_test_split(X, y, test_size=0.66)
+        X_thr, X_cal, y_thr, y_cal = train_test_split(X_cal, y_cal, test_size=0.5)
         self.UncalibratedAdaBoost.fit(X_train, y_train)
         self.n_classes_ = self.UncalibratedAdaBoost.n_classes_
         self.thresholds = tuple([0 for _ in range(self.n_classes_)])
         logging.info('\tRaw adaboosted model trained')
         self.CalibratedAdaBoost = CalibratedClassifierCV(self.UncalibratedAdaBoost, cv="prefit", method="sigmoid")
-        self.CalibratedAdaBoost = self.UncalibratedAdaBoost.fit(X_cal, y_cal)
+        self.CalibratedAdaBoost = self.CalibratedAdaBoost.fit(X_cal, y_cal)
         logging.info('\tModel calibrated')
         self.is_fitted = True
+        self.scores = self.CalibratedAdaBoost.predict_proba(X_thr)
+        self.ground_truth = y_thr
         return self
 
     def predict_proba(self, X_test):
@@ -113,10 +128,7 @@ class SelfThresholdingAdaClassifier:
         return self
 
 
-    def explore_thresholds(self, X_test, y_test, limits=(0., 0.5), n_points=10):
-        self.scores = self.predict_proba(X_test)
-        self.ground_truth = y_test
-
+    def explore_thresholds(self, limits=(0., 0.5), n_points=10):
         for thresholds in n_dim_iterator(self.n_classes_, support=limits, n_points=n_points):
             self.__assess_thresholds(thresholds)
 

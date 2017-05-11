@@ -31,6 +31,13 @@ def model_training(model_name, verbose=global_verbosity):
     else:
         analyser.fit(training_set, training_labels)
 
+    try:
+        analyser.explore_thresholds()
+        analyser.explore_history()
+    except AttributeError:
+        pass
+
+
     analyser.fit = frozen
     analyser.set_params = frozen
 
