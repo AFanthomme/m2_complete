@@ -14,6 +14,7 @@ def model_training(model_name, verbose=global_verbosity):
     training_set = np.loadtxt(directory + 'full_training_set.txt')
     training_labels = np.loadtxt(directory + 'full_training_labels.txt')
 
+    debug = False
     if model_weights:
         weights = np.array([model_weights[int(cat)] for cat in training_labels])
         analyser.fit(training_set, training_labels, weights)
@@ -30,12 +31,12 @@ def model_training(model_name, verbose=global_verbosity):
         analyser.fit(training_set, training_labels, weights)
     else:
         analyser.fit(training_set, training_labels)
-
-    try:
-        analyser.explore_thresholds()
-        analyser.explore_history()
-    except AttributeError:
-        pass
+    if not debug:
+        try:
+            analyser.explore_thresholds()
+            analyser.explore_history()
+        except AttributeError:
+            pass
 
 
     analyser.fit = frozen

@@ -13,7 +13,7 @@ ignore_warnings = True
 # can easily be overriden from main.py
 # To add new sets of features (either from file or calculated), add the corresponding file and suffix here then
 # modify preprocessing.py
-features_set_selector = 2
+features_set_selector = 0
 dir_suff_dict = [('saves/common_nodiscr/', '_nodiscr'), ('saves/common_onlydiscr/', '_onlydiscr'),
                  ('saves/common_full/', '_full')]
 
@@ -69,8 +69,10 @@ models_dict = {
         # 'adaboost_stumps_300_20_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
         #                     n_estimators=300), [2, 1., 1., 1., 1.]),
         # 'adaboost_stumps_300_25_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-        #                                                      n_estimators=300), [2.5, 1., 1., 1., 1.]),
-        'adathresh_stumps_300_noweight': (SelfThresholdingAdaClassifier(base_estimator=decision_stump, n_estimators=300)
-                                          , None)
+        #                                                     n_estimators=300), [2.5, 1., 1., 1., 1.]),
+         'thresh_stumps_300_4_noweight': (SelfThresholdingAdaClassifier(base_estimator=decision_stump, n_estimators=300, n_points=4), None),
+         'thresh_stumps_300_4_purity': (SelfThresholdingAdaClassifier(base_estimator=decision_stump, n_estimators=300, n_points=4), None),
+         'thresh_stumps_300_4_content': (SelfThresholdingAdaClassifier(base_estimator=decision_stump, n_estimators=300, n_points=4), None),
         }
+
 
