@@ -1,4 +1,6 @@
 import logging
+import warnings
+import os
 import src.preprocessing as pr
 import src.trainer as ctg
 from src.constants import *
@@ -15,17 +17,7 @@ if ignore_warnings:
 
 if __name__ == "__main__":
 
-    if features_set_selector == 0:
-        directory = 'saves/common_nodiscr/'
-        suffix = '_nodiscr'
-    elif features_set_selector == 1:
-        directory = 'saves/common_onlydiscr/'
-        suffix = '_onlydiscr'
-    elif features_set_selector == 2:
-        directory = 'saves/common_full/'
-        suffix = '_full'
-    else:
-        raise IOError
+    directory, suffix = dir_suff_dict[features_set_selector]
 
     if not (tests.common_saves_found() and tests.lengths_consistent()):
         pr.full_process()

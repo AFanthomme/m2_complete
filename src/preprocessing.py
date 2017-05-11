@@ -5,14 +5,17 @@ from warnings import warn
 import ROOT as r
 import numpy as np
 import numpy.lib.recfunctions as rcf
-from src.constants import base_features, base_path, production_modes, event_numbers, cross_sections, \
+from src.constants import base_features, production_modes, event_numbers, cross_sections, \
     event_categories
 from root_numpy import tree2array
 from shutil import rmtree
 from sklearn import preprocessing as pr
-from src.constants import likelihood_names
+from src.constants import likelihood_names, dir_suff_dict
 from src.misc import frozen
 
+
+# Common part of the path to retrieve the root files
+base_path = '/data_CMS/cms/ochando/CJLSTReducedTree/170222/'
 
 # This is done here to avoid having root anywhere it doesn't need to be
 r.gROOT.LoadMacro("libs/cConstants_no_ext.cc")
@@ -23,44 +26,46 @@ calculated_features = {
                             'p_JQCD_SIG_ghg2_1_JHUGen_JECNominal', 'ZZMass']),
 'DWHh_ME': (r.DWHh_ME, ['p_HadWH_SIG_ghw1_1_JHUGen_JECNominal', 'p_JJQCD_SIG_ghg2_1_JHUGen_JECNominal', 'ZZMass']),
 'DZHh_ME': (r.DZHh_ME, ['p_HadZH_SIG_ghz1_1_JHUGen_JECNominal', 'p_JJQCD_SIG_ghg2_1_JHUGen_JECNominal', 'ZZMass']),
-
 }
+
+
+# For each feature selection mode, (to get from root file, to calculate, to remove)
+features_specs = [(base_features, None, None), (base_features, calculated_features, likelihood_names),
+                  (base_features, calculated_features, None)]
 
 
 def remove_fields(a, *fields_to_remove):
     return a[[name for name in a.dtype.names if name not in fields_to_remove]]
 
 
-def read_root_files(directories=('saves/common_full/', 'saves/common_nodiscr/', 'saves/common_onlydiscr/')):
-    for directory in directories:
+def read_root_files(modes=(0, 1, 2)):
+    for features_mode in modes:
+        directory, suffix = dir_suff_dict[features_mode]
+
         if os.path.isdir(directory):
             rmtree(directory)
         os.makedirs(directory)
         logging.info('Directory ' + directory + ' created')
 
-        features_to_compute = None
+        to_retrieve, to_compute, to_remove = features_specs[features_mode]
 
-        if directory in ['saves/common_full/', 'saves/common_onlydiscr/']:
-            features_to_compute = calculated_features
-
-        for mode in production_modes:
-            rfile = r.TFile(base_path + mode + '125/ZZ4lAnalysis.root')
+        for prod_mode in production_modes:
+            rfile = r.TFile(base_path + prod_mode + '125/ZZ4lAnalysis.root')
             tree = rfile.Get('ZZTree/candTree')
-            core_variables = base_features
 
-            if mode not in ['WminusH', 'WplusH', 'ZH']:
-                data_set = tree2array(tree, branches=core_variables, selection=
+            if features_mode not in ['WminusH', 'WplusH', 'ZH']:
+                data_set = tree2array(tree, branches=to_retrieve, selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130')
                 weights = tree2array(tree, branches='overallEventWeight', selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130')
                 nb_events = np.ma.size(data_set, 0)
 
                 mask = np.ones(nb_events).astype(bool)
-                if features_to_compute:
-                    new_features = [np.zeros(nb_events) for _ in range(len(features_to_compute))]
+                if to_compute:
+                    new_features = [np.zeros(nb_events) for _ in range(len(to_compute))]
                     keys = []
                     feature_idx = 0
-                    for key, couple in features_to_compute.iteritems():
+                    for key, couple in to_compute.iteritems():
                         keys.append(key)
                         plop = new_features[feature_idx]
                         feature_expression, vars_list = couple
@@ -78,29 +83,29 @@ def read_root_files(directories=('saves/common_full/', 'saves/common_nodiscr/', 
                     data_set = data_set[mask]
                     weights = weights[mask]
 
-                if directory == 'saves/common_onlydiscr/':
-                    data_set = remove_fields(data_set, *likelihood_names)
+                if to_remove:
+                    data_set = remove_fields(data_set, *to_remove)
 
-                np.savetxt(directory + mode + '_training.txt', data_set[:nb_events // 2])
-                np.savetxt(directory + mode + '_test.txt', data_set[nb_events // 2:])
-                np.savetxt(directory + mode + '_weights_training.txt', weights[:nb_events // 2])
-                np.savetxt(directory + mode + '_weights_test.txt', weights[nb_events // 2:])
-                logging.info(mode + ' weights, training and test sets successfully stored in saves/' + directory)
+                np.savetxt(directory + prod_mode + '_training.txt', data_set[:nb_events // 2])
+                np.savetxt(directory + prod_mode + '_test.txt', data_set[nb_events // 2:])
+                np.savetxt(directory + prod_mode + '_weights_training.txt', weights[:nb_events // 2])
+                np.savetxt(directory + prod_mode + '_weights_test.txt', weights[nb_events // 2:])
+                logging.info(prod_mode + ' weights, training and test sets successfully stored in saves/' + directory)
             else:
                 decay_criteria = {'_lept': ' && genExtInfo > 10', '_hadr': ' && genExtInfo < 10'}
                 for decay in ['_lept', '_hadr']:
-                    data_set = tree2array(tree, branches=core_variables, selection=
+                    data_set = tree2array(tree, branches=to_retrieve, selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130' + decay_criteria[decay])
                     weights = tree2array(tree, branches='overallEventWeight', selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130' + decay_criteria[decay])
 
                     nb_events = np.ma.size(data_set, 0)
                     mask = np.ones(nb_events).astype(bool)
-                    if features_to_compute:
-                        new_features = [np.zeros(nb_events) for _ in range(len(features_to_compute))]
+                    if to_compute:
+                        new_features = [np.zeros(nb_events) for _ in range(len(to_compute))]
                         keys = []
                         feature_idx = 0
-                        for key, couple in features_to_compute.iteritems():
+                        for key, couple in to_compute.iteritems():
                             keys.append(key)
                             plop = new_features[feature_idx]
                             feature_expression, vars_list = couple
@@ -118,18 +123,20 @@ def read_root_files(directories=('saves/common_full/', 'saves/common_nodiscr/', 
                         data_set = data_set[mask]
                         weights = weights[mask]
 
-                    if directory == 'saves/common_onlydiscr/':
+                    if  to_remove:
                         data_set = remove_fields(data_set, *likelihood_names)
 
-                    np.savetxt(directory + mode + decay + '_training.txt', data_set[:nb_events // 2])
-                    np.savetxt(directory + mode + decay + '_test.txt', data_set[nb_events // 2:])
-                    np.savetxt(directory + mode + decay + '_weights_training.txt', weights[:nb_events // 2])
-                    np.savetxt(directory + mode + decay + '_weights_test.txt', weights[nb_events // 2:])
-                    logging.info(mode + decay + ' weights, training and test sets successfully stored in saves/' + directory)
+                    np.savetxt(directory + prod_mode + decay + '_training.txt', data_set[:nb_events // 2])
+                    np.savetxt(directory + prod_mode + decay + '_test.txt', data_set[nb_events // 2:])
+                    np.savetxt(directory + prod_mode + decay + '_weights_training.txt', weights[:nb_events // 2])
+                    np.savetxt(directory + prod_mode + decay + '_weights_test.txt', weights[nb_events // 2:])
+                    logging.info(prod_mode + decay + ' weights, training and test sets successfully stored in saves/'
+                                 + directory)
 
 
-def merge_vector_modes(directories=('saves/common_full/', 'saves/common_nodiscr/', 'saves/common_onlydiscr/')):
-    for directory in directories:
+def merge_vector_modes(modes=(0, 1, 2)):
+    for mode in modes:
+        directory, no_care = dir_suff_dict[mode]
         for decay in ['_lept', '_hadr']:
             file_list = [directory + mediator + decay for mediator in ['WplusH', 'WminusH', 'ZH']]
 
@@ -137,7 +144,7 @@ def merge_vector_modes(directories=('saves/common_full/', 'saves/common_nodiscr/
             test_set = np.loadtxt(file_list[0] + '_test.txt')
             weights_train = np.loadtxt(file_list[0] + '_weights_training.txt')
             weights_test = np.loadtxt(file_list[0] + '_weights_test.txt')
-            # Rescale the events weights to match a common cross_section / event number equal to the ones of WplusH
+            # Rescale the events weights to have common cross_sections & event numbers equal to the ones of WplusH
             for idx, filename in enumerate(file_list[1:]):
                 temp_train = np.loadtxt(filename + '_training.txt')
                 temp_test = np.loadtxt(filename + '_test.txt')
@@ -161,10 +168,10 @@ def merge_vector_modes(directories=('saves/common_full/', 'saves/common_nodiscr/
     logging.info('Merged data successfully generated')
 
 
-def prepare_scalers(directories=('saves/common_full/', 'saves/common_nodiscr/', 'saves/common_onlydiscr/')):
+def prepare_scalers(modes=(0, 1, 2)):
     gen_modes_int = event_categories
-    for directory in directories:
-
+    for mode in modes:
+        directory, no_care = dir_suff_dict[mode]
         file_list = [directory + mode for mode in gen_modes_int]
         training_set = np.loadtxt(file_list[0] + '_training.txt')
         test_set = np.loadtxt(file_list[0] + '_test.txt')
@@ -187,23 +194,22 @@ def prepare_scalers(directories=('saves/common_full/', 'saves/common_nodiscr/', 
             pickle.dump(scaler, f)
 
 
-def make_scaled_datasets():
-    fit_categories = event_categories
-    for directory in ['saves/common_full/', 'saves/common_nodiscr/', 'saves/common_onlydiscr/']:
-
+def make_scaled_datasets(modes=(0, 1, 2)):
+    for mode in modes:
+        directory, no_care = dir_suff_dict[mode]
         with open(directory + 'scaler.pkl', 'rb') as f:
             scaler = pickle.load(f)
 
-        file_list = [directory + cat for cat in fit_categories]
+        file_list = [directory + cat for cat in event_categories]
         training_set = scaler.transform(np.loadtxt(file_list[0] + '_training.txt'))
         test_set = scaler.transform(np.loadtxt(file_list[0] + '_test.txt'))
         np.savetxt(file_list[0] + '_test_scaled.txt', test_set)
         training_labels = np.zeros(np.ma.size(training_set, 0))
         test_labels = np.zeros(np.ma.size(test_set, 0))
         training_weights = np.loadtxt(file_list[0] + '_weights_training.txt') * \
-                  cross_sections[fit_categories[0]] / event_numbers[fit_categories[0]]
+                  cross_sections[event_categories[0]] / event_numbers[event_categories[0]]
         test_weights = np.loadtxt(file_list[0] + '_weights_test.txt') * \
-                  cross_sections[fit_categories[0]] / event_numbers[fit_categories[0]]
+                  cross_sections[event_categories[0]] / event_numbers[event_categories[0]]
 
         for idx, filename in enumerate(file_list[1:]):
             temp_train = scaler.transform(np.loadtxt(filename + '_training.txt'))
@@ -227,25 +233,26 @@ def make_scaled_datasets():
         np.savetxt(directory + 'full_test_weights.txt', test_weights)
 
 
-def clean_intermediate_files():
-    for directory in ['saves/common_full/', 'saves/common_nodiscr/', 'saves/common_onlydiscr/']:
+def clean_intermediate_files(modes=(0, 1, 2)):
+    for mode in modes:
+        directory, no_care = dir_suff_dict[mode]
         files_list = os.listdir(directory)
         for file_name in files_list:
             if file_name.split('_')[0] not in ['full', 'scaler.pkl']:
                 os.remove(directory + file_name)
 
 
-def full_process():
+def full_process(modes=(0, 1, 2)):
     logging.info('Reading root files')
-    read_root_files()
+    read_root_files(modes)
     logging.info('Merging vector modes')
-    merge_vector_modes()
+    merge_vector_modes(modes)
     logging.info('Preparing scalers')
-    prepare_scalers()
+    prepare_scalers(modes)
     logging.info('Merging and scaling datasets')
-    make_scaled_datasets()
+    make_scaled_datasets(modes)
     logging.info('Removing all intermediate files')
-    clean_intermediate_files()
+    clean_intermediate_files(modes)
 
 if __name__ == '__main__':
     full_process()

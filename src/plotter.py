@@ -5,6 +5,7 @@ from itertools import izip
 import matplotlib.pyplot as p
 import numpy as np
 import src.trainer as ctg
+from src.constants import dir_suff_dict
 
 from src.constants import global_verbosity, features_set_selector, event_categories, luminosity
 
@@ -24,15 +25,8 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     """
     tags_list = copy(event_categories)
 
-    if features_set_selector == 0:
-        suffix = '_nodiscr/'
-    elif features_set_selector == 1:
-        suffix = '_onlydiscr/'
-    elif features_set_selector == 2:
-        suffix = '_full/'
-    else:
-        raise IOError
-
+    no_care, suffix = dir_suff_dict[features_set_selector]
+    suffix += '/'
     directory = 'saves/' + model_name + suffix
     if not os.path.isfile(directory + 'predictions.txt'):
         if verbose:
@@ -43,7 +37,7 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     weights = np.loadtxt('saves/common' + suffix + 'full_test_weights.txt')
     predictions = np.loadtxt(directory + 'predictions.txt')
 
-    nb_categories = 5  # max(len(np.unique(np.loadtxt('saves/' + directory + 'ggH_predictions.txt'))), 5)
+    nb_categories = 5
     contents_table = np.zeros((nb_categories, len(event_categories)))
 
     for true_tag, predicted_tag, rescaled_weight in izip(true_categories, predictions, weights):

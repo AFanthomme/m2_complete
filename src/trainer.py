@@ -1,31 +1,15 @@
 import logging
 import os
 import pickle
-
 import numpy as np
-from src.constants import models_dict, global_verbosity, features_set_selector
-
+from src.constants import models_dict, global_verbosity, features_set_selector, dir_suff_dict
 from src.misc import frozen
-
-
-def asymmetric_training(model_name, weights=None, penalty_matrix=None, verbose=global_verbosity):
-    pass
 
 
 def model_training(model_name, verbose=global_verbosity):
     analyser, model_weights = models_dict[model_name]
 
-    if features_set_selector == 0:
-        directory = 'saves/common_nodiscr/'
-        suffix = '_nodiscr'
-    elif features_set_selector == 1:
-        directory = 'saves/common_onlydiscr/'
-        suffix = '_onlydiscr'
-    elif features_set_selector == 2:
-        directory = 'saves/common_full/'
-        suffix = '_full'
-    else:
-        raise IOError
+    directory, suffix = dir_suff_dict[features_set_selector]
 
     training_set = np.loadtxt(directory + 'full_training_set.txt')
     training_labels = np.loadtxt(directory + 'full_training_labels.txt')
