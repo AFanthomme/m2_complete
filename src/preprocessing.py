@@ -53,7 +53,7 @@ def read_root_files(modes=(0, 1, 2)):
             rfile = r.TFile(base_path + prod_mode + '125/ZZ4lAnalysis.root')
             tree = rfile.Get('ZZTree/candTree')
 
-            if features_mode not in ['WminusH', 'WplusH', 'ZH']:
+            if prod_mode not in ['WminusH', 'WplusH', 'ZH']:
                 data_set = tree2array(tree, branches=to_retrieve, selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130')
                 weights = tree2array(tree, branches='overallEventWeight', selection=
@@ -179,7 +179,6 @@ def prepare_scalers(modes=(0, 1, 2)):
         for idx, filename in enumerate(file_list[1:]):
 
             temp_train = np.loadtxt(filename + '_training.txt')
-            print(directory + filename, np.ma.size(temp_train, 1))
             temp_test = np.loadtxt(filename + '_test.txt')
             training_set = np.concatenate((training_set, temp_train), axis=0)
             test_set = np.concatenate((test_set, temp_test), axis=0)
