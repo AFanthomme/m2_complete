@@ -145,7 +145,7 @@ class SelfThresholdingAdaClassifier:
             self.__assess_thresholds(thresholds)
 
     def explore_history(self):
-        sorted_history = sorted(self.history.items(), key=itemgetter(1), reverse=True)
+        sorted_history = sorted(self.history.items(), key=itemgetter(1))
         weights = [pair[0] for pair in sorted_history]
         scores = [pair[1] for pair in sorted_history]
         logging.warn('Optimal weights : ' + str(weights[0]))
