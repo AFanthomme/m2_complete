@@ -57,17 +57,7 @@ def model_training(model_name, verbose=global_verbosity):
 
 
 def generate_predictions(model_name, tolerance=0., verbose=global_verbosity):
-    if features_set_selector == 0:
-        directory = 'saves/common_nodiscr/'
-        suffix = '_nodiscr'
-    elif features_set_selector == 1:
-        directory = 'saves/common_onlydiscr/'
-        suffix = '_onlydiscr'
-    elif features_set_selector == 2:
-        directory = 'saves/common_full/'
-        suffix = '_full'
-    else:
-        raise IOError
+    directory, suffix = dir_suff_dict[features_set_selector]
 
     scaled_dataset = np.loadtxt(directory + 'full_test_set.txt')
 
@@ -75,6 +65,7 @@ def generate_predictions(model_name, tolerance=0., verbose=global_verbosity):
         classifier = pickle.load(file)
 
     results = classifier.predict(scaled_dataset)
+    probas = classifier.predict_proba(scaled_dataset)
     nb_categs = max(np.unique(results))
 
     if tolerance:
@@ -86,6 +77,7 @@ def generate_predictions(model_name, tolerance=0., verbose=global_verbosity):
 
     out_path = 'saves/' + model_name + suffix
     np.savetxt(out_path + '/predictions.txt', results)
+    np.savetxt(out_path + '/probas.txt', probas)
 
     if verbose:
         print(out_path + ' predictions successfully stored')
