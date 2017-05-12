@@ -13,7 +13,7 @@ ignore_warnings = True
 # can easily be overriden from main.py
 # To add new sets of features (either from file or calculated), add the corresponding file and suffix here then
 # modify preprocessing.py
-features_set_selector = 0
+features_set_selector = 2
 dir_suff_dict = [('saves/common_nodiscr/', '_nodiscr'), ('saves/common_onlydiscr/', '_onlydiscr'),
                  ('saves/common_full/', '_full')]
 
@@ -64,22 +64,22 @@ models_dict = {
         #
         # 'adaboost_stumps_300_purity': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
         #                     n_estimators=300), None),
-        # 'adaboost_stumps_300_15_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-        #                     n_estimators=300), [1.5, 1., 1., 1., 1.]),
-        # 'adaboost_stumps_300_20_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-        #                     n_estimators=300), [2, 1., 1., 1., 1.]),
-        # 'adaboost_stumps_300_25_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-        #                                                     n_estimators=300), [2.5, 1., 1., 1., 1.]),
-        # 'adaboost_stumps_300_35_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-        #                                                  n_estimators=300), [3.5, 1., 1., 1., 1.]),
-        # 'adaboost_stumps_600_25_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-        #                                                  n_estimators=600), [2.5, 1., 1., 1., 1.]),
-        # 'adaboost_stumps_1000_25_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-        #                                                  n_estimators=1000), [2.5, 1., 1., 1., 1.]),
+        'adaboost_stumps_300_15_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                            n_estimators=300), [1.5, 1., 1., 1., 1.]),
+        'adaboost_stumps_300_20_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                            n_estimators=300), [2, 1., 1., 1., 1.]),
+        'adaboost_stumps_300_25_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                                                            n_estimators=300), [2.5, 1., 1., 1., 1.]),
+        'adaboost_stumps_300_35_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                                                         n_estimators=300), [3.5, 1., 1., 1., 1.]),
+        'adaboost_stumps_300_45_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                                                         n_estimators=300), [4.5, 1., 1., 1., 1.]),
+        'adaboost_stumps_300_50_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+                                                         n_estimators=300), [5., 1., 1., 1., 1.]),
 
         #  'thresh_stumps_300_4_noweight': (SelfThresholdingAdaClassifier(base_estimator=decision_stump, n_estimators=300, n_points=4), None),
         #  'thresh_stumps_300_4_purity': (SelfThresholdingAdaClassifier(base_estimator=decision_stump, n_estimators=300, n_points=4), None),
-         'thresh_stumps_300_4_content': (SelfThresholdingAdaClassifier(base_estimator=decision_stump, n_estimators=300, n_points=4), None),
+        #  'thresh_stumps_300_4_content': (SelfThresholdingAdaClassifier(base_estimator=decision_stump, n_estimators=300, n_points=4), None),
         }
 
 
