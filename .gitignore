@@ -4,5 +4,6 @@
 !/saves/common_full
 !/saves/common_nodiscr
 !/saves/common_onlydiscr
+!/saves/adaboost_stumps_300_purity_nodiscr
 
 logs
