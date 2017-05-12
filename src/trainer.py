@@ -14,7 +14,7 @@ def model_training(model_name, verbose=global_verbosity):
     training_set = np.loadtxt(directory + 'full_training_set.txt')
     training_labels = np.loadtxt(directory + 'full_training_labels.txt')
 
-    debug = False
+    debug = True
     if model_weights:
         weights = np.array([model_weights[int(cat)] for cat in training_labels])
         analyser.fit(training_set, training_labels, weights)

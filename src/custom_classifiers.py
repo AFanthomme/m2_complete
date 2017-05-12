@@ -34,10 +34,10 @@ def n_dim_iterator(dimension, support=(0, 1), n_points=10):
 
 
 class SelfThresholdingAdaClassifier:
-    def __init__(self, base_estimator, n_estimators=50, n_points=10):
+    def __init__(self, base_estimator, n_estimators=50, n_points=3):
         self.UncalibratedAdaBoost = AdaBoostClassifier(base_estimator=base_estimator, n_estimators=n_estimators)
         self.CalibratedAdaBoost = self.UncalibratedAdaBoost
-        self.n_points = 10
+        self.n_points = n_points
         self.n_classes_ = None
         self.is_fitted = False
         self.is_optimized = False
@@ -104,6 +104,9 @@ class SelfThresholdingAdaClassifier:
         logging.info('\tRaw adaboosted model trained')
         self.CalibratedAdaBoost = CalibratedClassifierCV(self.UncalibratedAdaBoost, cv="prefit", method="sigmoid")
         self.CalibratedAdaBoost = self.CalibratedAdaBoost.fit(X_cal, y_cal)
+
+        self.CalibratedAdaBoost = self.UncalibratedAdaBoost
+
         logging.info('\tModel calibrated')
         self.is_fitted = True
         self.scores = self.CalibratedAdaBoost.predict_proba(X_thr)
