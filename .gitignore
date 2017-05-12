@@ -1,9 +1,5 @@
 *pkl  # Dangerous to unpickle anything that could have been exposed to attacks
 *.idea
-/saves/*
-!/saves/common_full
-!/saves/common_nodiscr
-!/saves/common_onlydiscr
-!/saves/adaboost_stumps_300_purity_nodiscr
+
 
 logs
