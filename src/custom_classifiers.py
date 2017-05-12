@@ -105,8 +105,6 @@ class SelfThresholdingAdaClassifier:
         self.CalibratedAdaBoost = CalibratedClassifierCV(self.UncalibratedAdaBoost, cv="prefit", method="sigmoid")
         self.CalibratedAdaBoost = self.CalibratedAdaBoost.fit(X_cal, y_cal)
 
-        self.CalibratedAdaBoost = self.UncalibratedAdaBoost
-
         logging.info('\tModel calibrated')
         self.is_fitted = True
         self.scores = self.CalibratedAdaBoost.predict_proba(X_thr)
