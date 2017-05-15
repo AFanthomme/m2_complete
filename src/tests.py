@@ -2,9 +2,9 @@ import os
 import logging
 import pickle
 import numpy as np
-from src.constants import dir_suff_dict, features_set_selector
 
-def common_saves_found():
+
+def test_saves():
     directories = ['saves/common_full/', 'saves/common_nodiscr/', 'saves/common_onlydiscr/']
     file_list = ['full_test_set.txt', 'full_training_set.txt']
 
@@ -25,17 +25,7 @@ def lengths_consistent():
             return False
     return True
 
-def plop():
-    expectations = {'saves/common_full/': 17, 'saves/common_nodiscr/':13, 'saves/common_onlydiscr/':10}
-    name = 'WplusH_hadr_test.txt'
 
-    for directory in expectations.keys():
-        print(directory, np.ma.size(np.loadtxt(directory + name), 1))
-        if not np.ma.size(np.loadtxt(directory + name), 1) == expectations[directory]:
-            logging.info(directory + name + ' has inconsistent number of features.')
-
-            return False
-    return True
 
 # def main():
 #     model_name = 'adaboost_stumps_300_purity_nodiscr'

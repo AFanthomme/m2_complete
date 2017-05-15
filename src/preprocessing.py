@@ -10,7 +10,7 @@ from src.constants import base_features, production_modes, event_numbers, cross_
 from root_numpy import tree2array
 from shutil import rmtree
 from sklearn import preprocessing as pr
-from src.constants import likelihood_names, dir_suff_dict
+from src.constants import likelihood_names, dir_suff_dict, backgrounds
 from src.misc import frozen
 
 
@@ -36,6 +36,57 @@ features_specs = [(base_features, None, None), (base_features, calculated_featur
 
 def remove_fields(a, *fields_to_remove):
     return a[[name for name in a.dtype.names if name not in fields_to_remove]]
+
+
+def get_background_files(modes=(0, 1, 2)):
+    for features_mode in modes:
+        directory, suffix = dir_suff_dict[features_mode]
+
+        to_retrieve, to_compute, to_remove = features_specs[features_mode]
+        backgrounds = []
+        for background in backgrounds:
+            rfile = r.TFile(base_path + background + '125/ZZ4lAnalysis.root')
+            tree = rfile.Get('ZZTree/candTree')
+
+
+            data_set = tree2array(tree, branches=to_retrieve, selection=
+                        'ZZsel > 90 && 118 < ZZMass && ZZMass < 130')
+            weights = tree2array(tree, branches='overallEventWeight', selection=
+                        'ZZsel > 90 && 118 < ZZMass && ZZMass < 130')
+            nb_events = np.ma.size(data_set, 0)
+
+            mask = np.ones(nb_events).astype(bool)
+            if to_compute:
+                new_features = [np.zeros(nb_events) for _ in range(len(to_compute))]
+                keys = []
+                feature_idx = 0
+                for key, couple in to_compute.iteritems():
+                    keys.append(key)
+                    plop = new_features[feature_idx]
+                    feature_expression, vars_list = couple
+                    for event_idx in range(nb_events):
+                        tmp = feature_expression(*data_set[vars_list][event_idx])
+                        if np.isnan(tmp) or np.isinf(tmp) or np.isneginf(tmp):
+                            mask[event_idx] = False
+                        plop[event_idx] = tmp
+                    new_features[feature_idx] = plop
+                    feature_idx += 1
+                data_set = rcf.rec_append_fields(data_set, keys, new_features)
+
+            if not np.all(mask):
+                warn('At least one of the calculated features was Inf or NaN')
+                data_set = data_set[mask]
+                weights = weights[mask]
+
+            if to_remove:
+                data_set = remove_fields(data_set, *to_remove)
+
+            np.savetxt(directory + background + '_training.txt', data_set[:nb_events // 2])
+            np.savetxt(directory + background + '_test.txt', data_set[nb_events // 2:])
+            np.savetxt(directory + background + '_weights_training.txt', weights[:nb_events // 2])
+            np.savetxt(directory + background + '_weights_test.txt', weights[nb_events // 2:])
+            logging.info(background + ' weights, training and test sets successfully stored in saves/' + directory)
+
 
 
 def read_root_files(modes=(0, 1, 2)):
