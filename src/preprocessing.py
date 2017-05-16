@@ -305,14 +305,14 @@ def full_process(modes=(0, 1, 2)):
     clean_intermediate_files(modes)
 
 
-def get_genSum(mode):
+def get_count(mode, idx=40):
     rfile = r.TFile(base_path + mode + '125/ZZ4lAnalysis.root')
-    tree = rfile.Get('ZZTree/Counters')
-    plop = tree2array(tree, branches='genSumWeight')
+    counter = rfile.Get('ZZTree/Counters')
+    plop = counter[idx]
     print(plop)
 
 
 if __name__ == '__main__':
-    get_genSum('ttH')
+    get_count('ttH')
 
 
