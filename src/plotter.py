@@ -76,6 +76,8 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     p.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=6, fontsize=11, mode="expand", borderaxespad=0.)
 
     if save:
+        if not os.path.isdir('saves_alt/figs'):
+            os.makedirs('saves_alt/figs')
         p.savefig('saves_alt/figs/' + model_name + suffix[:-1] + '.png')
     else:
         p.show()
