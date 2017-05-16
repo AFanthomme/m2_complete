@@ -3,6 +3,7 @@ from copy import copy
 from itertools import izip
 
 import matplotlib.pyplot as p
+import matplotlib.cm as cm
 import numpy as np
 import src.trainer as ctg
 from src.constants import dir_suff_dict
@@ -52,7 +53,8 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     fig = p.figure()
     p.title('Content plot for ' + model_name, y=-0.12)
     ax = fig.add_subplot(111)
-    color_array = ['b', 'g', 'r', 'brown', 'm', '0.75']
+    # color_array = cm.rainbow(np.linspace(0, 1, nb_categories))
+    color_array = ['b', 'g', 'r', 'brown', 'm', '0.75', 'k']
 
     for category in range(nb_categories):
         position = ordering[category]

@@ -20,6 +20,12 @@ features_set_selector = 0
 # production_modes = ['ggH', 'VBFH', 'WminusH', 'WplusH', 'ZH', 'ttH']
 # event_categories = ['ggH', 'VBFH', 'VH_lept', 'VH_hadr', 'ttH']
 
+# production_modes = ['ggH', 'VBFH', 'WminusH', 'WplusH', 'ZH', 'ttH', 'bbH']
+# event_categories = ['ggH', 'VBFH', 'VH_lept', 'VH_hadr', 'VH_met', 'ttH', 'bbH']
+
+production_modes = ['ggH', 'VBFH', 'WminusH', 'WplusH', 'ZH', 'ttH']
+event_categories = ['ggH', 'VBFH', 'VH_lept', 'VH_hadr', 'VH_met', 'ttH', 'ZH_met']
+
 dir_suff_dict = [('saves_alt/common_nodiscr/', '_nodiscr'), ('saves_alt/common_onlydiscr/', '_onlydiscr'),
                  ('saves_alt/common_full/', '_full')]
 
@@ -27,14 +33,13 @@ dir_suff_dict = [('saves_alt/common_nodiscr/', '_nodiscr'), ('saves_alt/common_o
 # These are the physical constants
 luminosity = 2 * 35.9   # (fb-1), factor 2 because only half of the initial data set used for evaluation
 cross_sections = {'ggH': 13.41, 'VBFH': 1.044, 'WminusH': 0.147, 'WplusH': 0.232, 'ZH': 0.668, 'ttH': 0.393,
-                  'VH': 0.232, 'VH_lept': 0.232, 'VH_hadr': 0.232, 'bbH': 0.1347, 'tqH': 0}
+                  'VH': 0.232, 'VH_lept': 0.232, 'VH_hadr': 0.232, 'bbH': 0.1347}
 event_numbers = {'ZH': 376657.21875, 'WplusH': 252870.65625, 'WminusH': 168069.609375, 'ttH': 327699.28125,
                  'ggH': 999738.125, 'VBFH': 1885726.125, 'VH': 252870.65625, 'VH_lept': 252870.65625,
-                 'VH_hadr': 252870.65625, 'bbH':327699.28125, 'tqH': 0}
+                 'VH_hadr': 252870.65625, 'bbH':327699.28125}
 
 
-production_modes = ['ggH', 'VBFH', 'WminusH', 'WplusH', 'ZH', 'ttH', 'bbH']
-event_categories = ['ggH', 'VBFH', 'VH_lept', 'VH_hadr', 'ttH', 'bbH']
+
 
 base_features = [
                 'nExtraLep', 'nExtraZ', 'nCleanedJetsPt30', 'nCleanedJetsPt30BTagged_bTagSF',

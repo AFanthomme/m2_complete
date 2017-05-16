@@ -142,9 +142,57 @@ def read_root_files(modes=(0, 1, 2)):
                 np.savetxt(directory + prod_mode + '_weights_training.txt', weights[:nb_events // 2])
                 np.savetxt(directory + prod_mode + '_weights_test.txt', weights[nb_events // 2:])
                 logging.info(prod_mode + ' weights, training and test sets successfully stored in saves/' + directory)
+
+            elif prod_mode == 'ZH':
+                decay_criteria = {'_lept': ' && genExtInfo > 10 && !(genExtInfo == 12 || genExtInfo == 14 || genExtInfo == 16)',
+                                  '_hadr': ' && genExtInfo < 10',
+                                  '_met': ' && (genExtInfo == 12 || genExtInfo == 14 || genExtInfo == 16)'}
+
+                for decay in decay_criteria.keys():
+                    data_set = tree2array(tree, branches=to_retrieve, selection=
+                            'ZZsel > 90 && 118 < ZZMass && ZZMass < 130' + decay_criteria[decay])
+                    weights = tree2array(tree, branches='overallEventWeight', selection=
+                            'ZZsel > 90 && 118 < ZZMass && ZZMass < 130' + decay_criteria[decay])
+
+                    nb_events = np.ma.size(data_set, 0)
+                    mask = np.ones(nb_events).astype(bool)
+                    if to_compute:
+                        new_features = [np.zeros(nb_events) for _ in range(len(to_compute))]
+                        keys = []
+                        feature_idx = 0
+                        for key, couple in to_compute.iteritems():
+                            keys.append(key)
+                            plop = new_features[feature_idx]
+                            feature_expression, vars_list = couple
+                            for event_idx in range(nb_events):
+                                tmp = feature_expression(*data_set[vars_list][event_idx])
+                                if np.isnan(tmp) or np.isinf(tmp) or np.isneginf(tmp):
+                                    mask[event_idx] = False
+                                plop[event_idx] = tmp
+                            new_features[feature_idx] = plop
+                            feature_idx += 1
+                        data_set = rcf.rec_append_fields(data_set, keys, new_features)
+
+                    if not np.all(mask):
+                        logging.warning('At least one of the calculated features was Inf or NaN')
+                        data_set = data_set[mask]
+                        weights = weights[mask]
+
+                    if  to_remove:
+                        data_set = remove_fields(data_set, *likelihood_names)
+
+                    np.savetxt(directory + prod_mode + decay + '_training.txt', data_set[:nb_events // 2])
+                    np.savetxt(directory + prod_mode + decay + '_test.txt', data_set[nb_events // 2:])
+                    np.savetxt(directory + prod_mode + decay + '_weights_training.txt', weights[:nb_events // 2])
+                    np.savetxt(directory + prod_mode + decay + '_weights_test.txt', weights[nb_events // 2:])
+                    logging.info(prod_mode + decay + ' weights, training and test sets successfully stored in saves/'
+                                 + directory)
+
             else:
-                decay_criteria = {'_lept': ' && genExtInfo > 10', '_hadr': ' && genExtInfo < 10'}
-                for decay in ['_lept', '_hadr']:
+                decay_criteria = {'_lept': ' && genExtInfo > 10', '_hadr': ' && genExtInfo < 10',
+                                  '_met': ' && (genExtInfo == 12 || genExtInfo == 14 || genExtInfo == 16)'}
+
+                for decay in decay_criteria.keys():
                     data_set = tree2array(tree, branches=to_retrieve, selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130' + decay_criteria[decay])
                     weights = tree2array(tree, branches='overallEventWeight', selection=
