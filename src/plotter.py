@@ -52,7 +52,7 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     fig = p.figure()
     p.title('Content plot for ' + model_name, y=-0.12)
     ax = fig.add_subplot(111)
-    color_array = ['b', 'g', 'r', 'brown', 'm']
+    color_array = ['b', 'g', 'r', 'brown', 'm', 'k']
 
     for category in range(nb_categories):
         position = ordering[category]

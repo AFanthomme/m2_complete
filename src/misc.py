@@ -1,5 +1,4 @@
 import numpy as np
-from src.preprocessing import base_path
 
 def frozen(*arg):
     raise AttributeError("This method has been removed")

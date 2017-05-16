@@ -4,8 +4,9 @@ import pickle
 import numpy as np
 
 
-def test_saves():
-    directories = ['saves/common_full/', 'saves/common_nodiscr/', 'saves/common_onlydiscr/']
+def common_saves_found():
+    directories = ['saves_alt/common_full/', 'saves_alt/common_nodiscr/', 'saves_alt/common_onlydiscr/']
+    directories += ['saves/common_full/', 'saves/common_nodiscr/', 'saves/common_onlydiscr/']
     file_list = ['full_test_set.txt', 'full_training_set.txt']
 
     for directory in directories:

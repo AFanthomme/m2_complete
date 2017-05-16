@@ -66,17 +66,17 @@ models_dict = {
         # 'adaboost_stumps_300_purity': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
         #                     n_estimators=300), None),
         'adaboost_stumps_300_15_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                            n_estimators=300), [1.5, 1., 1., 1., 1.]),
+                            n_estimators=300), [1.5, 1., 1., 1., 1., 1.]),
         'adaboost_stumps_300_20_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                            n_estimators=300), [2, 1., 1., 1., 1.]),
+                            n_estimators=300), [2, 1., 1., 1., 1., 1.]),
         'adaboost_stumps_300_25_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                                                            n_estimators=300), [2.5, 1., 1., 1., 1.]),
+                                                            n_estimators=300), [2.5, 1., 1., 1., 1., 1.]),
         'adaboost_stumps_300_35_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                                                         n_estimators=300), [3.5, 1., 1., 1., 1.]),
+                                                         n_estimators=300), [3.5, 1., 1., 1., 1., 1.]),
         'adaboost_stumps_300_45_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                                                         n_estimators=300), [4.5, 1., 1., 1., 1.]),
+                                                         n_estimators=300), [4.5, 1., 1., 1., 1., 1.]),
         'adaboost_stumps_300_50_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                                                         n_estimators=300), [5., 1., 1., 1., 1.]),
+                                                         n_estimators=300), [5., 1., 1., 1., 1.,1.]),
         }
 
 
