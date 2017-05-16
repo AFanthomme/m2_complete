@@ -27,7 +27,7 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
 
     no_care, suffix = dir_suff_dict[features_set_selector]
     suffix += '/'
-    directory = 'saves/' + model_name + suffix
+    directory = 'saves_alt/' + model_name + suffix
     if not os.path.isfile(directory + 'predictions.txt'):
         if verbose:
             print('Generating predictions')
@@ -74,7 +74,7 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     p.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=6, fontsize=11, mode="expand", borderaxespad=0.)
 
     if save:
-        p.savefig('figs/tmp/' + model_name + suffix[:-1] + '.png')
+        p.savefig('saves_alt/figs/' + model_name + suffix[:-1] + '.png')
     else:
         p.show()
 
