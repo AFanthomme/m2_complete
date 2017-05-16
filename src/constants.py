@@ -13,7 +13,7 @@ ignore_warnings = True
 # can easily be overriden from main.py
 # To add new sets of features (either from file or calculated), add the corresponding file and suffix here then
 # modify preprocessing.py
-features_set_selector = 0
+features_set_selector = 2 
 
 # dir_suff_dict = [('saves/common_nodiscr/', '_nodiscr'), ('saves/common_onlydiscr/', '_onlydiscr'),
 #                  ('saves/common_full/', '_full')]

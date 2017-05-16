@@ -33,8 +33,8 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
             print('Generating predictions')
         ctg.generate_predictions(model_name)
 
-    true_categories = np.loadtxt('saves/common' + suffix + 'full_test_labels.txt')
-    weights = np.loadtxt('saves/common' + suffix + 'full_test_weights.txt')
+    true_categories = np.loadtxt('saves_alt/common' + suffix + 'full_test_labels.txt')
+    weights = np.loadtxt('saves_alt/common' + suffix + 'full_test_weights.txt')
     predictions = np.loadtxt(directory + 'predictions.txt')
 
     nb_categories = len(event_categories)
@@ -52,7 +52,7 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     fig = p.figure()
     p.title('Content plot for ' + model_name, y=-0.12)
     ax = fig.add_subplot(111)
-    color_array = ['b', 'g', 'r', 'brown', 'm', 'k']
+    color_array = ['b', 'g', 'r', 'brown', 'm', '0.75']
 
     for category in range(nb_categories):
         position = ordering[category]
