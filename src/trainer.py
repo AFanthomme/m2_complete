@@ -67,6 +67,7 @@ def generate_predictions(model_name, tolerance=0., verbose=global_verbosity):
     results = classifier.predict(scaled_dataset)
     probas = classifier.predict_proba(scaled_dataset)
     nb_categs = max(np.unique(results))
+    logging.info('nb_categs = ' + str(nb_categs))
 
     if tolerance:
         try:
