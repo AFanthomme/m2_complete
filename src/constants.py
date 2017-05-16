@@ -33,8 +33,8 @@ event_numbers = {'ZH': 376657.21875, 'WplusH': 252870.65625, 'WminusH': 168069.6
                  'VH_hadr': 252870.65625, 'bbH':0, 'tqH': 0}
 
 
-production_modes = ['ggH', 'VBFH', 'WminusH', 'WplusH', 'ZH', 'ttH', 'bbH', 'tqH']
-event_categories = ['ggH', 'VBFH', 'VH_lept', 'VH_hadr', 'ttH', 'bbH', 'tqH']
+production_modes = ['ggH', 'VBFH', 'WminusH', 'WplusH', 'ZH', 'ttH', 'bbH']
+event_categories = ['ggH', 'VBFH', 'VH_lept', 'VH_hadr', 'ttH', 'bbH']
 
 base_features = [
                 'nExtraLep', 'nExtraZ', 'nCleanedJetsPt30', 'nCleanedJetsPt30BTagged_bTagSF',

@@ -37,8 +37,8 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     weights = np.loadtxt('saves/common' + suffix + 'full_test_weights.txt')
     predictions = np.loadtxt(directory + 'predictions.txt')
 
-    nb_categories = 5
-    contents_table = np.zeros((nb_categories, len(event_categories)))
+    nb_categories = len(event_categories)
+    contents_table = np.zeros((nb_categories, nb_categories))
 
     for true_tag, predicted_tag, rescaled_weight in izip(true_categories, predictions, weights):
         contents_table[predicted_tag, true_tag] += rescaled_weight
