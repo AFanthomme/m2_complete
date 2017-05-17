@@ -1,30 +1,11 @@
 # Stage m2 : higgs generation mechanism classification
 
 
-#### Using Monte-Carlo simulated data, train neural network classifiers, generate content plots and "pickle" them for later use (note that we remove the "fit" method before storing so that our predictor cannot be altered).  
+#### Using Monte-Carlo simulated data, train neural network classifiers, "pickle" them for later useg and enerate content plots.  
+## The whole program is controlled by the main.py script, calling the functions from the src package :
+- src.constants regroups most of the program's global variables (the remaining are in preprocessing to regroup all ROOT commands in the same file)
+- src.preprocessing generates .txt saves of the datasets with control over the features to retrieve / compute / remove.
+- src.trainer trains the specified classifier and stores it in an appropriate folder along with its predictions.
+- src.plotter takes a trained model, a test set, and generates the associated category content plot.
 
-- This is the development version with all the details / functions / controls and lack of some optimizations (reload datasets everytime you train a new model
-
-- Efficient version for meta-parameter exploration on cluster incoming at https://github.com/AFanthomme/m2_stand_alone
-
-
-## To do :
-- try batched SVC
-- try kernels for logreg with 
-- generate the signal strength for real data
-
-
-## Notes :
-- Most of the program's behaviour can be controlled from constants.py 
-- The intended use is to launch directly plotter.py. It will try to generate and save in saves/tmp the category contents for all the classifiers defined in models_dict (Note that it is lazy and will not recompute a model if one with the same name has already been trained, however it is not computationally optimized.)
-
-## Best models so far :
-With discriminants :
-- logistic regression with invfreq weights 
-- bag_tree invfreq (if we only care about VBF)
-- 
-
-Without discriminants :
-- adaboost log reg (but very bad on VH)
-
-
+- In progress : SelfThresholdingAdaClassifier provides a wrapper of sklearn's adaboost meta-estimator designed to provide more control over its prediction method (especially optimize some prediction thresholds to minimize a given cost).
