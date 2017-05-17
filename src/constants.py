@@ -13,7 +13,14 @@ ignore_warnings = True
 # can easily be overriden from main.py
 # To add new sets of features (either from file or calculated), add the corresponding file and suffix here then
 # modify preprocessing.py
-features_set_selector = 2 
+features_set_selector = 3
+
+dir_suff_dict = [('saves_alt/common_nodiscr/', '_nodiscr'), ('saves_alt/common_onlydiscr/', '_onlydiscr'),
+                 ('saves_alt/common_full/', '_full'), ('saves_alt/common_nomass/', '_nomass')]
+
+production_modes = ['ggH', 'VBFH', 'WminusH', 'WplusH', 'ZH', 'ttH', 'bbH']
+event_categories = ['ggH', 'VBFH', 'VH_lept', 'VH_hadr', 'ttH', 'bbH', 'ZH_met']
+
 
 # dir_suff_dict = [('saves/common_nodiscr/', '_nodiscr'), ('saves/common_onlydiscr/', '_onlydiscr'),
 #                  ('saves/common_full/', '_full')]
@@ -23,11 +30,6 @@ features_set_selector = 2
 # production_modes = ['ggH', 'VBFH', 'WminusH', 'WplusH', 'ZH', 'ttH', 'bbH']
 # event_categories = ['ggH', 'VBFH', 'VH_lept', 'VH_hadr', 'VH_met', 'ttH', 'bbH']
 
-production_modes = ['ggH', 'VBFH', 'WminusH', 'WplusH', 'ZH', 'ttH', 'bbH']
-event_categories = ['ggH', 'VBFH', 'VH_lept', 'VH_hadr', 'ttH', 'bbH', 'ZH_met']
-
-dir_suff_dict = [('saves_alt/common_nodiscr/', '_nodiscr'), ('saves_alt/common_onlydiscr/', '_onlydiscr'),
-                 ('saves_alt/common_full/', '_full')]
 
 
 # These are the physical constants

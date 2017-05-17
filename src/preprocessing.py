@@ -31,7 +31,8 @@ calculated_features = {
 
 # For each feature selection mode, (to get from root file, to calculate, to remove)
 features_specs = [(base_features, None, None), (base_features, calculated_features, likelihood_names),
-                  (base_features, calculated_features, None)]
+                  (base_features, calculated_features, None),
+                  (base_features, calculated_features, likelihood_names + 'ZZMass')]
 
 
 def remove_fields(a, *fields_to_remove):
@@ -43,7 +44,7 @@ def get_background_files(modes=(0, 1, 2)):
         directory, suffix = dir_suff_dict[features_mode]
 
         to_retrieve, to_compute, to_remove = features_specs[features_mode]
-        backgrounds = []
+        backgrounds = ['DYJetsToLL_M50', 'WZTo3LNu', 'TTJets_DiLept']
         for background in backgrounds:
             rfile = r.TFile(base_path + background + '125/ZZ4lAnalysis.root')
             tree = rfile.Get('ZZTree/candTree')
