@@ -3,13 +3,14 @@ from copy import copy
 from itertools import izip
 
 import matplotlib.pyplot as p
+import matplotlib.cm as cm
 import numpy as np
 import src.trainer as ctg
+import src.constants as cst
 
-from src.constants import global_verbosity, features_set_selector, event_categories, luminosity
 
 
-def content_plot(model_name, permutation=None, save=True, verbose=global_verbosity):
+def content_plot(model_name, permutation=None, save=True, verbose=cst.global_verbosity):
     """
     Use an instance of a sklearn model (custom ones possible as long as they're contained in a class with correctly 
     named attributes)
@@ -22,34 +23,27 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     :param verbose: print the evolution messages
     :return: None but the plot
     """
-    tags_list = copy(event_categories)
+    tags_list = copy(cst.event_categories)
 
-    if features_set_selector == 0:
-        suffix = '_nodiscr/'
-    elif features_set_selector == 1:
-        suffix = '_onlydiscr/'
-    elif features_set_selector == 2:
-        suffix = '_full/'
-    else:
-        raise IOError
-
-    directory = 'saves/' + model_name + suffix
+    no_care, suffix = cst.dir_suff_dict[cst.features_set_selector]
+    suffix += '/'
+    directory = 'saves_alt/' + model_name + suffix
     if not os.path.isfile(directory + 'predictions.txt'):
         if verbose:
             print('Generating predictions')
         ctg.generate_predictions(model_name)
 
-    true_categories = np.loadtxt('saves/common' + suffix + 'full_test_labels.txt')
-    weights = np.loadtxt('saves/common' + suffix + 'full_test_weights.txt')
+    true_categories = np.loadtxt('saves_alt/common' + suffix + 'full_test_labels.txt')
+    weights = np.loadtxt('saves_alt/common' + suffix + 'full_test_weights.txt')
     predictions = np.loadtxt(directory + 'predictions.txt')
 
-    nb_categories = 5  # max(len(np.unique(np.loadtxt('saves/' + directory + 'ggH_predictions.txt'))), 5)
-    contents_table = np.zeros((nb_categories, len(event_categories)))
+    nb_categories = len(cst.event_categories)
+    contents_table = np.zeros((nb_categories, nb_categories))
 
     for true_tag, predicted_tag, rescaled_weight in izip(true_categories, predictions, weights):
         contents_table[predicted_tag, true_tag] += rescaled_weight
 
-    contents_table *= luminosity
+    contents_table *= cst.luminosity
     ordering = [nb_categories - 1 - i for i in range(nb_categories)]
 
     if permutation:
@@ -58,7 +52,8 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     fig = p.figure()
     p.title('Content plot for ' + model_name, y=-0.12)
     ax = fig.add_subplot(111)
-    color_array = ['b', 'g', 'r', 'brown', 'm']
+    # color_array = cm.rainbow(np.linspace(0, 1, nb_categories))
+    color_array = ['b', 'g', 'r', 'brown', 'm', '0.75', 'c']
 
     for category in range(nb_categories):
         position = ordering[category]
@@ -68,7 +63,7 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
             if position == 1:
                 ax.axhspan(position * 0.19 + 0.025, (position + 1) * 0.19 - 0.025, tmp,
                            tmp + normalized_content[gen_mode],
-                           color=color_array[gen_mode], label=event_categories[gen_mode])
+                           color=color_array[gen_mode], label=cst.event_categories[gen_mode])
             else:
                 ax.axhspan(position * 0.19 + 0.025, (position + 1) * 0.19 - 0.025, tmp,
                            tmp + normalized_content[gen_mode],
@@ -80,7 +75,9 @@ def content_plot(model_name, permutation=None, save=True, verbose=global_verbosi
     p.legend(bbox_to_anchor=(0., 1.02, 1., .102), loc=3, ncol=6, fontsize=11, mode="expand", borderaxespad=0.)
 
     if save:
-        p.savefig('figs/tmp/' + model_name + suffix[:-1] + '.png')
+        if not os.path.isdir('saves_alt/figs'):
+            os.makedirs('saves_alt/figs')
+        p.savefig('saves_alt/figs/' + model_name + suffix[:-1] + '.png')
     else:
         p.show()
 

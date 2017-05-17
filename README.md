@@ -9,3 +9,4 @@
 - src.plotter takes a trained model, a test set, and generates the associated category content plot.
 
 - In progress : SelfThresholdingAdaClassifier provides a wrapper of sklearn's adaboost meta-estimator designed to provide more control over its prediction method (especially optimize some prediction thresholds to minimize a given cost).
+
