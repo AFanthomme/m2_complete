@@ -33,9 +33,9 @@ calculated_features = {
 features_specs = [(base_features, None, None),
                   (base_features, calculated_features, likelihood_names),
                   (base_features, calculated_features, None),
-                  (base_features, calculated_features, likelihood_names + 'ZZMass'),
+                  (base_features, calculated_features, likelihood_names + ['ZZMass']),
                   (base_features, None, likelihood_names),
-                  (base_features, None, likelihood_names + 'ZZMass')
+                  (base_features, None, likelihood_names + ['ZZMass'])
                   ]
 
 
@@ -184,7 +184,7 @@ def read_root_files(modes=(0, 1, 2)):
                         weights = weights[mask]
 
                     if  to_remove:
-                        data_set = remove_fields(data_set, *likelihood_names)
+                        data_set = remove_fields(data_set, *to_remove)
 
                     np.savetxt(directory + prod_mode + decay + '_training.txt', data_set[:nb_events // 2])
                     np.savetxt(directory + prod_mode + decay + '_test.txt', data_set[nb_events // 2:])
@@ -228,7 +228,7 @@ def read_root_files(modes=(0, 1, 2)):
                         weights = weights[mask]
 
                     if  to_remove:
-                        data_set = remove_fields(data_set, *likelihood_names)
+                        data_set = remove_fields(data_set, *to_remove)
 
                     np.savetxt(directory + prod_mode + decay + '_training.txt', data_set[:nb_events // 2])
                     np.savetxt(directory + prod_mode + decay + '_test.txt', data_set[nb_events // 2:])
@@ -281,7 +281,6 @@ def prepare_scalers(modes=(0, 1, 2)):
         test_set = np.loadtxt(file_list[0] + '_test.txt')
 
         for idx, filename in enumerate(file_list[1:]):
-
             temp_train = np.loadtxt(filename + '_training.txt')
             temp_test = np.loadtxt(filename + '_test.txt')
             training_set = np.concatenate((training_set, temp_train), axis=0)

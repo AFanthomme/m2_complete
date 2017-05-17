@@ -2,14 +2,15 @@ import logging
 import os
 import pickle
 import numpy as np
-from src.constants import models_dict, global_verbosity, features_set_selector, dir_suff_dict
+import src.constants as cst
 from src.misc import frozen
+from copy import deepcopy as copy
 
-
-def model_training(model_name, verbose=global_verbosity):
+def model_training(model_name, verbose=cst.global_verbosity):
+    models_dict = copy(cst.models_dict)
     analyser, model_weights = models_dict[model_name]
 
-    directory, suffix = dir_suff_dict[features_set_selector]
+    directory, suffix = cst.dir_suff_dict[cst.features_set_selector]
 
     training_set = np.loadtxt(directory + 'full_training_set.txt')
     training_labels = np.loadtxt(directory + 'full_training_labels.txt')
@@ -56,17 +57,14 @@ def model_training(model_name, verbose=global_verbosity):
     logging.info('Generalization score : ' + str(analyser.score(test_set, test_labels)))
 
 
-def generate_predictions(model_name, tolerance=0., verbose=global_verbosity):
-    directory, suffix = dir_suff_dict[features_set_selector]
+def generate_predictions(model_name, tolerance=0., verbose=cst.global_verbosity):
+    directory, suffix = cst.dir_suff_dict[cst.features_set_selector]
     scaled_dataset = np.loadtxt(directory + 'full_test_set.txt')
-
     with open('saves_alt/' + model_name + suffix + '/categorizer.pkl', mode='rb') as file:
         classifier = pickle.load(file)
 
     results = classifier.predict(scaled_dataset)
     probas = classifier.predict_proba(scaled_dataset)
-    nb_categs = max(np.unique(results))
-    logging.info('nb_categs = ' + str(nb_categs))
 
     if tolerance:
         try:

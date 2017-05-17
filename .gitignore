@@ -1,5 +1,4 @@
-*pkl  # Dangerous to unpickle anything that could have been exposed to attacks
 *.idea
-
-
+pip
 logs
+saves/*
