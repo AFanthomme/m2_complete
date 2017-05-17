@@ -58,7 +58,6 @@ def model_training(model_name, verbose=global_verbosity):
 
 def generate_predictions(model_name, tolerance=0., verbose=global_verbosity):
     directory, suffix = dir_suff_dict[features_set_selector]
-
     scaled_dataset = np.loadtxt(directory + 'full_test_set.txt')
 
     with open('saves_alt/' + model_name + suffix + '/categorizer.pkl', mode='rb') as file:

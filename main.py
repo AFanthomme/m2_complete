@@ -35,27 +35,27 @@ if ignore_warnings:
 if __name__ == "__main__":
 
     directory, suffix = dir_suff_dict[features_set_selector]
+    pr.full_process((3, 4, 5))
 
-    if not (tests.common_saves_found() and tests.lengths_consistent()):
-        pr.full_process()
-    if not (tests.common_saves_found() and tests.lengths_consistent()):
-        raise UserWarning
+    # if not (tests.common_saves_found() and tests.lengths_consistent()):
+    #     pr.full_process()
+    # if not (tests.common_saves_found() and tests.lengths_consistent()):
+    #     raise UserWarning
 
-    if not os.path.isdir('figs/tmp'):
-        os.makedirs('figs/tmp')
+    for plop in [3, 4, 5]:
+        features_set_selector = plop
+        for model_name in models_dict.keys():
+            logging.info('Studying model ' + model_name + suffix)
+            try:
+                open('saves_alt/' + model_name + suffix + '/categorizer.pkl', 'rb')
+            except IOError:
+                logging.info('Training model ' + model_name)
+                ctg.model_training(model_name)
+            try:
+                open('saves_alt/' + model_name + suffix + '/predictions.txt', 'rb')
+            except IOError:
+                logging.info('Generating predictions for ' + model_name + suffix)
+                ctg.generate_predictions(model_name)
 
-    for model_name in models_dict.keys():
-        logging.info('Studying model ' + model_name + suffix)
-        try:
-            open('saves_alt/' + model_name + suffix + '/categorizer.pkl', 'rb')
-        except IOError:
-            logging.info('Training model ' + model_name)
-            ctg.model_training(model_name)
-        try:
-            open('saves_alt/' + model_name + suffix + '/predictions.txt', 'rb')
-        except IOError:
-            logging.info('Generating predictions for ' + model_name + suffix)
-            ctg.generate_predictions(model_name)
-
-        content_plot(model_name)
-    logging.info('All models studied with features set ' + suffix)
+            content_plot(model_name)
+        logging.info('All models studied with features set ' + suffix)

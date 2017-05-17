@@ -16,7 +16,8 @@ ignore_warnings = True
 features_set_selector = 3
 
 dir_suff_dict = [('saves_alt/common_nodiscr/', '_nodiscr'), ('saves_alt/common_onlydiscr/', '_onlydiscr'),
-                 ('saves_alt/common_full/', '_full'), ('saves_alt/common_nomass/', '_nomass')]
+                 ('saves_alt/common_full/', '_full'), ('saves_alt/common_nomass/', '_nomass'),
+                 ('saves_alt/common_nomela/', '_nomela'), ('saves_alt/common_nothing/', '_nothing')]
 
 production_modes = ['ggH', 'VBFH', 'WminusH', 'WplusH', 'ZH', 'ttH', 'bbH']
 event_categories = ['ggH', 'VBFH', 'VH_lept', 'VH_hadr', 'ttH', 'bbH', 'ZH_met']
@@ -72,18 +73,18 @@ models_dict = {
         #
         # 'adaboost_stumps_300_purity': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
         #                     n_estimators=300), None),
-        'adaboost_stumps_300_15_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                            n_estimators=300), [1.5, 1., 1., 1., 1., 1., 1.]),
-        'adaboost_stumps_300_20_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                            n_estimators=300), [2, 1., 1., 1., 1., 1., 1.]),
+        # 'adaboost_stumps_300_15_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+        #                     n_estimators=300), [1.5, 1., 1., 1., 1., 1., 1.]),
+        # 'adaboost_stumps_300_20_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+        #                     n_estimators=300), [2, 1., 1., 1., 1., 1., 1.]),
         'adaboost_stumps_300_25_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
                                                             n_estimators=300), [2.5, 1.,1.,  1., 1., 1., 1.]),
         'adaboost_stumps_300_35_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
                                                          n_estimators=300), [3.5, 1., 1., 1., 1., 1., 1.]),
         'adaboost_stumps_300_45_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
                                                          n_estimators=300), [4.5, 1., 1., 1., 1., 1., 1.]),
-        'adaboost_stumps_300_50_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                                                         n_estimators=300), [5., 1., 1., 1., 1., 1., 1.]),
+        # 'adaboost_stumps_300_50_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+        #                                                  n_estimators=300), [5., 1., 1., 1., 1., 1., 1.]),
         }
 
 

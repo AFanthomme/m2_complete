@@ -30,9 +30,13 @@ calculated_features = {
 
 
 # For each feature selection mode, (to get from root file, to calculate, to remove)
-features_specs = [(base_features, None, None), (base_features, calculated_features, likelihood_names),
+features_specs = [(base_features, None, None),
+                  (base_features, calculated_features, likelihood_names),
                   (base_features, calculated_features, None),
-                  (base_features, calculated_features, likelihood_names + 'ZZMass')]
+                  (base_features, calculated_features, likelihood_names + 'ZZMass'),
+                  (base_features, None, likelihood_names),
+                  (base_features, None, likelihood_names + 'ZZMass')
+                  ]
 
 
 def remove_fields(a, *fields_to_remove):
@@ -341,7 +345,7 @@ def clean_intermediate_files(modes=(0, 1, 2)):
                 os.remove(directory + file_name)
 
 
-def full_process(modes=(0, 1, 2)):
+def full_process(modes=(0, 1, 2, 3, 4, 5)):
     logging.info('Reading root files')
     read_root_files(modes)
     logging.info('Merging vector modes')
