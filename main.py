@@ -5,7 +5,7 @@ import pickle
 import os
 import src.preprocessing as pr
 import src.trainer as ctg
-from src.constants import *
+import src.constants as cst
 from src.plotter import content_plot
 from src import tests
 
@@ -13,7 +13,7 @@ logging.basicConfig(filename='logs', format='%(levelname)s %(asctime)s %(message
                     datefmt='%H:%M:%S')
 logging.info('Logger initialized')
 
-if ignore_warnings:
+if cst.ignore_warnings:
     warnings.filterwarnings('ignore')
 
 
@@ -34,17 +34,17 @@ if ignore_warnings:
 
 if __name__ == "__main__":
 
-    directory, suffix = dir_suff_dict[features_set_selector]
-    pr.full_process((3, 4, 5))
+    #pr.full_process((3, 4, 5,))
 
     # if not (tests.common_saves_found() and tests.lengths_consistent()):
     #     pr.full_process()
     # if not (tests.common_saves_found() and tests.lengths_consistent()):
     #     raise UserWarning
 
-    for plop in [3, 4, 5]:
-        features_set_selector = plop
-        for model_name in models_dict.keys():
+    for plop in [2, 3, 4, 5]:
+        cst.features_set_selector = plop
+        directory, suffix = cst.dir_suff_dict[cst.features_set_selector]
+        for model_name in cst.models_dict.keys():
             logging.info('Studying model ' + model_name + suffix)
             try:
                 open('saves_alt/' + model_name + suffix + '/categorizer.pkl', 'rb')
