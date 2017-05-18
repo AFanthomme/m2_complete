@@ -30,9 +30,9 @@ calculated_features = {
 
 
 # For each feature selection mode, (to get from root file, to calculate, to remove)
-features_specs = [(base_features, None, None),
+features_specs = [(base_features, calculated_features, None),
                   (base_features, calculated_features, likelihood_names),
-                  (base_features, calculated_features, None),
+                  (base_features, None, None),
                   (base_features, calculated_features, likelihood_names + ['ZZMass']),
                   (base_features, None, likelihood_names),
                   (base_features, None, likelihood_names + ['ZZMass']),
@@ -110,12 +110,17 @@ def read_root_files(modes=(0, 1, 2)):
             rfile = r.TFile(base_path + prod_mode + '125/ZZ4lAnalysis.root')
             tree = rfile.Get('ZZTree/candTree')
 
+            ref_mask = None
+
             if prod_mode not in ['WminusH', 'WplusH', 'ZH']:
                 data_set = tree2array(tree, branches=to_retrieve, selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130')
                 weights = tree2array(tree, branches='overallEventWeight', selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130')
                 nb_events = np.ma.size(data_set, 0)
+
+                if features_mode != 0:  # Don't try to load it before it's created
+                    ref_mask = np.loadtxt(dir_suff_dict[2][0] + prod_mode + 'masks.ma')
 
                 mask = np.ones(nb_events).astype(bool)
                 if to_compute:
@@ -136,12 +141,17 @@ def read_root_files(modes=(0, 1, 2)):
                     data_set = rcf.rec_append_fields(data_set, keys, new_features)
 
                 if not np.all(mask):
-                    warn('At least one of the calculated features was Inf or NaN')
-                    data_set = data_set[mask]
-                    weights = weights[mask]
+                    logging.warning('At least one of the calculated features was Inf or NaN')
+                if np.any(ref_mask):
+                    mask = ref_mask  # mode 0 = _full should give the most restrictive mask
+                data_set = data_set[mask]
+                weights = weights[mask]
 
                 if to_remove:
                     data_set = remove_fields(data_set, *to_remove)
+
+                if features_mode == 0:
+                    np.savetxt(directory + prod_mode + '_masks.ma', mask)
 
                 np.savetxt(directory + prod_mode + '_training.txt', data_set[:nb_events // 2])
                 np.savetxt(directory + prod_mode + '_test.txt', data_set[nb_events // 2:])
@@ -155,6 +165,9 @@ def read_root_files(modes=(0, 1, 2)):
                                   '_met': ' && (genExtInfo == 12 || genExtInfo == 14 || genExtInfo == 16)'}
 
                 for decay in decay_criteria.keys():
+                    if features_mode != 0:  # Don't try to load it before it's created
+                        ref_mask = np.loadtxt(dir_suff_dict[2][0] + prod_mode + decay + 'masks.ma')
+
                     data_set = tree2array(tree, branches=to_retrieve, selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130' + decay_criteria[decay])
                     weights = tree2array(tree, branches='overallEventWeight', selection=
@@ -181,11 +194,16 @@ def read_root_files(modes=(0, 1, 2)):
 
                     if not np.all(mask):
                         logging.warning('At least one of the calculated features was Inf or NaN')
-                        data_set = data_set[mask]
-                        weights = weights[mask]
+                    if np.any(ref_mask):
+                        mask = ref_mask  # mode 0 = _full should give the most restrictive mask
+                    data_set = data_set[mask]
+                    weights = weights[mask]
 
                     if  to_remove:
                         data_set = remove_fields(data_set, *to_remove)
+
+                    if features_mode == 0:
+                        np.savetxt(directory + prod_mode + decay + '_masks.ma', mask)
 
                     np.savetxt(directory + prod_mode + decay + '_training.txt', data_set[:nb_events // 2])
                     np.savetxt(directory + prod_mode + decay + '_test.txt', data_set[nb_events // 2:])
@@ -199,6 +217,9 @@ def read_root_files(modes=(0, 1, 2)):
                                   '_met': ' && (genExtInfo == 12 || genExtInfo == 14 || genExtInfo == 16)'}
 
                 for decay in decay_criteria.keys():
+                    if features_mode != 0:  # Don't try to load it before it's created
+                        ref_mask = np.loadtxt(dir_suff_dict[2][0] + prod_mode + decay + 'masks.ma')
+
                     data_set = tree2array(tree, branches=to_retrieve, selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130' + decay_criteria[decay])
                     weights = tree2array(tree, branches='overallEventWeight', selection=
@@ -225,11 +246,17 @@ def read_root_files(modes=(0, 1, 2)):
 
                     if not np.all(mask):
                         logging.warning('At least one of the calculated features was Inf or NaN')
-                        data_set = data_set[mask]
-                        weights = weights[mask]
+                    if np.any(ref_mask):
+                        mask = ref_mask  # mode 0 = _full should give the most restrictive mask
+
+                    data_set = data_set[mask]
+                    weights = weights[mask]
 
                     if  to_remove:
                         data_set = remove_fields(data_set, *to_remove)
+
+                    if features_mode == 0:
+                        np.savetxt(directory + prod_mode + decay + '_masks.ma', mask)
 
                     np.savetxt(directory + prod_mode + decay + '_training.txt', data_set[:nb_events // 2])
                     np.savetxt(directory + prod_mode + decay + '_test.txt', data_set[nb_events // 2:])
@@ -328,12 +355,12 @@ def make_scaled_datasets(modes=(0, 1, 2)):
             training_weights = np.concatenate((training_weights, tmp_training_weights), axis=0)
             test_weights = np.concatenate((test_weights, tmp_test_weights), axis=0)
 
-        np.savetxt(directory + 'full_training_set.txt', training_set)
-        np.savetxt(directory + 'full_training_labels.txt', training_labels)
-        np.savetxt(directory + 'full_training_weights.txt', training_weights)
-        np.savetxt(directory + 'full_test_set.txt', test_set)
-        np.savetxt(directory + 'full_test_labels.txt', test_labels)
-        np.savetxt(directory + 'full_test_weights.txt', test_weights)
+        np.savetxt(directory + 'full_training_set.dts', training_set)
+        np.savetxt(directory + 'full_training_labels.lbl', training_labels)
+        np.savetxt(directory + 'full_training_weights.wgt', training_weights)
+        np.savetxt(directory + 'full_test_set.dst', test_set)
+        np.savetxt(directory + 'full_test_labels.lbl', test_labels)
+        np.savetxt(directory + 'full_test_weights.wgt', test_weights)
 
 
 def clean_intermediate_files(modes=(0, 1, 2)):
@@ -341,11 +368,11 @@ def clean_intermediate_files(modes=(0, 1, 2)):
         directory, no_care = dir_suff_dict[mode]
         files_list = os.listdir(directory)
         for file_name in files_list:
-            if file_name.split('_')[0] not in ['full', 'scaler.pkl']:
+            if file_name.split('.')[-1] not in ['pkl', 'lbl', 'wgt']:
                 os.remove(directory + file_name)
 
 
-def full_process(modes=(0, 1, 2, 3, 4, 5)):
+def full_process(modes=tuple(range(7))):
     logging.info('Reading root files')
     read_root_files(modes)
     logging.info('Merging vector modes')
@@ -364,8 +391,5 @@ def get_count(mode, idx=40):
     plop = counter[idx]
     print(plop)
 
-
-if __name__ == '__main__':
-    get_count('ttH')
 
 

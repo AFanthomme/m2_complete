@@ -34,14 +34,14 @@ if cst.ignore_warnings:
 
 if __name__ == "__main__":
 
-    pr.full_process((6,))
+    pr.full_process((0, 2, 3, 4, 5, 6, 1))
 
     # if not (tests.common_saves_found() and tests.lengths_consistent()):
     #     pr.full_process()
     # if not (tests.common_saves_found() and tests.lengths_consistent()):
     #     raise UserWarning
 
-    for plop in [6,]:
+    for plop in [6, 0]:
         cst.features_set_selector = plop
         directory, suffix = cst.dir_suff_dict[cst.features_set_selector]
         for model_name in cst.models_dict.keys():

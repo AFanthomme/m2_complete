@@ -28,14 +28,14 @@ def content_plot(model_name, permutation=None, save=True, verbose=cst.global_ver
     no_care, suffix = cst.dir_suff_dict[cst.features_set_selector]
     suffix += '/'
     directory = 'saves_alt/' + model_name + suffix
-    if not os.path.isfile(directory + 'predictions.txt'):
+    if not os.path.isfile(directory + 'predictions.prd'):
         if verbose:
             print('Generating predictions')
         ctg.generate_predictions(model_name)
 
-    true_categories = np.loadtxt('saves_alt/common' + suffix + 'full_test_labels.txt')
-    weights = np.loadtxt('saves_alt/common' + suffix + 'full_test_weights.txt')
-    predictions = np.loadtxt(directory + 'predictions.txt')
+    true_categories = np.loadtxt('saves_alt/common' + suffix + 'full_test_labels.lbl')
+    weights = np.loadtxt('saves_alt/common' + suffix + 'full_test_weights.wgt')
+    predictions = np.loadtxt(directory + 'predictions.prd')
 
     nb_categories = len(cst.event_categories)
     contents_table = np.zeros((nb_categories, nb_categories))
@@ -80,6 +80,46 @@ def content_plot(model_name, permutation=None, save=True, verbose=cst.global_ver
         p.savefig('saves_alt/figs/' + model_name + suffix[:-1] + '.png')
     else:
         p.show()
+
+
+def search_discrimination(model_name, mode=1, verbose=cst.global_verbosity):
+    tags_list = copy(cst.event_categories)
+
+    no_care, suffix = cst.dir_suff_dict[cst.features_set_selector]
+    suffix += '/'
+    directory = 'saves_alt/' + model_name + suffix
+    if not os.path.isfile(directory + 'predictions.prd'):
+        if verbose:
+            print('Generating predictions')
+        ctg.generate_predictions(model_name)
+
+    test_set = np.loadtxt('saves_alt/common' + suffix + 'full_test_set.dst')
+    true_categories = np.loadtxt('saves_alt/common' + suffix + 'full_test_labels.lbl')
+    weights = np.loadtxt('saves_alt/common' + suffix + 'full_test_weights.wgt')
+
+    predictions = np.loadtxt(directory + 'predictions.txt')
+
+
+    nb_categories = len(cst.event_categories)
+
+    for idx, true_cat, predicted_cat, rescaled_weight in enumerate(izip(true_categories, predictions, weights)):
+        right_indices = []
+        wrong_indices = []
+        if predicted_cat == mode:
+            if true_cat == mode:
+                right_indices.append(idx)
+            else:
+                wrong_indices.append(idx)
+
+    discriminants_list = []
+    colors = ['g', 'r']
+    labels = ['Correct', 'Incorrect']
+
+    for discriminant in discriminants_list:
+        my_list = [test_set[discriminant][idx_list] for idx_list in [right_indices, wrong_indices]]
+        p.hist(my_list, 50, stacked=True, histtype='bar', color=colors, label=labels)
+        p.title('Distribution of ' + discriminant + ' among events classified as ' + cst.event_categories[mode])
+        p.savefig('saves_alt/hists/' + model_name + '_' + discriminant + '_' + suffix[:-1] + '.png')
 
 
 

@@ -15,8 +15,8 @@ ignore_warnings = True
 # modify preprocessing.py
 features_set_selector = 6
 
-dir_suff_dict = [('saves_alt/common_nodiscr/', '_nodiscr'), ('saves_alt/common_onlydiscr/', '_onlydiscr'),
-                 ('saves_alt/common_full/', '_full'), ('saves_alt/common_nomass/', '_nomass'),
+dir_suff_dict = [('saves_alt/common_full/', '_full'), ('saves_alt/common_onlydiscr/', '_onlydiscr'),
+                 ('saves_alt/common_nodiscr/', '_nodiscr'), ('saves_alt/common_nomass/', '_nomass'),
                  ('saves_alt/common_nomela/', '_nomela'), ('saves_alt/common_nothing/', '_nothing'),
                  ('saves_alt/common_linnomass/', '_linnomass')
                 ]
