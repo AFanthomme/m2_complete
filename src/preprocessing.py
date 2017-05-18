@@ -35,7 +35,8 @@ features_specs = [(base_features, None, None),
                   (base_features, calculated_features, None),
                   (base_features, calculated_features, likelihood_names + ['ZZMass']),
                   (base_features, None, likelihood_names),
-                  (base_features, None, likelihood_names + ['ZZMass'])
+                  (base_features, None, likelihood_names + ['ZZMass']),
+                  (base_features, None, ['ZZMass']),
                   ]
 
 
