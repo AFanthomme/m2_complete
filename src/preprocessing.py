@@ -120,7 +120,7 @@ def read_root_files(modes=(0, 1, 2)):
                 nb_events = np.ma.size(data_set, 0)
 
                 if features_mode != 0:  # Don't try to load it before it's created
-                    ref_mask = np.loadtxt(dir_suff_dict[2][0] + prod_mode + 'masks.ma')
+                    ref_mask = np.loadtxt(dir_suff_dict[0][0] + prod_mode + '_masks.ma').astype(bool)
 
                 mask = np.ones(nb_events).astype(bool)
                 if to_compute:
@@ -166,7 +166,7 @@ def read_root_files(modes=(0, 1, 2)):
 
                 for decay in decay_criteria.keys():
                     if features_mode != 0:  # Don't try to load it before it's created
-                        ref_mask = np.loadtxt(dir_suff_dict[2][0] + prod_mode + decay + 'masks.ma')
+                        ref_mask = np.loadtxt(dir_suff_dict[0][0] + prod_mode + decay + '_masks.ma').astype(bool)
 
                     data_set = tree2array(tree, branches=to_retrieve, selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130' + decay_criteria[decay])
@@ -218,7 +218,7 @@ def read_root_files(modes=(0, 1, 2)):
 
                 for decay in decay_criteria.keys():
                     if features_mode != 0:  # Don't try to load it before it's created
-                        ref_mask = np.loadtxt(dir_suff_dict[2][0] + prod_mode + decay + 'masks.ma')
+                        ref_mask = np.loadtxt(dir_suff_dict[0][0] + prod_mode + decay + '_masks.ma').astype(bool)
 
                     data_set = tree2array(tree, branches=to_retrieve, selection=
                             'ZZsel > 90 && 118 < ZZMass && ZZMass < 130' + decay_criteria[decay])
@@ -355,7 +355,7 @@ def make_scaled_datasets(modes=(0, 1, 2)):
             training_weights = np.concatenate((training_weights, tmp_training_weights), axis=0)
             test_weights = np.concatenate((test_weights, tmp_test_weights), axis=0)
 
-        np.savetxt(directory + 'full_training_set.dts', training_set)
+        np.savetxt(directory + 'full_training_set.dst', training_set)
         np.savetxt(directory + 'full_training_labels.lbl', training_labels)
         np.savetxt(directory + 'full_training_weights.wgt', training_weights)
         np.savetxt(directory + 'full_test_set.dst', test_set)
@@ -368,7 +368,7 @@ def clean_intermediate_files(modes=(0, 1, 2)):
         directory, no_care = dir_suff_dict[mode]
         files_list = os.listdir(directory)
         for file_name in files_list:
-            if file_name.split('.')[-1] not in ['pkl', 'lbl', 'wgt']:
+            if file_name.split('.')[-1] not in ['dst', 'pkl', 'lbl', 'wgt']:
                 os.remove(directory + file_name)
 
 
