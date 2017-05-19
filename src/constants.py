@@ -5,6 +5,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.tree import DecisionTreeClassifier
 from src.custom_classifiers import SelfThresholdingAdaClassifier
+import numpy as np
+import pickle
+import datetime
 
 global_verbosity = 0
 ignore_warnings = True
@@ -80,14 +83,25 @@ models_dict = {
         #                     n_estimators=300), [1.5, 1., 1., 1., 1., 1., 1.]),
         # 'adaboost_stumps_300_20_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
         #                     n_estimators=300), [2, 1., 1., 1., 1., 1., 1.]),
-        'adaboost_stumps_300_25_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                                                            n_estimators=300), [2.5, 1.,1.,  1., 1., 1., 1.]),
-        'adaboost_stumps_300_35_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                                                         n_estimators=300), [3.5, 1., 1., 1., 1., 1., 1.]),
-        'adaboost_stumps_300_45_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-                                                         n_estimators=300), [4.5, 1., 1., 1., 1., 1., 1.]),
-        # 'adaboost_stumps_300_50_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
-        #                                                  n_estimators=300), [5., 1., 1., 1., 1., 1., 1.]),
+        # 'adaboost_stumps_300_25_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+        #                                                     n_estimators=300), [2.5, 1.,1.,  1., 1., 1., 1.]),
+        # 'adaboost_stumps_300_35_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+        #                                                  n_estimators=300), [3.5, 1., 1., 1., 1., 1., 1.]),
+        #  'adaboost_stumps_300_45_custom': (AdaBoostClassifier(DecisionTreeClassifier(max_depth=1),
+        #                                                   n_estimators=300), [4.5, 1., 1., 1., 1., 1., 1.]),
         }
 
+for n_est in [300, 500, 1000]:
+    for purity_param in np.arange(45, 100, step=5):
+        models_dict['adaboost_stumps_' + str(n_est) + '_' + str(purity_param) + '_' + 'custom'] = \
+        (AdaBoostClassifier(decision_stump, n_estimators=n_est), [float(purity_param) / 10., 1., 1., 1., 1., 1., 1.])
 
+for n_est in [50, 100, 200]:
+    for purity_param in np.arange(10, 70, step=10):
+        models_dict['adaboost_logreg_' + str(n_est) + '_' + str(purity_param) + '_' + 'custom'] = \
+        (AdaBoostClassifier(LogisticRegression(solver='newton-cg', multi_class='ovr', n_jobs=8),
+                            n_estimators=n_est), [float(purity_param) / 10., 1., 1., 1., 1., 1., 1.])
+
+
+with open('models_dict' + '{_%H_%M_%S_}'.format(datetime.datetime.now()) + '.pkl', 'wb') as file:
+    pickle.dump(models_dict, file)
