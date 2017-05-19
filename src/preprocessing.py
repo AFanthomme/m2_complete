@@ -401,7 +401,7 @@ def full_process(modes=tuple(range(7))):
 
 
 def get_count(mode, idx=40):
-    rfile = r.TFile(base_path + mode + '125/ZZ4lAnalysis.root')
+    rfile = r.TFile(base_path + mode + '/ZZ4lAnalysis.root')
     counter = rfile.Get('ZZTree/Counters')
     plop = counter[idx]
     print(plop)
