@@ -59,7 +59,7 @@ likelihood_names = ['p_JJQCD_SIG_ghg2_1_JHUGen_JECNominal', 'p_JQCD_SIG_ghg2_1_J
                 'pAux_JVBF_SIG_ghv1_1_JHUGen_JECNominal', 'p_HadWH_SIG_ghw1_1_JHUGen_JECNominal',
                 'p_HadZH_SIG_ghz1_1_JHUGen_JECNominal']
 
-backgrounds = ['']
+backgrounds = ['ZZTo4l']
 
 decision_stump = DecisionTreeClassifier(max_depth=1)
 my_classifier = SelfThresholdingAdaClassifier(base_estimator=decision_stump, n_estimators=300)

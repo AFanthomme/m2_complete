@@ -45,11 +45,16 @@ def remove_fields(a, *fields_to_remove):
 
 
 def get_background_files(modes=(0, 1, 2)):
+    """
+    For now, only one background so no need to merge backgrounds
+
+    :param modes:
+    :return:
+    """
     for features_mode in modes:
         directory, suffix = dir_suff_dict[features_mode]
 
         to_retrieve, to_compute, to_remove = features_specs[features_mode]
-        backgrounds = ['DYJetsToLL_M50', 'WZTo3LNu', 'TTJets_DiLept']
         for background in backgrounds:
             rfile = r.TFile(base_path + background + '125/ZZ4lAnalysis.root')
             tree = rfile.Get('ZZTree/candTree')
@@ -61,7 +66,12 @@ def get_background_files(modes=(0, 1, 2)):
                         'ZZsel > 90 && 118 < ZZMass && ZZMass < 130')
             nb_events = np.ma.size(data_set, 0)
 
+            ref_mask = None
+            if features_mode != 0:  # Don't try to load it before it's created
+                ref_mask = np.loadtxt(dir_suff_dict[0][0] + background + '_masks.ma').astype(bool)
+
             mask = np.ones(nb_events).astype(bool)
+
             if to_compute:
                 new_features = [np.zeros(nb_events) for _ in range(len(to_compute))]
                 keys = []
@@ -81,16 +91,21 @@ def get_background_files(modes=(0, 1, 2)):
 
             if not np.all(mask):
                 warn('At least one of the calculated features was Inf or NaN')
-                data_set = data_set[mask]
-                weights = weights[mask]
+
+            if features_mode == 0:
+                np.savetxt(dir_suff_dict[0][0] + background + '_masks.ma', mask)
+
+            if np.any(ref_mask):
+                mask = ref_mask  # mode 0 = _full should give the most restrictive mask
+
+            data_set = data_set[mask]
+            weights = weights[mask]
 
             if to_remove:
                 data_set = remove_fields(data_set, *to_remove)
 
-            np.savetxt(directory + background + '_training.txt', data_set[:nb_events // 2])
-            np.savetxt(directory + background + '_test.txt', data_set[nb_events // 2:])
-            np.savetxt(directory + background + '_weights_training.txt', weights[:nb_events // 2])
-            np.savetxt(directory + background + '_weights_test.txt', weights[nb_events // 2:])
+            np.savetxt(directory + background + '.dst', data_set)
+            np.savetxt(directory + background + '_weights.wgt', weights)
             logging.info(background + ' weights, training and test sets successfully stored in saves/' + directory)
 
 

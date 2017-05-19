@@ -60,11 +60,13 @@ def model_training(model_name, verbose=cst.global_verbosity):
 def generate_predictions(model_name, verbose=cst.global_verbosity, tolerance =0.):
     directory, suffix = cst.dir_suff_dict[cst.features_set_selector]
     scaled_dataset = np.loadtxt(directory + 'full_test_set.dst')
+    background_dataset = np.loadtxt(directory + 'ZZTo4l.dst')
     with open('saves_alt/' + model_name + suffix + '/categorizer.pkl', mode='rb') as file:
         classifier = pickle.load(file)
 
     results = classifier.predict(scaled_dataset)
     probas = classifier.predict_proba(scaled_dataset)
+    bkg_results = classifier.predict(background_dataset)
 
     # if tolerance:
     #     try:
@@ -76,6 +78,7 @@ def generate_predictions(model_name, verbose=cst.global_verbosity, tolerance =0.
     out_path = 'saves_alt/' + model_name + suffix
     np.savetxt(out_path + '/predictions.prd', results)
     np.savetxt(out_path + '/probas.prb', probas)
+    np.savetxt(out_path + '/bkg_predictions.prd', bkg_results)
 
     if verbose:
         print(out_path + ' predictions successfully stored')

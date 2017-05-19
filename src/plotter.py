@@ -99,7 +99,6 @@ def search_discrimination(model_name, mode=1, verbose=cst.global_verbosity):
 
     predictions = np.loadtxt(directory + 'predictions.txt')
 
-
     nb_categories = len(cst.event_categories)
 
     for idx, true_cat, predicted_cat, rescaled_weight in enumerate(izip(true_categories, predictions, weights)):
@@ -120,6 +119,10 @@ def search_discrimination(model_name, mode=1, verbose=cst.global_verbosity):
         p.hist(my_list, 50, stacked=True, histtype='bar', color=colors, label=labels)
         p.title('Distribution of ' + discriminant + ' among events classified as ' + cst.event_categories[mode])
         p.savefig('saves_alt/hists/' + model_name + '_' + discriminant + '_' + suffix[:-1] + '.png')
+
+
+def background_plot():
+    pass
 
 
 
