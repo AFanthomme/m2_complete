@@ -56,7 +56,7 @@ def get_background_files(modes=(0, 1, 2)):
 
         to_retrieve, to_compute, to_remove = features_specs[features_mode]
         for background in backgrounds:
-            rfile = r.TFile(base_path + background + '125/ZZ4lAnalysis.root')
+            rfile = r.TFile(base_path + background + '/ZZ4lAnalysis.root')
             tree = rfile.Get('ZZTree/candTree')
 
 
