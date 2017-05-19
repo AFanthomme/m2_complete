@@ -33,7 +33,7 @@ if cst.ignore_warnings:
 
 
 if __name__ == "__main__":
-    pr.get_background_files(tuple(range(7)))
+    #pr.get_background_files(tuple(range(7)))
     #pr.full_process((0, 2, 3, 4, 5, 6, 1))
 
     # if not (tests.common_saves_found() and tests.lengths_consistent()):
@@ -52,7 +52,8 @@ if __name__ == "__main__":
                 logging.info('Training model ' + model_name)
                 ctg.model_training(model_name)
             try:
-                open('saves_alt/' + model_name + suffix + '/predictions.txt', 'rb')
+                open('saves_alt/' + model_name + suffix + '/predictions.prd', 'rb')
+                open('saves_alt/' + model_name + suffix + '/bkg_predictions.prd', 'rb')
             except IOError:
                 logging.info('Generating predictions for ' + model_name + suffix)
                 ctg.generate_predictions(model_name)

@@ -46,7 +46,7 @@ def content_plot(model_name, permutation=None, save=True, verbose=cst.global_ver
 
     contents_table *= cst.luminosity
     correct = [contents_table[cat, cat] for cat in range(nb_categories)]
-    incorrect = np.sum(contents_table[np.logical_not(np.identity(nb_categories, dtype=bool))], axis=1)
+    incorrect = np.sum(np.where(np.logical_not(np.identity(nb_categories, dtype=bool)), contents_table, 0.), axis=1)
 
     bkg_predictions = np.loadtxt(directory + 'bkg_predictions.prd')
     bkg_weights = np.loadtxt('saves_alt/common' + suffix + 'ZZTo4l_weights.wgt')
@@ -54,7 +54,7 @@ def content_plot(model_name, permutation=None, save=True, verbose=cst.global_ver
     bkg = np.array([np.sum(bkg_weights[np.where(bkg_predictions == cat)]) for cat in range(nb_categories)])
 
     strengths = [1. / (1. + (bkg[cat] + incorrect[cat]) / correct[cat]) for cat in range(nb_categories)]
-    np.savetxt(directory + 'strengths.txt')
+    np.savetxt(directory + 'strengths.txt', strengths)
 
     ordering = [nb_categories - 1 - i for i in range(nb_categories)]
     if permutation:
