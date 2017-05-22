@@ -103,5 +103,5 @@ for n_est in [50, 100, 200]:
                             n_estimators=n_est), [float(purity_param) / 10., 1., 1., 1., 1., 1., 1.])
 
 
-with open('models_dict' + '{_%H_%M_%S_}'.format(datetime.datetime.now()) + '.pkl', 'wb') as file:
+with open('models_dict_' + '{:%H_%M_%S_}'.format(datetime.datetime.now()) + '.pkl', 'wb') as file:
     pickle.dump(models_dict, file)
